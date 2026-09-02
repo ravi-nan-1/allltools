@@ -1,0 +1,32 @@
+
+'use server';
+import { config } from 'dotenv';
+config();
+
+import '@/ai/flows/ai-product-background-remover.ts';
+import '@/ai/flows/generate-seo-metadata.ts';
+import '@/ai/flows/analyze-content-gap.ts';
+import '@/ai/flows/find-tax-deductions.ts';
+import '@/ai/flows/translate-content.ts';
+import '@/ai/flows/generate-invoice-from-prompt.ts';
+import '@/ai/flows/generate-financials-from-prompt.ts';
+import '@/ai/flows/generate-headshot.ts';
+import '@/ai/flows/generate-keyword-clusters.ts';
+import '@/ai/flows/generate-product-description.ts';
+import '@/ai/flows/generate-regex-from-text.ts';
+import '@/ai/flows/webhook-tester.ts';
+import '@/ai/flows/generate-article-outline.ts';
+import '@/ai/flows/compare-two-texts.ts';
+import '@/ai/flows/detect-malicious-urls.ts';
+import '@/ai/flows/intelligent-formula-suggestion.ts';
+import '@/ai/flows/chat-with-ai-tutor.ts';
+import '@/ai/flows/summarize-uploaded-content.ts';
+import '@/ai/flows/generate-practice-quiz.ts';
+import '@/ai/flows/extract-text-from-url.ts';
+import '@/ai/flows/extract-text-from-pdf.ts';
+import '@/ai/flows/summarize-content-generate-cheatsheet.ts';
+import '@/ai/flows/humanize-text.ts';
+import '@/ai/flows/simplify-complex-text.ts';
+import '@/ai/flows/adjust-text-tone.ts';
+import '@/ai/flows/translate-text.ts';
+import '@/ai/flows/write-email.ts';
