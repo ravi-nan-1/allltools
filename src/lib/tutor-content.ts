@@ -1,4 +1,4 @@
-import { FileText, Youtube, Globe, FileAudio, FileVideo, Icon } from 'lucide-react';
+import { FileText, Youtube, Globe, FileAudio, FileVideo } from 'lucide-react';
 import type { ComponentType } from 'react';
 
 export type ContentType = 'PDF' | 'YouTube' | 'URL' | 'Audio' | 'Video';
