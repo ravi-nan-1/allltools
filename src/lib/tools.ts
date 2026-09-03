@@ -28,17 +28,6 @@ import {
   Target,
   BadgeDollarSign,
   TrendingDown,
-  Briefcase,
-  FileSearch,
-  Table,
-  Link,
-  FileDiff,
-  GraduationCap,
-  FileSpreadsheet,
-  Minimize,
-  Feather,
-  QrCode,
-  BookCopy,
 } from 'lucide-react';
 
 export type ToolCategory =
