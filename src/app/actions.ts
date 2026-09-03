@@ -44,7 +44,7 @@ export async function handleBackgroundRemoval(formData: FormData) {
     const productPhotoDataUri = await fileToDataUri(imageFile);
     const result = await removeBackground({ productPhotoDataUri });
     return result;
-  } catch (error: any) {
+  } catch (error) {
     console.error('Background removal action error:', error);
     if (error.message.includes('upstream')) {
         return { error: 'The AI service is currently unavailable. Please try again later.' };
@@ -77,7 +77,7 @@ export async function handleContentAnalysis(formData: FormData) {
     
     const result = await analyzeContentGap({ text, competitorUrls: validUrls });
     return result;
-  } catch (error: any) {
+  } catch (error) {
     return { error: error.message || 'Failed to analyze content.' };
   }
 }
@@ -159,7 +159,7 @@ export async function handleLatencyCheck(formData: FormData) {
     const data = await Promise.all(promises);
     return { data };
 
-  } catch (error: any) {
+  } catch (error) {
     return { error: error.message || 'Failed to check latency.' };
   }
 }
@@ -171,7 +171,7 @@ export async function handleTranslation(content: string, targetLanguage: string)
     }
     const result = await translateContent({ content, targetLanguage });
     return result;
-  } catch (error: any) {
+  } catch (error) {
     return { error: error.message || 'Failed to translate content.' };
   }
 }
@@ -183,7 +183,7 @@ export async function handleInvoiceGeneration(prompt: string) {
         }
         const result = await generateInvoiceFromPrompt({ prompt });
         return { data: result };
-    } catch (error: any) {
+    } catch (error) {
         return { error: error.message || 'Failed to generate invoice from prompt.' };
     }
 }
@@ -195,7 +195,7 @@ export async function handleFinancialsGeneration(prompt: string) {
         }
         const result = await generateFinancialsFromPrompt({ prompt });
         return { data: result };
-    } catch (error: any) {
+    } catch (error) {
         return { error: error.message || 'Failed to generate financials from prompt.' };
     }
 }
@@ -218,7 +218,7 @@ export async function handleHeadshotGeneration(formData: FormData) {
     const photoDataUri = await fileToDataUri(imageFile);
     const result = await generateHeadshot({ photoDataUri, style });
     return result;
-  } catch (error: any) {
+  } catch (error) {
     console.error('Headshot generation action error:', error);
     if (error.message.includes('upstream')) {
         return { error: 'The AI service is currently unavailable. Please try again later.' };
@@ -241,7 +241,7 @@ export async function handleKeywordClusterGeneration(formData: FormData) {
             secondaryKeywords: secondaryKeywords.filter(k => k.trim() !== '')
         });
         return { data: result };
-    } catch (error: any) {
+    } catch (error) {
         return { error: error.message || 'Failed to generate keyword clusters.' };
     }
 }
@@ -253,7 +253,7 @@ export async function handleProductDescriptionGeneration(
     const validatedInput = GenerateProductDescriptionInputSchema.parse(input);
     const result = await generateProductDescription(validatedInput);
     return { data: result };
-  } catch (error: any) {
+  } catch (error) {
     if (error instanceof z.ZodError) {
       return { error: error.errors.map((e) => e.message).join(', ') };
     }
@@ -271,7 +271,7 @@ export async function handleRegexGeneration(
   try {
     const result = await generateRegexFromText(input);
     return { data: result };
-  } catch (error: any) {
+  } catch (error) {
     if (error instanceof z.ZodError) {
       return { error: error.errors.map((e) => e.message).join(', ') };
     }
@@ -288,7 +288,7 @@ export async function handleRegexDescription(
     try {
         const result = await describeRegex(input);
         return { data: result };
-    } catch (error: any) {
+    } catch (error) {
         if (error instanceof z.ZodError) {
         return { error: error.errors.map((e) => e.message).join(', ') };
         }
@@ -303,7 +303,7 @@ export async function handleWebhookPayloadGeneration(type: 'github' | 'stripe') 
     try {
         const result = await generateWebhookPayload({ type });
         return { payload: result.payload };
-    } catch (error: any) {
+    } catch (error) {
         return { error: error.message || `Failed to generate ${type} payload.`}
     }
 }
@@ -323,7 +323,7 @@ export async function handleArticleOutlineGeneration(
     const validatedInput = ArticleOutlineInputSchema.parse(input);
     const result = await generateArticleOutline(validatedInput);
     return { data: result };
-  } catch (error: any) {
+  } catch (error) {
     if (error instanceof z.ZodError) {
       return { error: error.errors.map((e) => e.message).join(', ') };
     }
