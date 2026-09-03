@@ -193,7 +193,7 @@ export function UrlShortenerForm() {
       )}
 
       <p className="text-xs text-muted-foreground text-center">
-        We don't store any personal data. The history of your last 5 links is kept locally in
+        We don&apos;t store any personal data. The history of your last 5 links is kept locally in
         this browser only and is never sent to our servers.
       </p>
     </div>

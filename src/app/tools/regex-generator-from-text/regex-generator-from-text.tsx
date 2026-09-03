@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -18,7 +18,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
-import { Loader2, Sparkles, Copy, Trash2, Wand2, UploadCloud, FileCode, Replace, RefreshCw, Milestone } from 'lucide-react';
+import { Loader2, Sparkles, Copy, Trash2, Wand2, UploadCloud, FileCode, RefreshCw, Milestone } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { handleRegexGeneration, handleRegexDescription } from '@/app/actions';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -410,7 +410,7 @@ export function RegexGeneratorFromText() {
                              <TabsContent value="samples" className="mt-4 space-y-4">
                                 <Alert>
                                     <AlertTitle>AI-Generated Samples</AlertTitle>
-                                    <AlertDescription>These are examples of what will and won't match.</AlertDescription>
+                                    <AlertDescription>These are examples of what will and won&apos;t match.</AlertDescription>
                                 </Alert>
                                 <div>
                                     <FormLabel>Matching Examples</FormLabel>

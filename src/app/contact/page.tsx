@@ -21,7 +21,7 @@ export default function ContactPage() {
             Contact Us
           </h1>
           <p className="mt-4 text-lg text-muted-foreground">
-            Have a question, feedback, or a tool suggestion? We'd love to hear from you.
+            Have a question, feedback, or a tool suggestion? We&apos;d love to hear from you.
           </p>
         </header>
 

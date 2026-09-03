@@ -163,7 +163,7 @@ export function JwtDecoderValidator() {
         <Alert className="border-green-500/50 text-green-700 dark:text-green-400">
             <CheckCircle2 className="h-4 w-4 text-green-500" />
             <AlertTitle>Signature Verified</AlertTitle>
-            <AlertDescription>The token's signature is valid.</AlertDescription>
+            <AlertDescription>The token&apos;s signature is valid.</AlertDescription>
         </Alert>
       )}
       {verificationStatus === 'invalid' && (
@@ -177,7 +177,7 @@ export function JwtDecoderValidator() {
          <Alert variant="default">
             <Info className="h-4 w-4" />
             <AlertTitle>Verify Signature</AlertTitle>
-            <AlertDescription>Paste your secret or public key above to verify the token's signature.</AlertDescription>
+            <AlertDescription>Paste your secret or public key above to verify the token&apos;s signature.</AlertDescription>
         </Alert>
       )}
 

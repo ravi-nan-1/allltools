@@ -16,7 +16,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Loader2, PlusCircle, Sparkles, Trash2, UploadCloud, FileText, Merge, Split, HelpCircle, ChevronsUpDown, ChevronsDownUp, Copy, AlertTriangle, TrendingUp, DollarSign, Search, ListTree, BarChart, Info, ShieldQuestion } from 'lucide-react';
+import { Loader2, PlusCircle, Sparkles, Trash2, UploadCloud, Merge, Split, Copy, TrendingUp, Info, ShieldQuestion } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { handleKeywordClusterGeneration } from '@/app/actions';
 import { Badge } from '@/components/ui/badge';
@@ -348,14 +348,14 @@ export function KeywordClusterGenerator() {
                                             <div className="space-y-2">
                                                 <h4 className="font-semibold text-sm">AI-Suggested SEO Title</h4>
                                                 <div className="flex items-start gap-2">
-                                                    <p className="text-sm p-2 bg-muted/50 rounded-md text-muted-foreground flex-grow">"{cluster.aiSeoTitle}"</p>
+                                                    <p className="text-sm p-2 bg-muted/50 rounded-md text-muted-foreground flex-grow">&quot;{cluster.aiSeoTitle}&quot;</p>
                                                     <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0" onClick={() => copyToClipboard(cluster.aiSeoTitle)}><Copy/></Button>
                                                 </div>
                                             </div>
                                             <div className="space-y-2">
                                                 <h4 className="font-semibold text-sm">AI-Suggested Meta Description</h4>
                                                 <div className="flex items-start gap-2">
-                                                    <p className="text-sm p-2 bg-muted/50 rounded-md text-muted-foreground flex-grow">"{cluster.aiMetaDescription}"</p>
+                                                    <p className="text-sm p-2 bg-muted/50 rounded-md text-muted-foreground flex-grow">&quot;{cluster.aiMetaDescription}&quot;</p>
                                                     <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0" onClick={() => copyToClipboard(cluster.aiMetaDescription)}><Copy/></Button>
                                                 </div>
                                             </div>

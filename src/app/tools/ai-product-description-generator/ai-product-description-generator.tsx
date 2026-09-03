@@ -19,7 +19,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Loader2, Sparkles, Copy, ShoppingBag, Users, BrainCircuit } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { handleProductDescriptionGeneration } from '@/app/actions';
-import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface GenerateProductDescriptionOutput {

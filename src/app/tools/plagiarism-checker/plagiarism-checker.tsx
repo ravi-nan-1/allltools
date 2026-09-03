@@ -66,7 +66,7 @@ export function PlagiarismChecker() {
         <CardHeader>
           <CardTitle>Compare Two Texts</CardTitle>
           <CardDescription>
-            Paste a source text and a comparison text below. We'll compute a similarity score
+            Paste a source text and a comparison text below. We&apos;ll compute a similarity score
             and use AI to surface matched or paraphrased phrases.
           </CardDescription>
         </CardHeader>

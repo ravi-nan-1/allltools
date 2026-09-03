@@ -1,6 +1,4 @@
 import { ShieldCheck, Zap, BadgeDollarSign } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-
 const features = [
   {
     icon: <ShieldCheck className="h-8 w-8 text-primary" />,

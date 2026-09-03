@@ -224,9 +224,9 @@ export function ApiLatencyChecker() {
             </div>
             </AccordionTrigger>
           <AccordionContent className="pt-4 space-y-4 text-sm text-muted-foreground">
-            <p><strong>DNS Lookup:</strong> The time it takes to resolve your API's domain name to an IP address. High DNS time can indicate issues with your DNS provider.</p>
+            <p><strong>DNS Lookup:</strong> The time it takes to resolve your API&apos;s domain name to an IP address. High DNS time can indicate issues with your DNS provider.</p>
             <p><strong>Connection Time:</strong> The time required to establish a TCP connection with the server. This includes the three-way handshake.</p>
-            <p><strong>TTFB (Time To First Byte):</strong> The time from when the request was sent until the first byte of the response was received. This is a key indicator of your server's backend processing speed.</p>
+            <p><strong>TTFB (Time To First Byte):</strong> The time from when the request was sent until the first byte of the response was received. This is a key indicator of your server&apos;s backend processing speed.</p>
             <p><strong>Total Time:</strong> The total duration from the start of the request to receiving the full response.</p>
           </AccordionContent>
         </AccordionItem>

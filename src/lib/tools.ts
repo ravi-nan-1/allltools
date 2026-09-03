@@ -1,35 +1,4 @@
 
-import type { LucideIcon } from 'lucide-react';
-import {
-  Calculator,
-  Landmark,
-  Globe,
-  Bitcoin,
-  Currency,
-  FileText,
-  Building2,
-  Image,
-  UserCircle,
-  Scan,
-  Smile,
-  ShieldCheck,
-  AppWindow,
-  Binary,
-  GitBranch,
-  FileCode,
-  ShoppingBag,
-  Network,
-  KeyRound,
-  Regex,
-  FileJson,
-  Webhook,
-  HeartPulse,
-  BedDouble,
-  Target,
-  BadgeDollarSign,
-  TrendingDown,
-} from 'lucide-react';
-
 export type ToolCategory =
   | 'Finance'
   | 'Business'

@@ -29,7 +29,7 @@ export default function RedirectPage() {
       <div className="flex h-screen w-screen flex-col items-center justify-center gap-4 text-center px-4">
         <h1 className="text-2xl font-bold">Short link not found</h1>
         <p className="text-muted-foreground max-w-md">
-          This short link doesn't exist on this device, or it was created in a different
+          This short link doesn&apos;t exist on this device, or it was created in a different
           browser. Short links created with our tool are stored locally in the browser that
           created them.
         </p>

@@ -53,7 +53,7 @@ export function WhyAll2ools() {
           </h2>
           
           <p className="text-muted-foreground mb-8">
-            Most online tools force you to watch ads, require sign-ups, slow down your device, and don't respect your privacy. All2ools does the opposite, offering powerful features like a <strong>free PDF to Word converter</strong>, <strong>PDF to Excel</strong>, <strong>merge PDF</strong>, <strong>split PDF</strong>, high-quality <strong>image compressor</strong>, <strong>background remover</strong>, <strong>plagiarism checker free</strong>, and a full suite of <strong>AI tools online for free</strong>.
+            Most online tools force you to watch ads, require sign-ups, slow down your device, and don&apos;t respect your privacy. All2ools does the opposite, offering powerful features like a <strong>free PDF to Word converter</strong>, <strong>PDF to Excel</strong>, <strong>merge PDF</strong>, <strong>split PDF</strong>, high-quality <strong>image compressor</strong>, <strong>background remover</strong>, <strong>plagiarism checker free</strong>, and a full suite of <strong>AI tools online for free</strong>.
           </p>
           
           <ul className="space-y-4">
@@ -322,7 +322,7 @@ export function WhyAll2ools() {
               No File Size Limits
             </h3>
             <p className="text-muted-foreground">
-              Unlike other <strong>PDF converter free</strong> tools, we don't restrict file sizes. Convert large <strong>PDF to Word</strong>, <strong>PDF to Excel</strong>, or <strong>merge PDF</strong> files without worrying about upload limits.
+              Unlike other <strong>PDF converter free</strong> tools, we don&apos;t restrict file sizes. Convert large <strong>PDF to Word</strong>, <strong>PDF to Excel</strong>, or <strong>merge PDF</strong> files without worrying about upload limits.
             </p>
           </div>
 
@@ -332,7 +332,7 @@ export function WhyAll2ools() {
               100% Secure & Private
             </h3>
             <p className="text-muted-foreground">
-              Your files are automatically deleted after conversion. We don't store, track, or share your documents. Perfect for sensitive business PDFs, invoices, and contracts.
+              Your files are automatically deleted after conversion. We don&apos;t store, track, or share your documents. Perfect for sensitive business PDFs, invoices, and contracts.
             </p>
           </div>
 

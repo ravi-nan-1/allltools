@@ -82,12 +82,9 @@ export default async function ToolPage() {
     image: image?.imageUrl || `https://picsum.photos/seed/${tool.slug}/1200/400`,
     imageHint: image?.imageHint || 'tool banner',
   };
-
-  const { icon, ...rest } = toolWithImage;
-
   return (
     <ToolPageClient
-      tool={{ ...rest, icon: tool.icon }}
+      tool={toolWithImage}
       aiContent={aiContent}
     />
   );

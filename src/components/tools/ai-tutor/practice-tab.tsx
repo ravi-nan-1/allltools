@@ -152,7 +152,7 @@ export function PracticeTab() {
                 </Alert>
               )}
               {availableContent.length === 0 && (
-                <p className="text-sm text-muted-foreground">Your library is empty. Add content in the "Library" tab first.</p>
+                <p className="text-sm text-muted-foreground">Your library is empty. Add content in the &quot;Library&quot; tab first.irst.</p>
               )}
             </CardContent>
             <CardFooter>
@@ -253,7 +253,7 @@ export function PracticeTab() {
           <Card className="w-full text-center h-fit">
             <CardHeader>
               <CardTitle>Your Score</CardTitle>
-              <CardDescription>Results for "{selectedContent?.title}"</CardDescription>
+              <CardDescription>Results for &quot;{selectedContent?.title}&quot;</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div

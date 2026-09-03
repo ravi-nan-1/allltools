@@ -11,7 +11,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Calculator, AlertTriangle, Loader2, LineChart, PieChart, Landmark, DollarSign, Scale, Sparkles, Globe } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
@@ -269,8 +269,8 @@ export function BusinessValuationCalculator() {
                     </CardHeader>
                     <CardContent>
                         <p className="text-sm text-muted-foreground mb-2">
-                          e.g., "A 3-year old profitable Shopify store doing $1M in sales"
-                        </p>
+                          e.g., &quot;A 3-year old profitable Shopify store doing $1M in sales&quot;
+                             </p>
                         <div className="flex gap-2">
                             <Input name="ai-prompt" ref={aiPromptRef} placeholder="Describe a business..." disabled={isProcessingAi} />
                             <Button type="button" onClick={handleAiPrompt} disabled={isProcessingAi}>
@@ -358,7 +358,7 @@ export function BusinessValuationCalculator() {
                         </FormItem>
                     )} />
                     <FormField control={form.control} name="ownerSalary" render={({ field }) => (
-                        <FormItem><FormLabel>Owner's Salary ({country})</FormLabel><FormControl><Input type="number" {...field} /></FormControl></FormItem>
+                        <FormItem><FormLabel>Owner&apos;s Salary ({country})</FormLabel><FormControl><Input type="number" {...field} /></FormControl></FormItem>
                     )} />
                      <FormField control={form.control} name="addBacks" render={({ field }) => (
                         <FormItem><FormLabel>Discretionary Expenses / Add-backs ({country})</FormLabel><FormControl><Input type="number" {...field} /></FormControl></FormItem>
@@ -432,7 +432,7 @@ export function BusinessValuationCalculator() {
                          <Card>
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2"><Scale className="text-primary"/>Asset-Based</CardTitle>
-                                <CardDescription>Valuation based on the company's balance sheet (book value).</CardDescription>
+                                <CardDescription>Valuation based on the company&apos;s balance sheet (book value).</CardDescription>
                             </CardHeader>
                             <CardContent className="text-center">
                                  <div className="p-4 bg-muted rounded-lg">

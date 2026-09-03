@@ -3,22 +3,15 @@ import type { Metadata } from 'next';
 import {
   ShieldCheck,
   FileUp,
-  Server,
   Cookie,
-  Users,
-  Lock,
   Baby,
   UserCheck,
   RefreshCcw,
   Mail,
-  List,
-  FileText,
-  BrainCircuit,
   Zap,
   CheckCircle,
   XCircle,
   Database,
-  Link as LinkIcon,
   Bot
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';

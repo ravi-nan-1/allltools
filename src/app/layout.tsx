@@ -7,9 +7,6 @@ import { Suspense } from 'react';
 import { MainLayout } from '@/components/shared/main-layout';
 import { Inter, Source_Code_Pro } from 'next/font/google';
 import { cn } from '@/lib/utils';
-import { ClientOnly } from '@/components/shared/client-only';
-import { AdBanner } from '@/components/shared/ad-banner';
-import { DeferredAdBanner } from '@/components/shared/deferred-ad-banner';
 
 const inter = Inter({
   subsets: ['latin'],

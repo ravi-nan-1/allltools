@@ -43,7 +43,7 @@ export function ResultsDisplay({ result }: ResultsDisplayProps) {
     <Card>
       <CardHeader>
         <CardTitle>Analysis Report</CardTitle>
-        <CardDescription>Here's the breakdown of the similarity check.</CardDescription>
+        <CardDescription>Here&apos;s the breakdown of the similarity check.</CardDescription>
       </CardHeader>
       <CardContent className="grid gap-6 md:grid-cols-3">
         <div className="flex flex-col items-center justify-center gap-4 p-6 rounded-lg bg-secondary/50">
@@ -58,7 +58,7 @@ export function ResultsDisplay({ result }: ResultsDisplayProps) {
               <ul className="space-y-2">
                 {result.matchedPhrases.map((phrase, index) => (
                   <li key={index} className="p-2 text-sm italic border-l-4 rounded-r-md bg-muted border-accent">
-                    "{phrase}"
+                    &quot;{phrase}&quot;
                   </li>
                 ))}
               </ul>

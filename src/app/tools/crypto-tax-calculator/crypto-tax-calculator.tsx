@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Form, FormField } from "@/components/ui/form";
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { UploadCloud, Link, Keyboard, AlertTriangle, ArrowRight, ArrowLeft, Loader2, Building, Wallet, Trash2, PlusCircle, Info, Calculator, Globe } from 'lucide-react';
 import { Input } from '@/components/ui/input';
@@ -513,8 +513,8 @@ export function CryptoTaxCalculator() {
         <AlertTriangle className="h-4 w-4" />
         <AlertTitle>Disclaimer: For Educational & Illustrative Use Only</AlertTitle>
         <AlertDescription>
-          This is a simplified tool using the FIFO method. It does not account for all transaction types, fees, or specific tax laws (like the UK's 'share pooling' rule). **Do not use for official tax filing.** Always consult a qualified tax professional.
-        </AlertDescription>
+          This is a simplified tool using the FIFO method. It does not account for all transaction types, fees, or specific tax laws (like the UK&apos;s 'share pooling&apos; rule). **Do not use for official tax filing.** Always consult a qualified tax professional.
+                  </AlertDescription>
       </Alert>
       
       <Form {...form}>

@@ -10,7 +10,7 @@ import { Slider } from '@/components/ui/slider';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Loader2, Banknote, Landmark, Building, University } from 'lucide-react';
+import { Loader2, Landmark, Building, University } from 'lucide-react';
 
 const formSchema = z.object({
   loanAmount: z.number().min(1000, "Must be at least 1,000").max(10000000, "Must be at most 1,00,00,000 / 1,000,000"),
