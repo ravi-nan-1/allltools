@@ -1,12 +1,7 @@
 
 import type { Metadata } from 'next';
 import {
-  HeartHandshake,
-  LayoutGrid,
   Zap,
-  Star,
-  Users,
-  Eye,
   CheckCircle,
   XCircle,
   Mail,
