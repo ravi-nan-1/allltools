@@ -104,11 +104,19 @@ export function FreeCheatSheetGenerator() {
         title: "Cheat sheet ready!",
         description: `Detected content type: ${result.contentType}`,
       });
-    } catch (e: any) {
-      const errorMessage = e?.message || "Something unexpected happened. Please try again.";
+    } catch (e) {
+      const errorMessage =
+        e instanceof Error
+          ? e.message
+          : "Something unexpected happened. Please try again.";
+    
       setError(errorMessage);
-      toast({ variant: "destructive", title: "Generation failed", description: errorMessage });
-    } finally {
+      toast({
+        variant: "destructive",
+        title: "Generation failed",
+        description: errorMessage,
+      });
+} finally {
       setIsLoading(false);
       setLoadingMessage("");
     }
