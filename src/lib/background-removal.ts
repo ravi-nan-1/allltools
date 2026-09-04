@@ -11,33 +11,51 @@ import { pipeline, env } from "@huggingface/transformers";
 import { loadImage } from "./image-processing";
 
 env.allowLocalModels = false;
-env.useBrowserCache = false;
+env.useBrowserCache = true;
 
 const MODEL_ID = "briaai/RMBG-1.4";
 const BACKGROUND_REMOVAL_TASK = "background-removal" as const;
 
 // The model (~176MB) is cached across calls so it's only downloaded/initialized
 // once per session instead of on every image.
-let segmenterPromise: Promise<any> | null = null;
+type BackgroundRemovalPipeline = (
+  image: string
+) => Promise<Array<{ toCanvas: () => HTMLCanvasElement }>>;
+
+let segmenterPromise: Promise<BackgroundRemovalPipeline> | null = null;
+
+async function createSegmenter(
+  device: "webgpu" | "wasm"
+): Promise<BackgroundRemovalPipeline> {
+  const segmenter = await pipeline(BACKGROUND_REMOVAL_TASK, MODEL_ID, {
+    device,
+    dtype: "fp32",
+  });
+  return segmenter as unknown as BackgroundRemovalPipeline;
+}
 
 async function getSegmenter(onProgress?: (status: string) => void) {
   if (segmenterPromise) return segmenterPromise;
 
   onProgress?.("Loading AI model...");
 
-  // WebGPU gives the best performance but isn't available in every browser yet;
-  // fall back to the CPU/WASM backend so the tool still works everywhere.
   const hasWebGPU = typeof navigator !== "undefined" && "gpu" in navigator;
 
-  segmenterPromise = pipeline(BACKGROUND_REMOVAL_TASK, MODEL_ID, {
-    device: hasWebGPU ? "webgpu" : "wasm",
-    dtype: "fp32",
-  }).catch((err) => {
-    console.warn("WebGPU pipeline failed, falling back to CPU:", err);
-    const fallback = pipeline(BACKGROUND_REMOVAL_TASK, MODEL_ID, { device: "wasm", dtype: "fp32" });
-    segmenterPromise = fallback;
-    return fallback;
-  });
+  segmenterPromise = createSegmenter(hasWebGPU ? "webgpu" : "wasm")
+    .catch(async (err) => {
+      if (hasWebGPU) {
+        console.warn(
+          "WebGPU background-removal pipeline failed, falling back to WASM:",
+          err
+        );
+        return createSegmenter("wasm");
+      }
+      throw err;
+    })
+    .catch((err) => {
+      segmenterPromise = null;
+      throw err;
+    });
 
   return segmenterPromise;
 }

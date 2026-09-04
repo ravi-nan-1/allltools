@@ -66,12 +66,14 @@ Specific instructions:
         },
       ],
       config: {
-        responseModalities: ['IMAGE', 'TEXT'],
+        responseModalities: ['IMAGE'],
       },
     });
 
     if (!media?.url) {
-      throw new Error('AI model did not return an image.');
+      throw new Error(
+        'The image model did not return a headshot. Please try a clearer selfie and try again.'
+      );
     }
 
     return { generatedHeadshotDataUri: media.url };

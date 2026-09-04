@@ -23,7 +23,7 @@ const ContentType = z.enum([
 ]);
 
 const SummarizeContentAndGenerateCheatSheetInputSchema = z.object({
-  text: z.string().describe('The content to summarize and generate a cheat sheet for.'),
+  text: z.string().min(1).max(50000).describe('The content to summarize and generate a cheat sheet for.'),
   targetLanguage: z.string().optional().describe('The target language for the cheat sheet output (e.g., "English", "Spanish"). Defaults to English.'),
 });
 export type SummarizeContentAndGenerateCheatSheetInput = z.infer<typeof SummarizeContentAndGenerateCheatSheetInputSchema>;
@@ -118,11 +118,11 @@ const summarizeContentAndGenerateCheatSheetFlow = ai.defineFlow(
 
     } catch (e) {
       console.error("Error in cheat sheet generation:", e);
-      // Instead of throwing, create a user-facing error message in HTML.
-      cheatSheetHtml = `<div class="p-4 rounded-lg border border-destructive/50 bg-destructive/10 text-destructive">
-          <h3 class="font-bold">Generation Failed</h3>
-          <p>The AI model failed to generate a cheat sheet for this content. This could be due to network issues or content restrictions. Please try again with different input.</p>
-        </div>`;
+      throw new Error(
+        e instanceof Error
+          ? e.message
+          : 'The AI model failed to generate the cheat sheet. Please try again.'
+      );
     }
 
     return {

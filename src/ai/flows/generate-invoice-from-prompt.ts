@@ -11,7 +11,7 @@ import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
 
 const GenerateInvoiceInputSchema = z.object({
-  prompt: z.string().describe('A natural language description of the invoice to be created.'),
+  prompt: z.string().min(3).max(4000).describe('A natural language description of the invoice to be created.'),
 });
 export type GenerateInvoiceInput = z.infer<typeof GenerateInvoiceInputSchema>;
 
@@ -60,6 +60,27 @@ const generateInvoiceFlow = ai.defineFlow(
   },
   async input => {
     const { output } = await generateInvoicePrompt(input);
-    return output!;
+
+    if (!output) {
+      throw new Error(
+        'The AI model did not return invoice data. Please simplify your prompt and try again.'
+      );
+    }
+
+    return {
+      ...output,
+      billTo: output.billTo?.trim() || 'Customer',
+      lineItems:
+        output.lineItems?.length
+          ? output.lineItems.map((item) => ({
+              ...item,
+              quantity: Number.isFinite(item.quantity) && item.quantity > 0 ? item.quantity : 1,
+              rate: Number.isFinite(item.rate) && item.rate >= 0 ? item.rate : 0,
+            }))
+          : [{ description: 'Service', quantity: 1, rate: 0 }],
+      tax: output.tax ?? 0,
+      discount: output.discount ?? 0,
+      shipping: output.shipping ?? 0,
+    };
   }
 );

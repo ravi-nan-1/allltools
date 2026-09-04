@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import {
@@ -65,6 +65,12 @@ export function AiHeadshotGenerator() {
   const [selectedBackground, setSelectedBackground] = useState<string>(backgrounds[0].prompt);
 
   const { toast } = useToast();
+
+  useEffect(() => {
+    return () => {
+      if (originalUrl) URL.revokeObjectURL(originalUrl);
+    };
+  }, [originalUrl]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];

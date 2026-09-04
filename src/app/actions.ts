@@ -13,6 +13,9 @@ import { generateProductDescription } from '@/ai/flows/generate-product-descript
 import { generateRegexFromText, describeRegex } from '@/ai/flows/generate-regex-from-text';
 import { generateWebhookPayload } from '@/ai/flows/webhook-tester';
 import { generateArticleOutline } from '@/ai/flows/generate-article-outline';
+import {
+  summarizeContentAndGenerateCheatSheet,
+} from '@/ai/flows/summarize-content-generate-cheatsheet';
 import type { GenerateRegexInput, DescribeRegexInput } from '@/ai/flows/generate-regex-from-text';
 
 const GenerateProductDescriptionInputSchema = z.object({
@@ -22,23 +25,32 @@ const GenerateProductDescriptionInputSchema = z.object({
   tone: z.string().min(1, 'Please select a tone.'),
 });
 
+const MAX_AI_IMAGE_BYTES = 4 * 1024 * 1024;
+const MAX_CHEAT_SHEET_CHARS = 50000;
+
 async function fileToDataUri(file: File): Promise<string> {
+  if (!(file instanceof File) || file.size === 0) {
+    throw new Error('Please provide a valid image file.');
+  }
+
+  if (file.size > MAX_AI_IMAGE_BYTES) {
+    throw new Error('Image file is too large. Please use an image under 4MB.');
+  }
+
+  if (!file.type.startsWith('image/')) {
+    throw new Error('Unsupported file type. Please upload a JPG, PNG, or WEBP image.');
+  }
+
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
-  const base64 = buffer.toString('base64');
-  return `data:${file.type};base64,${base64}`;
+  return `data:${file.type};base64,${buffer.toString('base64')}`;
 }
 
 export async function handleBackgroundRemoval(formData: FormData) {
   try {
-    const imageFile = formData.get('image') as File;
-    if (!imageFile) {
+    const imageFile = formData.get('image');
+    if (!(imageFile instanceof File)) {
       return { error: 'No image file provided.' };
-    }
-
-    // Add a size check
-    if (imageFile.size > 4 * 1024 * 1024) { // 4MB limit
-        return { error: 'Image file is too large. Please use a file under 4MB.' };
     }
 
     const productPhotoDataUri = await fileToDataUri(imageFile);
@@ -80,6 +92,46 @@ export async function handleContentAnalysis(formData: FormData) {
     return result;
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Failed to analyze content.';
+    return { error: message };
+  }
+}
+
+export async function handleCheatSheetGeneration(
+  text: string,
+  targetLanguage: string
+) {
+  try {
+    if (typeof text !== 'string' || !text.trim()) {
+      return { error: 'Please provide some content to summarize.' };
+    }
+
+    if (text.length > MAX_CHEAT_SHEET_CHARS) {
+      return {
+        error: `Please keep the source content under ${MAX_CHEAT_SHEET_CHARS.toLocaleString()} characters.`,
+      };
+    }
+
+    const language =
+      typeof targetLanguage === 'string' && targetLanguage.trim()
+        ? targetLanguage.trim()
+        : 'English';
+
+    const result = await summarizeContentAndGenerateCheatSheet({
+      text: text.trim(),
+      targetLanguage: language,
+    });
+
+    if (!result?.cheatSheetHtml?.trim()) {
+      return { error: 'The AI returned an empty cheat sheet. Please try again.' };
+    }
+
+    return { data: result };
+  } catch (error) {
+    const message =
+      error instanceof Error
+        ? error.message
+        : 'Failed to generate the cheat sheet. Please try again.';
+    console.error('Cheat sheet generation error:', error);
     return { error: message };
   }
 }
@@ -208,14 +260,12 @@ export async function handleFinancialsGeneration(prompt: string) {
 
 export async function handleHeadshotGeneration(formData: FormData) {
   try {
-    const imageFile = formData.get('image') as File;
-    const style = formData.get('style') as string;
+    const imageFile = formData.get('image');
+    const styleValue = formData.get('style');
+    const style = typeof styleValue === 'string' ? styleValue.trim() : '';
 
-    if (!imageFile) {
+    if (!(imageFile instanceof File)) {
       return { error: 'No image file provided.' };
-    }
-     if (imageFile.size > 4 * 1024 * 1024) { // 4MB limit
-        return { error: 'Image file is too large. Please use a file under 4MB.' };
     }
     if (!style) {
         return { error: 'No style selected.' };

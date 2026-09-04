@@ -42,13 +42,16 @@ const removeBackgroundFlow = ai.defineFlow(
   },
   async input => {
     const {media} = await ai.generate({
-      model: 'googleai/gemini-2.5-flash-image-preview',
+      model: 'googleai/gemini-2.5-flash-image',
       prompt: [
         {media: {url: input.productPhotoDataUri}},
-        {text: 'Remove the background from this product photo. The resulting image should have a transparent background.'},
+        {
+          text:
+            'Edit this product photo by precisely removing the entire background while preserving the product itself, including its shape, edges, colors, texture, text, logos, and fine details. Do not redesign, crop, or change the product. The final image must contain only the isolated product on a transparent background.',
+        },
       ],
       config: {
-        responseModalities: ['IMAGE', 'TEXT'],
+        responseModalities: ['IMAGE'],
       },
     });
 

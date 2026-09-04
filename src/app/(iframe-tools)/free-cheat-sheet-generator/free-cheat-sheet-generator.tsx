@@ -2,10 +2,8 @@
 "use client";
 
 import { useState, useRef } from "react";
-import {
-  summarizeContentAndGenerateCheatSheet,
-  type SummarizeContentAndGenerateCheatSheetOutput,
-} from "@/ai/flows/summarize-content-generate-cheatsheet";
+import { handleCheatSheetGeneration } from "@/app/actions";
+import type { SummarizeContentAndGenerateCheatSheetOutput } from "@/ai/flows/summarize-content-generate-cheatsheet";
 import { extractTextFromUrl } from "@/ai/flows/extract-text-from-url";
 import { extractTextFromPdf } from "@/ai/flows/extract-text-from-pdf";
 import { Button } from "@/components/ui/button";
@@ -76,6 +74,9 @@ export function FreeCheatSheetGenerator() {
           setIsLoading(false);
           return;
         }
+        if (pdfFile.size > 10 * 1024 * 1024) {
+          throw new Error("PDF is too large. Please use a PDF under 10MB.");
+        }
         setLoadingMessage("Reading the PDF...");
         const pdfDataUri = await new Promise<string>((resolve, reject) => {
           const reader = new FileReader();
@@ -88,18 +89,24 @@ export function FreeCheatSheetGenerator() {
         setLoadingMessage(`Summarizing ${pdfResult.numPages} page(s)...`);
       }
 
-      if (!contentToProcess.trim()) {
+      contentToProcess = contentToProcess.trim();
+
+      if (!contentToProcess) {
         throw new Error("We couldn't find any meaningful content to summarize.");
       }
 
-      const result = await summarizeContentAndGenerateCheatSheet({
-        text: contentToProcess,
-        targetLanguage,
-      });
-      if (!result || !result.cheatSheetHtml) {
+      if (contentToProcess.length > 50000) {
+        throw new Error("The extracted content is too large. Please use a shorter document or webpage (50,000 characters max).");
+      }
+
+      const response = await handleCheatSheetGeneration(contentToProcess, targetLanguage);
+      if ("error" in response) {
+        throw new Error(response.error);
+      }
+      if (!response.data?.cheatSheetHtml) {
         throw new Error("Cheat sheet generation failed. Please try again.");
       }
-      setCheatSheet(result);
+      setCheatSheet(response.data);
       toast({
         title: "Cheat sheet ready!",
         description: `Detected content type: ${result.contentType}`,
@@ -118,26 +125,33 @@ export function FreeCheatSheetGenerator() {
     if (!cheatSheetRef.current) return;
 
     const cheatSheetHtml = cheatSheetRef.current.innerHTML;
-    const pageStyles = `
-      <!DOCTYPE html>
-      <html lang="en">
-        <head>
-          <title>All2ools Cheat Sheet</title>
-          <script src="https://cdn.tailwindcss.com"><\/script>
-        </head>
-        <body class="bg-white">
-          <div class="p-4 sm:p-6 md:p-8">${cheatSheetHtml}</div>
-        </body>
-      </html>`;
+    const pageStyles = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>All2ools Cheat Sheet</title>
+<style>
+body{font-family:Arial,sans-serif;background:#fff;color:#111;line-height:1.5;margin:0}
+.container{max-width:1000px;margin:0 auto;padding:32px}
+h1,h2,h3{line-height:1.2}
+section,.card,.box{margin:12px 0;padding:16px;border:1px solid #ddd;border-radius:12px}
+pre{white-space:pre-wrap;background:#f6f6f6;padding:12px;border-radius:8px;overflow:auto}
+code{background:#f3f3f3;padding:2px 4px;border-radius:4px}
+table{width:100%;border-collapse:collapse}th,td{border:1px solid #ddd;padding:8px;text-align:left}
+</style>
+</head>
+<body><main class="container">${cheatSheetHtml}</main></body>
+</html>`;
 
-    const blob = new Blob([pageStyles], { type: "text/html" });
+    const blob = new Blob([pageStyles], { type: "text/html;charset=utf-8" });
     const objectUrl = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = objectUrl;
-    a.download = "cheatsheet.html";
+    a.download = "all2ools-cheatsheet.html";
     document.body.appendChild(a);
     a.click();
-    document.body.removeChild(a);
+    a.remove();
     URL.revokeObjectURL(objectUrl);
 
     toast({ title: "Downloaded", description: "Your cheat sheet was saved as an HTML file." });

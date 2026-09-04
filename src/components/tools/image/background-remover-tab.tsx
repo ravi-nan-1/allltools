@@ -26,12 +26,15 @@ const BackgroundRemoverTab = () => {
       const blob = await removeBackgroundFromFile(file, (status) => setProgress(status));
       setProcessedImage(URL.createObjectURL(blob));
       setProcessedBlob(blob);
-      toast({ title: "Success!", description: "Background removed successfully" });
+      toast({ title: "Success!", description: "Background removed successfully." });
     } catch (error) {
       console.error("Error removing background:", error);
       toast({
-        title: "Error",
-        description: "Failed to remove background. Your browser may not support the in-browser AI model — try a different browser or a smaller image.",
+        title: "Background removal failed",
+        description:
+          error instanceof Error
+            ? error.message
+            : "The browser AI model could not process this image. Try a smaller JPG/PNG.",
         variant: "destructive",
       });
     } finally {
@@ -55,7 +58,7 @@ const BackgroundRemoverTab = () => {
           <h2 className="text-2xl font-bold">AI Background Remover</h2>
         </div>
         <p className="text-muted-foreground">
-          Remove image backgrounds instantly with AI. 100% browser-based — nothing is uploaded.
+          Remove image backgrounds with AI directly in your browser. Your image stays on your device.
         </p>
       </div>
 
