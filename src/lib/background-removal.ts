@@ -1,11 +1,11 @@
 // Client-side AI background removal using transformers.js's dedicated
-// "background-removal" pipeline (BRIA RMBG-1.4). No image data is ever
+// "background-removal" pipeline (ORMBG-ONNX). No image data is ever
 // uploaded to a server — everything runs on-device.
 //
 // Note: the model previously wired up here (Xenova/segformer-b0-finetuned-ade-512-512)
 // is a 150-class scene-parsing model (wall/floor/car/etc.), not a foreground/background
 // matting model — grabbing its first result was effectively random and produced garbage
-// or silently-broken output. RMBG-1.4 is purpose-built for this exact task.
+// or silently-broken output. ORMBG-ONNX is purpose-built for this exact task.
 
 import { pipeline, env } from "@huggingface/transformers";
 import { loadImage } from "./image-processing";
@@ -13,14 +13,18 @@ import { loadImage } from "./image-processing";
 env.allowLocalModels = false;
 env.useBrowserCache = true;
 
-const MODEL_ID = "briaai/RMBG-1.4";
+const MODEL_ID = "onnx-community/ormbg-ONNX";
 const BACKGROUND_REMOVAL_TASK = "background-removal" as const;
 
-// The model (~176MB) is cached across calls so it's only downloaded/initialized
+// The quantized model is cached across calls so it's only downloaded/initialized
 // once per session instead of on every image.
+type BackgroundRemovalResult = {
+  toCanvas: () => HTMLCanvasElement;
+};
+
 type BackgroundRemovalPipeline = (
   image: string
-) => Promise<Array<{ toCanvas: () => HTMLCanvasElement }>>;
+) => Promise<BackgroundRemovalResult[]>;
 
 let segmenterPromise: Promise<BackgroundRemovalPipeline> | null = null;
 
@@ -29,7 +33,8 @@ async function createSegmenter(
 ): Promise<BackgroundRemovalPipeline> {
   const segmenter = await pipeline(BACKGROUND_REMOVAL_TASK, MODEL_ID, {
     device,
-    dtype: "fp32",
+    // q8 is much lighter for WASM/CPU; fp16 is preferred when WebGPU is available.
+    dtype: device === "webgpu" ? "fp16" : "q8",
   });
   return segmenter as unknown as BackgroundRemovalPipeline;
 }
@@ -67,8 +72,8 @@ export const removeBackground = async (
   const segmenter = await getSegmenter(onProgress);
 
   onProgress?.("Removing background...");
-  // Returns an array of RawImage results (RGBA, already cut out, same
-  // dimensions as the input) — one per input image.
+  // The dedicated background-removal pipeline returns an RGBA image with
+  // the predicted foreground retained and the background made transparent.
   const [result] = await segmenter(imageElement.src);
 
   if (!result) {

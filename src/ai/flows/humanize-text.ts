@@ -52,7 +52,7 @@ const humanizeTextPrompt = ai.definePrompt({
   name: 'humanizeTextPrompt',
   input: {schema: HumanizeTextInputSchema},
   output: {schema: HumanizeTextOutputSchema},
-  model: 'googleai/gemini-2.0-flash',
+  model: 'googleai/gemini-3.6-flash',
   prompt: `Rewrite the following text with a {{{style}}} tone. Your goal is to make it sound completely human-written.
 
 - Adjust the length to be {{{length}}} than the original.

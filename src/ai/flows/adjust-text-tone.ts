@@ -42,7 +42,7 @@ const adjustTextTonePrompt = ai.definePrompt({
   name: 'adjustTextTonePrompt',
   input: {schema: AdjustTextToneInputSchema},
   output: {schema: AdjustTextToneOutputSchema},
-  model: 'googleai/gemini-2.0-flash',
+  model: 'googleai/gemini-3.6-flash',
   prompt: `Rewrite the following text with a {{{tone}}} tone.
 
 - Adjust the length to be {{{length}}} than the original.

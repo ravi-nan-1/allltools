@@ -38,7 +38,7 @@ const prompt = ai.definePrompt({
   name: 'simplifyComplexTextPrompt',
   input: {schema: SimplifyComplexTextInputSchema},
   output: {schema: SimplifyComplexTextOutputSchema},
-  model: 'googleai/gemini-2.0-flash',
+  model: 'googleai/gemini-3.6-flash',
   prompt: `You are an expert in simplifying complex text. Your goal is to take the input text and rewrite it in a way that is easier to understand, while maintaining the original meaning.
 
 - Adjust the length to be {{{length}}} than the original.

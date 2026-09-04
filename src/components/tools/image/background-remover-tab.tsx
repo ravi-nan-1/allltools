@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Download, Loader2, Sparkles } from "lucide-react";
 import { removeBackgroundFromFile } from "@/lib/background-removal";
@@ -16,9 +16,38 @@ const BackgroundRemoverTab = () => {
   const [processedBlob, setProcessedBlob] = useState<Blob | null>(null);
   const { toast } = useToast();
 
+  useEffect(() => {
+    return () => {
+      if (originalImage) URL.revokeObjectURL(originalImage);
+      if (processedImage) URL.revokeObjectURL(processedImage);
+    };
+  }, [originalImage, processedImage]);
+
   const handleImageUpload = async (file: File) => {
+    if (!file.type.startsWith("image/")) {
+      toast({
+        title: "Invalid image",
+        description: "Please choose a JPG, PNG, or WebP image.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      toast({
+        title: "Image is too large",
+        description: "Please choose an image smaller than 10 MB.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (originalImage) URL.revokeObjectURL(originalImage);
+    if (processedImage) URL.revokeObjectURL(processedImage);
+
     setOriginalImage(URL.createObjectURL(file));
     setProcessedImage(null);
+    setProcessedBlob(null);
     setProcessing(true);
     setProgress("Starting...");
 
@@ -94,6 +123,8 @@ const BackgroundRemoverTab = () => {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button
               onClick={() => {
+                if (originalImage) URL.revokeObjectURL(originalImage);
+                if (processedImage) URL.revokeObjectURL(processedImage);
                 setOriginalImage(null);
                 setProcessedImage(null);
                 setProcessedBlob(null);
