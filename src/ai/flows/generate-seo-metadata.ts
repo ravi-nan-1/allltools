@@ -10,6 +10,7 @@
  */
 
 import {ai} from '@/ai/genkit';
+import {tools} from '@/lib/tools';
 import {z} from 'genkit';
 
 const GenerateSEOMetadataInputSchema = z.object({
@@ -49,30 +50,42 @@ const generateSEOMetadataFlow = ai.defineFlow(
     outputSchema: GenerateSEOMetadataOutputSchema,
   },
   async (input) => {
-    // AI generation is removed to prevent errors. Returning a placeholder.
-    const faqContent = 'FAQs are currently unavailable. Please check back later.';
+    const tool = input.toolSlug ? tools.find((item) => item.slug === input.toolSlug) : undefined;
+    const seoTitle = tool?.metaTitle || `${input.toolName} | All2ools`;
+    const seoDescription = tool?.metaDescription || input.toolDescription.substring(0, 160);
+    const faqContent = tool?.faq?.map((faq, index) => `${index + 1}. ${faq.question}\n${faq.answer}`).join('\n\n') || '';
 
-    const seoTitle = `${input.toolName} | All2ools`;
-    const seoDescription = input.toolDescription.substring(0, 160);
+    const categoryMap: Record<string, string> = {
+      Finance: 'FinanceApplication',
+      Business: 'BusinessApplication',
+      Image: 'MultimediaApplication',
+      SEO: 'BusinessApplication',
+      Developer: 'DeveloperApplication',
+      Health: 'HealthApplication',
+    };
 
     const jsonLd = {
       '@context': 'https://schema.org',
       '@type': 'WebApplication',
       name: input.toolName,
       description: seoDescription,
-      applicationCategory: 'BusinessApplication',
+      applicationCategory: tool ? categoryMap[tool.category] || 'WebApplication' : 'WebApplication',
       operatingSystem: 'Any',
+      browserRequirements: 'Requires a modern web browser with JavaScript enabled.',
       ...(input.toolSlug ? { url: `https://all2ools.com/tools/${input.toolSlug}` } : {}),
+      ...(tool?.keywords?.length ? { keywords: tool.keywords.join(', ') } : {}),
+      ...(tool?.features?.length ? { featureList: tool.features } : {}),
       offers: {
         '@type': 'Offer',
         price: '0',
+        priceCurrency: 'USD',
       },
     };
 
     return {
       seoTitle,
       seoDescription,
-      faqContent: faqContent,
+      faqContent,
       jsonLdSchema: JSON.stringify(jsonLd, null, 2),
     };
   }

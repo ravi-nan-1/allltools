@@ -5,7 +5,6 @@ import { useState } from "react";
 import { FileConverter, type ConversionType } from "@/components/tools/pdf-to-word/file-converter";
 import { FeatureGrid } from "@/components/tools/pdf-to-word/feature-grid";
 import { TrustAndSecurity } from "@/components/tools/pdf-to-word/trust-and-security";
-import { SeoContent } from "@/components/tools/pdf-to-word/seo-content";
 
 export function PdfToWordConverter() {
   const [conversionType, setConversionType] = useState<ConversionType>("pdf-to-word");
@@ -20,9 +19,6 @@ export function PdfToWordConverter() {
       </div>
       <div className="w-full">
         <TrustAndSecurity />
-      </div>
-      <div className="w-full">
-        <SeoContent />
       </div>
     </div>
   );
