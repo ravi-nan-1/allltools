@@ -145,28 +145,26 @@ export function AiHeadshotGenerator() {
           <div>
             <label
               htmlFor="image-upload"
-              className="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer bg-muted hover:bg-background transition-colors"
+              className="relative flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer bg-muted hover:bg-background transition-colors overflow-hidden"
             >
-              <div className="flex flex-col items-center justify-center pt-5 pb-6 text-center">
-                {originalUrl ? (
-                  <img
-                    src={originalUrl}
-                    alt="Uploaded selfie"
-                    className="max-h-full max-w-full object-contain rounded-md"
-                  />
-                ) : (
-                  <>
-                    <UploadCloud className="w-10 h-10 mb-3 text-muted-foreground" />
-                    <p className="mb-2 text-sm text-muted-foreground">
-                      <span className="font-semibold">Click to upload</span> or
-                      drag and drop your selfie
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      PNG, JPG, WEBP (Max 4MB)
-                    </p>
-                  </>
-                )}
-              </div>
+              {originalUrl ? (
+                <img
+                  src={originalUrl}
+                  alt="Uploaded selfie"
+                  className="absolute inset-0 w-full h-full object-contain rounded-lg p-2"
+                />
+              ) : (
+                <div className="flex flex-col items-center justify-center pt-5 pb-6 text-center">
+                  <UploadCloud className="w-10 h-10 mb-3 text-muted-foreground" />
+                  <p className="mb-2 text-sm text-muted-foreground">
+                    <span className="font-semibold">Click to upload</span> or
+                    drag and drop your selfie
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    PNG, JPG, WEBP (Max 4MB)
+                  </p>
+                </div>
+              )}
               <Input
                 id="image-upload"
                 type="file"

@@ -2,6 +2,16 @@ import type {NextConfig} from 'next';
 
 const nextConfig: NextConfig = {
   /* config options here */
+  experimental: {
+    // Server Actions default to a 1MB request body limit. Several tools
+    // (AI Headshot Generator, etc.) accept image uploads up to 4MB via
+    // Server Actions, so without this the upload silently fails past 1MB
+    // with a generic "unexpected response was received from the server"
+    // error on the client.
+    serverActions: {
+      bodySizeLimit: '8mb',
+    },
+  },
   async redirects() {
     // These top-level routes are leftovers from the old iframe-embed architecture.
     // They're never linked internally (every link on the site points to /tools/<slug>)
