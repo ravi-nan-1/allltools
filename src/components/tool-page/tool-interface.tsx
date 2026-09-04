@@ -27,7 +27,6 @@ import { PdfToWordConverter } from '@/app/tools/pdf-to-word-converter/pdf-to-wor
 import { AiTutor } from '@/app/tools/ai-tutor/ai-tutor';
 import { ExcelPowerTools } from '@/app/tools/excel-power-tools/excel-power-tools';
 import { FinanceCalculator } from '@/components/tools/finance/finance-calculator';
-import { AdvancedCalculator } from '@/components/tools/finance/advanced-calculators';
 import { AiProductBackgroundRemover } from '@/app/tools/ai-product-background-remover/ai-product-background-remover';
 
 interface ToolInterfaceProps {
@@ -36,11 +35,9 @@ interface ToolInterfaceProps {
 
 export function ToolInterface({ slug }: ToolInterfaceProps) {
   const financeSlugs = new Set(['emi-calculator','loan-calculator','mortgage-calculator','home-loan-calculator','car-loan-calculator','personal-loan-calculator','student-loan-calculator','credit-card-payoff-calculator','interest-calculator','simple-interest-calculator','compound-interest-calculator','investment-return-calculator','roi-calculator','inflation-calculator']);
-  const advancedSlugs = new Set(['stopwatch','retirement-calculator','pension-calculator','sip-calculator','fd-calculator','ppf-calculator','nps-calculator','401k-calculator','social-security-calculator','income-tax-calculator','take-home-pay-calculator','salary-calculator','gst-calculator','sales-tax-calculator','percentage-calculator','age-calculator','date-calculator','bmi-calculator','calorie-calculator','mortgage-payment-calculator','auto-loan-calculator','discount-calculator','tip-calculator','profit-margin-calculator','break-even-calculator','currency-converter','time-zone-converter','scientific-calculator','random-number-generator']);
 
   const renderTool = () => {
     if (financeSlugs.has(slug)) return <FinanceCalculator slug={slug} />;
-    if (advancedSlugs.has(slug)) return <AdvancedCalculator slug={slug} />;
     switch (slug) {
       case 'free-image-file-compressor':
         return <FreeImageFileCompressor />;
