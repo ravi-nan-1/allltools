@@ -33,7 +33,7 @@ const writeEmailPrompt = ai.definePrompt({
   name: 'writeEmailPrompt',
   input: {schema: WriteEmailInputSchema},
   output: {schema: WriteEmailOutputSchema},
-  model: 'googleai/gemini-2.0-flash',
+  model: 'googleai/gemini-3.6-flash',
   prompt: `Write an email based on the following details:
 
 Topic: {{{topic}}}
