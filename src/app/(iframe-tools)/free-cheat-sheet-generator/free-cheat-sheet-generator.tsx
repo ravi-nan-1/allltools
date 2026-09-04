@@ -109,7 +109,7 @@ export function FreeCheatSheetGenerator() {
       setCheatSheet(response.data);
       toast({
         title: "Cheat sheet ready!",
-        description: `Detected content type: ${result.contentType}`,
+        description: `Detected content type: ${response.data.contentType ?? "General"}`,
       });
     } catch (e) {
       const errorMessage = e instanceof Error ? e.message : "Something unexpected happened. Please try again.";
