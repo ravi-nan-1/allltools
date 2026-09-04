@@ -64,14 +64,14 @@ type TableData = {
 
 type FlattenStyle = 'dot' | 'underscore';
 
-const JsonTree = ({ data, level = 0 }: { data: any; level?: number }) => {
+const JsonTree = ({ data, level = 0 }: { data: unknown; level?: number }) => {
   if (typeof data !== 'object' || data === null) {
     return <span className="text-green-500">{JSON.stringify(data)}</span>;
   }
 
   return (
     <div className={`pl-4 ${level > 0 ? 'border-l border-muted' : ''}`}>
-      {Object.entries(data).map(([key, value]) => (
+      {Object.entries(data as Record<string, unknown>).map(([key, value]) => (
         <div key={key}>
           <Accordion type="single" collapsible className="w-full">
             <AccordionItem value={key} className="border-b-0">
@@ -91,7 +91,6 @@ const JsonTree = ({ data, level = 0 }: { data: any; level?: number }) => {
 
 export function JsonExcelConverter() {
   const [jsonInput, setJsonInput] = useState('');
-  const [tableData, setTableData] = useState<TableData | null>(null);
   const [allKeys, setAllKeys] = useState<string[]>([]);
   const [selectedKeys, setSelectedKeys] = useState<Record<string, boolean>>({});
   const [error, setError] = useState<string | null>(null);
@@ -113,7 +112,6 @@ export function JsonExcelConverter() {
   
   const clearAll = () => {
     setJsonInput('');
-    setTableData(null);
     setAllKeys([]);
     setSelectedKeys({});
     setError(null);
@@ -182,10 +180,11 @@ export function JsonExcelConverter() {
       if(activeTab === 'json-to-excel') {
         parseAndDisplayJson(jsonString);
       }
-    } catch (e: any) {
+    } catch (e) {
+      const message = e instanceof Error ? e.message : 'Could not retrieve data. This may be due to browser CORS restrictions.';
       toast({
         title: 'Failed to fetch URL',
-        description: e.message || 'Could not retrieve data. This may be due to browser CORS restrictions.',
+        description: message,
         variant: 'destructive',
       });
       setError('Could not retrieve data from the URL. This may be due to browser CORS restrictions.');
@@ -194,30 +193,29 @@ export function JsonExcelConverter() {
     }
   };
 
-  const flattenObject = (obj: any, prefix = '', style: FlattenStyle = 'dot'): Record<string, any> => {
+  const flattenObject = (obj: Record<string, unknown>, prefix = '', style: FlattenStyle = 'dot'): Record<string, unknown> => {
     const separator = style === 'dot' ? '.' : '_';
     return Object.keys(obj).reduce((acc, k) => {
         const pre = prefix.length ? prefix + separator : '';
         const key = pre + k;
         if (obj[k] && typeof obj[k] === 'object' && !Array.isArray(obj[k])) {
-            Object.assign(acc, flattenObject(obj[k], key, style));
+            Object.assign(acc, flattenObject(obj[k] as Record<string, unknown>, key, style));
         } else {
             acc[key] = obj[k];
         }
         return acc;
-    }, {} as Record<string, any>);
+    }, {} as Record<string, unknown>);
   };
 
-  const flattenJson = (data: any, style: FlattenStyle): Record<string, any>[] => {
+  const flattenJson = (data: unknown, style: FlattenStyle): Record<string, unknown>[] => {
     const array = Array.isArray(data) ? data : [data];
-    return array.map(item => flattenObject(item, '', style));
+    return array.map(item => flattenObject(item as Record<string, unknown>, '', style));
   };
 
 
   const parseAndDisplayJson = (jsonString: string) => {
     if (!jsonString.trim()) {
       setJsonInput('');
-      setTableData(null);
       setAllKeys([]);
       setSelectedKeys({});
       setError(null);
@@ -230,7 +228,6 @@ export function JsonExcelConverter() {
 
       const flattenedData = flattenJson(data, flattenStyle);
       if (flattenedData.length === 0) {
-        setTableData(null);
         return;
       }
       
@@ -241,9 +238,8 @@ export function JsonExcelConverter() {
       headers.forEach(h => initialSelectedKeys[h] = true);
       setSelectedKeys(initialSelectedKeys);
 
-    } catch (e) {
+    } catch {
       setError('Invalid JSON format. Please check your input.');
-      setTableData(null);
       setAllKeys([]);
       setSelectedKeys({});
     }
@@ -264,12 +260,13 @@ export function JsonExcelConverter() {
         const activeKeys = allKeys.filter(k => selectedKeys[k]);
         
         const rows = flattenedData.map(item =>
-            activeKeys.map(header => {
+            activeKeys.map((header): string | number | boolean | null => {
                 const value = item[header];
                 if (typeof value === 'object' && value !== null) {
                     return JSON.stringify(value);
                 }
-                return value === undefined ? null : value;
+                if (value === undefined) return null;
+                return value as string | number | boolean | null;
             })
         );
 
@@ -321,7 +318,7 @@ export function JsonExcelConverter() {
       const parsed = JSON.parse(jsonInput);
       setJsonInput(JSON.stringify(parsed, null, 2));
       setError(null);
-    } catch (e) {
+    } catch {
       setError("Cannot format invalid JSON.");
     }
   }

@@ -24,7 +24,7 @@ const typeIcons = {
 };
 
 export const ContentTab = ({ config, setConfig }: ContentTabProps) => {
-  const updateContent = (field: keyof QRConfig, value: any) => {
+  const updateContent = <K extends keyof QRConfig>(field: K, value: QRConfig[K]) => {
     setConfig({ ...config, [field]: value });
   };
 

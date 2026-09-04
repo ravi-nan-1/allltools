@@ -79,7 +79,7 @@ export function BusinessValuationCalculator() {
         } else {
             setCountry('US');
         }
-    } catch (error) {
+    } catch {
         console.error("Could not detect timezone, defaulting to US.");
         setCountry('US');
     }
@@ -203,8 +203,9 @@ export function BusinessValuationCalculator() {
         });
 
         toast({ title: 'AI Success', description: 'Financials populated from your prompt.'});
-    } catch(e: any) {
-        toast({ title: 'AI Error', description: e.message || 'Failed to generate financials from prompt.', variant: 'destructive'});
+    } catch(e) {
+        const message = e instanceof Error ? e.message : 'Failed to generate financials from prompt.';
+        toast({ title: 'AI Error', description: message, variant: 'destructive'});
     } finally {
         setIsProcessingAi(false);
     }
@@ -221,16 +222,6 @@ export function BusinessValuationCalculator() {
         maximumFractionDigits: 2 
     }).format(amount);
   }
-
-  const formatCurrencyFull = (amount: number) => {
-    const selectedCountry = countries.find(c => c.code === country);
-    if (!selectedCountry) return amount.toString();
-    return new Intl.NumberFormat(selectedCountry.locale, {
-      style: 'currency',
-      currency: selectedCountry.currency,
-      maximumFractionDigits: 0,
-    }).format(amount);
-  };
 
   return (
     <div className="space-y-8">
@@ -269,8 +260,8 @@ export function BusinessValuationCalculator() {
                     </CardHeader>
                     <CardContent>
                         <p className="text-sm text-muted-foreground mb-2">
-                          e.g., &quot;A 3-year old profitable Shopify store doing $1M in sales&quot;
-                             </p>
+                          e.g., &ldquo;A 3-year old profitable Shopify store doing $1M in sales&rdquo;
+                        </p>
                         <div className="flex gap-2">
                             <Input name="ai-prompt" ref={aiPromptRef} placeholder="Describe a business..." disabled={isProcessingAi} />
                             <Button type="button" onClick={handleAiPrompt} disabled={isProcessingAi}>

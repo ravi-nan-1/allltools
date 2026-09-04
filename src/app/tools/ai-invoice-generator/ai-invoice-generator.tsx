@@ -5,8 +5,8 @@ import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import jsPDF from 'jspdf';
-import autoTable, { type CellInput, type UserOptions } from 'jspdf-autotable';
-import Image from 'next/image';
+import 'jspdf-autotable';
+import type { UserOptions, Styles, RowInput } from 'jspdf-autotable';
 import {
   Card,
   CardContent,
@@ -80,10 +80,6 @@ export const invoiceSchema = z.object({
   discount: z.coerce.number().min(0).default(0),
   shipping: z.coerce.number().min(0).default(0),
 });
-
-type AutoTableDocument = jsPDF & {
-  lastAutoTable: { finalY: number };
-};
 
 export type InvoiceFormValues = z.infer<typeof invoiceSchema>;
 
@@ -179,9 +175,9 @@ export function AiInvoiceGenerator() {
         });
 
         toast({ title: 'AI Success', description: 'Invoice populated from your prompt.'});
-    } catch (error: unknown) {
-        const description = error instanceof Error ? error.message : 'Failed to generate invoice from prompt.';
-        toast({ title: 'AI Error', description, variant: 'destructive'});
+    } catch(e) {
+        const message = e instanceof Error ? e.message : 'Failed to generate invoice from prompt.';
+        toast({ title: 'AI Error', description: message, variant: 'destructive'});
     } finally {
         setIsProcessingAi(false);
     }
@@ -208,7 +204,10 @@ export function AiInvoiceGenerator() {
   const generatePdf = async (action: 'download' | 'preview') => {
     setIsProcessingPdf(true);
     const values = form.getValues();
-    const doc = new jsPDF();
+    const doc = new jsPDF() as jsPDF & {
+      autoTable: (options: UserOptions) => void;
+      lastAutoTable: { finalY: number };
+    };
 
     try {
       if (logoUrl) {
@@ -274,7 +273,7 @@ export function AiInvoiceGenerator() {
       
       // --- Line Items Table ---
       let tableColumn = ["Description", "Quantity", "Rate", "Amount"];
-      let tableRows: CellInput[][] = values.lineItems.map(item => [
+      let tableRows: (string | number)[][] = values.lineItems.map(item => [
           item.description,
           item.quantity,
           formatCurrencyForPdf(item.rate),
@@ -295,7 +294,7 @@ export function AiInvoiceGenerator() {
       }
 
 
-      let headStyles: NonNullable<UserOptions['headStyles']> = { fillColor: [22, 160, 133] }; // Modern
+      let headStyles: Partial<Styles> = { fillColor: [22, 160, 133] }; // Modern
       if (selectedTemplate === 'minimal') {
           headStyles = { fillColor: [240, 240, 240], textColor: 0 };
       } else if (isProfessional) {
@@ -304,7 +303,7 @@ export function AiInvoiceGenerator() {
           headStyles = { fillColor: [240, 240, 240], textColor: 0 };
       }
 
-      autoTable(doc, {
+      doc.autoTable({
           head: [tableColumn],
           body: tableRows,
           startY: 100,
@@ -312,7 +311,7 @@ export function AiInvoiceGenerator() {
           headStyles: headStyles,
           styles: { font: 'helvetica', fontSize: 10 },
       });
-      let finalY = (doc as AutoTableDocument).lastAutoTable.finalY;
+      let finalY = doc.lastAutoTable.finalY;
 
       // --- Totals Section ---
       const totalX = 130;
@@ -353,7 +352,7 @@ export function AiInvoiceGenerator() {
           doc.setFontSize(11);
           doc.setFont('helvetica', 'bold');
           
-          let breakdownBody: CellInput[][] = [];
+          let breakdownBody: RowInput[] = [];
           if (isGst) {
             doc.text('Tax Breakdown:', 14, totalY);
             breakdownBody = [
@@ -369,14 +368,14 @@ export function AiInvoiceGenerator() {
             breakdownBody = [[`Sales Tax (${values.tax}%)`, formatCurrencyForPdf(taxAmount)]];
           }
 
-          autoTable(doc, {
+          doc.autoTable({
               startY: totalY + 2,
               body: breakdownBody,
               theme: 'grid',
               styles: { fontSize: 10 },
               columnStyles: { 0: { cellWidth: 40 }, 1: { halign: 'right' } }
           });
-          finalY = Math.max(finalY, (doc as AutoTableDocument).lastAutoTable.finalY);
+          finalY = Math.max(finalY, doc.lastAutoTable.finalY);
       }
 
 
@@ -472,7 +471,7 @@ export function AiInvoiceGenerator() {
                   <div className="w-1/3">
                       {logoUrl ? (
                           <div className="relative">
-                              <Image src={logoUrl} alt="Company Logo" width={256} height={64} unoptimized className="h-16 w-auto object-contain" />
+                              <img src={logoUrl} alt="Company Logo" className="h-16 w-auto object-contain"/>
                               <Button variant="ghost" size="icon" className="absolute -top-2 -right-2 h-6 w-6" onClick={() => setLogoUrl(null)}>
                                   <X className="h-4 w-4"/>
                               </Button>
@@ -672,8 +671,8 @@ export function AiInvoiceGenerator() {
               <div>
                 <p className="text-sm font-medium mb-1">AI Assistant</p>
                 <p className="text-sm text-muted-foreground mb-2">
-                  e.g., &quot;Make an invoice for John for 13 items.&quot;
-                     </p>
+                  e.g., &ldquo;Make an invoice for John for 13 items.&rdquo;
+                </p>
                 <form onSubmit={(e) => {
                     e.preventDefault();
                     const formData = new FormData(e.currentTarget);

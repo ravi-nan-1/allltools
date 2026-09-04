@@ -12,7 +12,7 @@ interface SettingsTabProps {
 }
 
 export const SettingsTab = ({ config, setConfig }: SettingsTabProps) => {
-  const updateSetting = (field: keyof QRConfig, value: any) => {
+  const updateSetting = <K extends keyof QRConfig>(field: K, value: QRConfig[K]) => {
     setConfig({ ...config, [field]: value });
   };
 
@@ -59,7 +59,7 @@ export const SettingsTab = ({ config, setConfig }: SettingsTabProps) => {
 
       <div className="space-y-2">
         <Label htmlFor="error-correction">Error Correction Level</Label>
-        <Select value={config.errorCorrection} onValueChange={(value) => updateSetting("errorCorrection", value)}>
+        <Select value={config.errorCorrection} onValueChange={(value: QRConfig["errorCorrection"]) => updateSetting("errorCorrection", value)}>
           <SelectTrigger id="error-correction">
             <SelectValue />
           </SelectTrigger>

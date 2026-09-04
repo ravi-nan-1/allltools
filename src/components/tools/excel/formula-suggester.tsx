@@ -60,7 +60,7 @@ export function FormulaSuggester({ onSelectFormula }: FormulaSuggesterProps) {
         <CardTitle>Describe Your Excel Problem</CardTitle>
         <CardDescription>
           For example: &quot;I have a list of full names and I want to get only the first name from each.&quot;
-             </CardDescription>
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>

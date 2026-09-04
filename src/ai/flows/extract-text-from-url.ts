@@ -58,8 +58,9 @@ const extractTextFromUrlFlow = ai.defineFlow(
 
       return { text };
     } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
-      console.error('Error:', message);
-}
+      console.error(`Error scraping ${url}:`, error);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      throw new Error(`Could not process the URL. It might be invalid or the server is blocking requests. Error: ${message}`);
+    }
   }
 );

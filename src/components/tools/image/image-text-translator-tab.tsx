@@ -97,7 +97,7 @@ const ImageTextTranslatorTab = () => {
       } else {
         throw new Error("Translation failed");
       }
-    } catch (error) {
+    } catch {
       toast({ title: "Translation Failed", description: "Could not translate the text. Please try again.", variant: "destructive" });
     } finally {
       setIsTranslating(false);

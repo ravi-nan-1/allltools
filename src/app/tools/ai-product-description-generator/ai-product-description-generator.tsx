@@ -82,10 +82,11 @@ export function AiProductDescriptionGenerator() {
         title: 'Descriptions Generated!',
         description: 'Your AI-powered product descriptions are ready.',
       });
-    } catch (error: any) {
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'An unexpected error occurred.';
       toast({
         title: 'Generation Failed',
-        description: error.message || 'An unexpected error occurred.',
+        description: message,
         variant: 'destructive',
       });
     } finally {

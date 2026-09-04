@@ -132,10 +132,11 @@ export function KeywordClusterGenerator() {
         title: 'Clusters Generated!',
         description: 'Your advanced keyword clusters are ready below.',
       });
-    } catch (error: any) {
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'An unexpected error occurred.';
       toast({
         title: 'Generation Failed',
-        description: error.message || 'An unexpected error occurred.',
+        description: message,
         variant: 'destructive',
       });
     } finally {

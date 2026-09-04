@@ -4,7 +4,7 @@
 import React, { useEffect, useState } from 'react';
 import { AdBanner } from './ad-banner';
 
-interface DeferredAdBannerProps extends React.ComponentProps<typeof AdBanner> {}
+type DeferredAdBannerProps = React.ComponentProps<typeof AdBanner>;
 
 export function DeferredAdBanner(props: DeferredAdBannerProps) {
   const [isMounted, setIsMounted] = useState(false);

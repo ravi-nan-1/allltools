@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 
 declare global {
   interface Window {
-    adsbygoogle: any;
+    adsbygoogle: unknown[];
   }
 }
 

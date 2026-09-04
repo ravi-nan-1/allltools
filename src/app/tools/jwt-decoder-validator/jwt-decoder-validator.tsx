@@ -8,13 +8,13 @@ import { CheckCircle2, XCircle, Shield, Info } from 'lucide-react';
 import { jwtVerify, decodeJwt } from 'jose';
 
 // Helper to format JSON with indentation
-const formatJson = (obj: any) => JSON.stringify(obj, null, 2);
+const formatJson = (obj: unknown) => JSON.stringify(obj, null, 2);
 
 export function JwtDecoderValidator() {
   const [encodedToken, setEncodedToken] = useState('');
   const [secretKey, setSecretKey] = useState('');
   const [header, setHeader] = useState<object | null>(null);
-  const [payload, setPayload] = useState<Record<string, any> | null>(null);
+  const [payload, setPayload] = useState<Record<string, unknown> | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [verificationStatus, setVerificationStatus] = useState<'idle' | 'valid' | 'invalid' | 'error'>();
   const [verificationError, setVerificationError] = useState<string | null>(null);
@@ -33,12 +33,13 @@ export function JwtDecoderValidator() {
 
       setHeader(decodedHeader);
       setPayload(decodedPayload);
-    } catch (e: any) {
+    } catch (e) {
       setHeader(null);
       setPayload(null);
-      if (e.message.includes('Invalid Compact JWS')) {
+      const message = e instanceof Error ? e.message : '';
+      if (message.includes('Invalid Compact JWS')) {
          setError('Invalid JWT structure. The token must have three parts separated by dots.');
-      } else if (e.message.includes('base64')) {
+      } else if (message.includes('base64')) {
         setError('Invalid JWT: Header or Payload is not correctly Base64Url encoded.');
       } else {
         setError('Failed to decode JWT. Please ensure it is a valid token.');
@@ -67,7 +68,7 @@ export function JwtDecoderValidator() {
 
       try {
         setVerificationError(null);
-        const alg = (decodeJwt(encodedToken) as any).alg as string;
+        const alg = (decodeJwt(encodedToken) as { alg?: string }).alg as string;
 
         let key: CryptoKey | Uint8Array;
         if (alg.startsWith('HS')) { // Symmetric HMAC algorithms
@@ -91,16 +92,18 @@ export function JwtDecoderValidator() {
         
         await jwtVerify(encodedToken, key);
         setVerificationStatus('valid');
-      } catch (e: any) {
+      } catch (e) {
         setVerificationStatus('invalid');
-        if (e.code === 'ERR_JWS_SIGNATURE_VERIFICATION_FAILED') {
+        const err = e as { code?: string; claim?: string };
+        if (err.code === 'ERR_JWS_SIGNATURE_VERIFICATION_FAILED') {
             setVerificationError('Signature verification failed.');
-        } else if (e.code === 'ERR_JWT_EXPIRED') {
-            setVerificationError(`Token expired at ${new Date(payload?.exp * 1000).toLocaleString()}`);
-        } else if (e.code === 'ERR_JWT_CLAIM_VALIDATION_FAILED' && e.claim === 'nbf') {
-            setVerificationError(`Token is not yet active (nbf: ${new Date(payload?.nbf * 1000).toLocaleString()}).`);
+        } else if (err.code === 'ERR_JWT_EXPIRED') {
+            setVerificationError(`Token expired at ${new Date((payload?.exp as number) * 1000).toLocaleString()}`);
+        } else if (err.code === 'ERR_JWT_CLAIM_VALIDATION_FAILED' && err.claim === 'nbf') {
+            setVerificationError(`Token is not yet active (nbf: ${new Date((payload?.nbf as number) * 1000).toLocaleString()}).`);
         } else {
-            setVerificationError(`Verification Error: ${e.message}. Ensure your key matches the token's algorithm.`);
+            const message = e instanceof Error ? e.message : 'Unknown error';
+            setVerificationError(`Verification Error: ${message}. Ensure your key matches the token's algorithm.`);
         }
       }
     };

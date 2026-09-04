@@ -119,12 +119,12 @@ export async function POST(request: NextRequest) {
                     if(typeof errorJson.detail === 'string') {
                         errorMessage = errorJson.detail;
                     } else if (Array.isArray(errorJson.detail) && errorJson.detail[0]?.msg) {
-                         errorMessage = errorJson.detail.map((d: any) => `${d.loc.join(' -> ')}: ${d.msg}`).join(', ');
+                         errorMessage = errorJson.detail.map((d: { loc: (string | number)[]; msg: string }) => `${d.loc.join(' -> ')}: ${d.msg}`).join(', ');
                     } else {
                         errorMessage = JSON.stringify(errorJson.detail);
                     }
                 }
-            } catch (e) {
+            } catch {
                 if (errorBody && !errorBody.trim().startsWith('<')) {
                     errorMessage = errorBody;
                 }

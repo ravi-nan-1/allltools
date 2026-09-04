@@ -152,7 +152,7 @@ export function PracticeTab() {
                 </Alert>
               )}
               {availableContent.length === 0 && (
-                <p className="text-sm text-muted-foreground">Your library is empty. Add content in the &quot;Library&quot; tab first.irst.</p>
+                <p className="text-sm text-muted-foreground">Your library is empty. Add content in the &quot;Library&quot; tab first.</p>
               )}
             </CardContent>
             <CardFooter>

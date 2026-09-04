@@ -1,4 +1,5 @@
 
+
 export type ToolCategory =
   | 'Finance'
   | 'Business'

@@ -20,7 +20,7 @@ const colorPresets = [
 ];
 
 export const DesignTab = ({ config, setConfig }: DesignTabProps) => {
-  const updateDesign = (field: keyof QRConfig, value: any) => {
+  const updateDesign = <K extends keyof QRConfig>(field: K, value: QRConfig[K]) => {
     setConfig({ ...config, [field]: value });
   };
 

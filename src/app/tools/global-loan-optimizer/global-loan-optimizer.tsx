@@ -66,7 +66,7 @@ export function GlobalLoanOptimizer() {
             } else {
                 setCountry('US');
             }
-        } catch (error) {
+        } catch {
             console.error("Could not detect timezone, defaulting to US.");
             setCountry('US');
         }

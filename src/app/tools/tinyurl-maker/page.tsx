@@ -16,12 +16,6 @@ export async function generateMetadata(): Promise<Metadata> {
     };
   }
 
-  const { seoTitle, seoDescription } = await generateSEOMetadata({
-    toolName: tool.name,
-    toolDescription: tool.longDescription,
-    toolSlug: tool.slug,
-  });
-
   return {
     alternates: {
       canonical: `https://all2ools.com/tools/${SLUG}`,
@@ -82,6 +76,7 @@ export default async function ToolPage() {
     image: image?.imageUrl || `https://picsum.photos/seed/${tool.slug}/1200/400`,
     imageHint: image?.imageHint || 'tool banner',
   };
+
   return (
     <ToolPageClient
       tool={toolWithImage}

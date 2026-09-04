@@ -67,7 +67,7 @@ export function ChatTab() {
             {messages.length === 0 && (
               <p className="text-sm text-muted-foreground text-center py-8">
                 Ask me anything you&apos;re studying — I&apos;ll do my best to explain it clearly.
-                   </p>
+              </p>
             )}
             {messages.map((message) => (
               <div key={message.id} className={`flex items-start gap-3 ${message.sender === "user" ? "justify-end" : ""}`}>

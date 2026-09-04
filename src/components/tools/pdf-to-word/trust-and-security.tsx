@@ -1,4 +1,5 @@
 import { ShieldCheck, Zap, BadgeDollarSign } from 'lucide-react';
+
 const features = [
   {
     icon: <ShieldCheck className="h-8 w-8 text-primary" />,

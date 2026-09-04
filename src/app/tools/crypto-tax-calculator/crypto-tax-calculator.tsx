@@ -196,11 +196,11 @@ export function CryptoTaxCalculator() {
     if (file) {
       setFileName(file.name);
       setIsProcessing(true);
-      Papa.parse(file, {
+      Papa.parse<Record<string, string>>(file, {
         header: true,
         skipEmptyLines: true,
         complete: (results) => {
-            const parsedTransactions = results.data.map((row: any) => {
+            const parsedTransactions = results.data.map((row) => {
                 // This is a very basic mapper. A real app would have complex mappers per exchange.
                 return {
                     type: row.Type?.toLowerCase() === 'sell' ? 'sell' : 'buy',
@@ -215,7 +215,7 @@ export function CryptoTaxCalculator() {
             setIsProcessing(false);
             setStep('manual');
         },
-        error: (error: any) => {
+        error: (error: Error) => {
           console.error("CSV Parsing Error:", error);
           setIsProcessing(false);
         }
@@ -513,8 +513,8 @@ export function CryptoTaxCalculator() {
         <AlertTriangle className="h-4 w-4" />
         <AlertTitle>Disclaimer: For Educational & Illustrative Use Only</AlertTitle>
         <AlertDescription>
-          This is a simplified tool using the FIFO method. It does not account for all transaction types, fees, or specific tax laws (like the UK&apos;s 'share pooling&apos; rule). **Do not use for official tax filing.** Always consult a qualified tax professional.
-                  </AlertDescription>
+          This is a simplified tool using the FIFO method. It does not account for all transaction types, fees, or specific tax laws (like the UK&apos;s &apos;share pooling&apos; rule). **Do not use for official tax filing.** Always consult a qualified tax professional.
+        </AlertDescription>
       </Alert>
       
       <Form {...form}>

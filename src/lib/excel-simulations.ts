@@ -11,11 +11,6 @@ export type SimulationFunction = (helpers: SimulationHelpers) => Promise<void>;
 const todayDate = new Date().toLocaleDateString();
 const nowDateTime = new Date().toLocaleString();
 
-// Default placeholder for new simulations
-const sim_placeholder: SimulationFunction = async ({ setCell }) => {
-  setCell(1, 1, 'Coming');
-  setCell(1, 2, 'Soon!');
-};
 
 const sim_sum: SimulationFunction = async ({ wait, typeText, setCell, setHighlightedCells }) => {
   setCell(1, 1, '10');

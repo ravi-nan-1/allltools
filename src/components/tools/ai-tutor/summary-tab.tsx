@@ -161,7 +161,7 @@ export function SummaryTab() {
             {availableContent.length === 0 && (
               <p className="text-sm text-muted-foreground mt-4">
                 Your library is empty. Add content in the &quot;Library&quot; tab first.
-                   </p>
+              </p>
             )}
           </form>
         </CardContent>

@@ -69,7 +69,7 @@ export function ForexArbitrageChecker() {
         }, 2000);
     }
 
-    const handleExport = (format: 'csv' | 'pdf' | 'excel', data: any[], fileName: string) => {
+    const handleExport = (format: 'csv' | 'pdf' | 'excel', data: Record<string, unknown>[], fileName: string) => {
         if (format === 'csv') {
           const csv = Papa.unparse(data);
           const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });

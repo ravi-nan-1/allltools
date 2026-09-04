@@ -80,7 +80,7 @@ export function RegexGeneratorFromText() {
   const [testString, setTestString] = useState('');
   const [replaceString, setReplaceString] = useState('');
   const [selectedLanguage, setSelectedLanguage] = useState('javascript');
-  const [activeMode, setActiveMode] = useState('generate');
+  const [, setActiveMode] = useState('generate');
   const [reverseRegexInput, setReverseRegexInput] = useState('');
   const [reverseRegexResult, setReverseRegexResult] = useState('');
   const { toast } = useToast();
@@ -126,10 +126,11 @@ export function RegexGeneratorFromText() {
         title: 'Regex Generated!',
         description: 'Your AI-powered regular expression is ready.',
       });
-    } catch (error: any) {
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'An unexpected error occurred.';
       toast({
         title: 'Generation Failed',
-        description: error.message || 'An unexpected error occurred.',
+        description: message,
         variant: 'destructive',
       });
     } finally {
@@ -145,10 +146,11 @@ export function RegexGeneratorFromText() {
         const response = await handleRegexDescription({regex: reverseRegexInput});
         if (response.error) throw new Error(response.error);
         setReverseRegexResult(response.data?.explanation || '');
-    } catch (error: any) {
+    } catch (error) {
+         const message = error instanceof Error ? error.message : 'Could not describe the regex.';
          toast({
             title: 'Description Failed',
-            description: error.message || 'Could not describe the regex.',
+            description: message,
             variant: 'destructive',
         });
     } finally {
@@ -202,7 +204,7 @@ export function RegexGeneratorFromText() {
           ))}
         </p>
       );
-    } catch (e) {
+    } catch {
       return <p className="text-destructive">Invalid regular expression.</p>;
     }
   };

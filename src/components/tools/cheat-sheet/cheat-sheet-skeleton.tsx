@@ -1,4 +1,5 @@
 import { Skeleton } from "@/components/ui/skeleton";
+
 export function CheatSheetSkeleton() {
   return (
     <div className="space-y-6 animate-pulse">

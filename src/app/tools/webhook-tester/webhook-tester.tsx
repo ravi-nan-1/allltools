@@ -22,7 +22,7 @@ interface WebhookRequest {
   method: string;
   headers: Record<string, string>;
   query: Record<string, string>;
-  body: any;
+  body: unknown;
   timestamp: string;
 }
 
@@ -69,8 +69,9 @@ export function WebhookTester() {
         setSelectedRequest(newRequest);
         toast({ title: 'Mock Request Received', description: `A mock ${type} webhook has been generated.` });
 
-    } catch (e: any) {
-        toast({ title: "Generation Failed", description: e.message, variant: 'destructive'});
+    } catch (e) {
+        const message = e instanceof Error ? e.message : 'An unexpected error occurred.';
+        toast({ title: "Generation Failed", description: message, variant: 'destructive'});
     } finally {
         setIsGenerating(false);
     }

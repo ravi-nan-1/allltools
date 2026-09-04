@@ -45,11 +45,12 @@ export async function handleBackgroundRemoval(formData: FormData) {
     const result = await removeBackground({ productPhotoDataUri });
     return result;
   } catch (error) {
+    const message = error instanceof Error ? error.message : 'An unexpected error occurred during background removal.';
     console.error('Background removal action error:', error);
-    if (error.message.includes('upstream')) {
+    if (message.includes('upstream')) {
         return { error: 'The AI service is currently unavailable. Please try again later.' };
     }
-    return { error: error.message || 'An unexpected error occurred during background removal.' };
+    return { error: message };
   }
 }
 
@@ -70,7 +71,7 @@ export async function handleContentAnalysis(formData: FormData) {
     for (const url of validUrls) {
       try {
         new URL(url);
-      } catch (_) {
+      } catch {
         throw new Error(`Invalid URL format: ${url}`);
       }
     }
@@ -78,7 +79,8 @@ export async function handleContentAnalysis(formData: FormData) {
     const result = await analyzeContentGap({ text, competitorUrls: validUrls });
     return result;
   } catch (error) {
-    return { error: error.message || 'Failed to analyze content.' };
+    const message = error instanceof Error ? error.message : 'Failed to analyze content.';
+    return { error: message };
   }
 }
 
@@ -115,7 +117,7 @@ export async function handleLatencyCheck(formData: FormData) {
     // Validate URL
     try {
       new URL(url);
-    } catch (_) {
+    } catch {
       throw new Error('Invalid URL format.');
     }
 
@@ -143,11 +145,11 @@ export async function handleLatencyCheck(formData: FormData) {
           connection,
           ttfb
         };
-      } catch (e: any) {
+      } catch (e) {
         return { 
           region: `${region.flag} ${region.name}`, 
           latency: 'Error',
-          status: e.cause?.code || 'FETCH_ERROR',
+          status: (e instanceof Error && 'cause' in e && (e.cause as { code?: string } | undefined)?.code) || 'FETCH_ERROR',
           size: 'N/A',
           dns: 0,
           connection: 0,
@@ -160,7 +162,8 @@ export async function handleLatencyCheck(formData: FormData) {
     return { data };
 
   } catch (error) {
-    return { error: error.message || 'Failed to check latency.' };
+    const message = error instanceof Error ? error.message : 'Failed to check latency.';
+    return { error: message };
   }
 }
 
@@ -172,7 +175,8 @@ export async function handleTranslation(content: string, targetLanguage: string)
     const result = await translateContent({ content, targetLanguage });
     return result;
   } catch (error) {
-    return { error: error.message || 'Failed to translate content.' };
+    const message = error instanceof Error ? error.message : 'Failed to translate content.';
+    return { error: message };
   }
 }
 
@@ -184,7 +188,8 @@ export async function handleInvoiceGeneration(prompt: string) {
         const result = await generateInvoiceFromPrompt({ prompt });
         return { data: result };
     } catch (error) {
-        return { error: error.message || 'Failed to generate invoice from prompt.' };
+        const message = error instanceof Error ? error.message : 'Failed to generate invoice from prompt.';
+        return { error: message };
     }
 }
 
@@ -196,7 +201,8 @@ export async function handleFinancialsGeneration(prompt: string) {
         const result = await generateFinancialsFromPrompt({ prompt });
         return { data: result };
     } catch (error) {
-        return { error: error.message || 'Failed to generate financials from prompt.' };
+        const message = error instanceof Error ? error.message : 'Failed to generate financials from prompt.';
+        return { error: message };
     }
 }
 
@@ -219,11 +225,12 @@ export async function handleHeadshotGeneration(formData: FormData) {
     const result = await generateHeadshot({ photoDataUri, style });
     return result;
   } catch (error) {
+    const message = error instanceof Error ? error.message : 'An unexpected error occurred during headshot generation.';
     console.error('Headshot generation action error:', error);
-    if (error.message.includes('upstream')) {
+    if (message.includes('upstream')) {
         return { error: 'The AI service is currently unavailable. Please try again later.' };
     }
-    return { error: error.message || 'An unexpected error occurred during headshot generation.' };
+    return { error: message };
   }
 }
 
@@ -242,7 +249,8 @@ export async function handleKeywordClusterGeneration(formData: FormData) {
         });
         return { data: result };
     } catch (error) {
-        return { error: error.message || 'Failed to generate keyword clusters.' };
+        const message = error instanceof Error ? error.message : 'Failed to generate keyword clusters.';
+        return { error: message };
     }
 }
 
@@ -257,9 +265,9 @@ export async function handleProductDescriptionGeneration(
     if (error instanceof z.ZodError) {
       return { error: error.errors.map((e) => e.message).join(', ') };
     }
+    const message = error instanceof Error ? error.message : 'Failed to generate product descriptions from prompt.';
     return {
-      error:
-        error.message || 'Failed to generate product descriptions from prompt.',
+      error: message,
     };
   }
 }
@@ -275,9 +283,9 @@ export async function handleRegexGeneration(
     if (error instanceof z.ZodError) {
       return { error: error.errors.map((e) => e.message).join(', ') };
     }
+    const message = error instanceof Error ? error.message : 'Failed to generate regex from text.';
     return {
-      error:
-        error.message || 'Failed to generate regex from text.',
+      error: message,
     };
   }
 }
@@ -292,9 +300,9 @@ export async function handleRegexDescription(
         if (error instanceof z.ZodError) {
         return { error: error.errors.map((e) => e.message).join(', ') };
         }
+        const message = error instanceof Error ? error.message : 'Failed to describe regex.';
         return {
-        error:
-            error.message || 'Failed to describe regex.',
+        error: message,
         };
     }
 }
@@ -304,7 +312,8 @@ export async function handleWebhookPayloadGeneration(type: 'github' | 'stripe') 
         const result = await generateWebhookPayload({ type });
         return { payload: result.payload };
     } catch (error) {
-        return { error: error.message || `Failed to generate ${type} payload.`}
+        const message = error instanceof Error ? error.message : `Failed to generate ${type} payload.`;
+        return { error: message }
     }
 }
 
@@ -327,9 +336,9 @@ export async function handleArticleOutlineGeneration(
     if (error instanceof z.ZodError) {
       return { error: error.errors.map((e) => e.message).join(', ') };
     }
+    const message = error instanceof Error ? error.message : 'Failed to generate article outline.';
     return {
-      error:
-        error.message || 'Failed to generate article outline.',
+      error: message,
     };
   }
 }

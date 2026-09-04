@@ -51,6 +51,7 @@ export default async function ToolPage() {
     image: image?.imageUrl || `https://picsum.photos/seed/${tool.slug}/1200/400`,
     imageHint: image?.imageHint || 'tool banner',
   };
+
   return (
     <ToolPageClient
       tool={toolWithImage}

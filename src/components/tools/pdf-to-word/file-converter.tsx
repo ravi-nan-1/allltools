@@ -78,7 +78,6 @@ function FileDropZone({
   files,
   additionalParams,
   progress,
-  convertedFile,
   handleFileChange,
   handleParamChange,
   handleConvert,
@@ -94,7 +93,6 @@ function FileDropZone({
   files: File[];
   additionalParams: Record<string, string>;
   progress: number;
-  convertedFile: { blob: Blob; name: string } | null;
   handleFileChange: (e: ChangeEvent<HTMLInputElement>) => void;
   handleParamChange: (id: string, value: string) => void;
   handleConvert: () => void;
@@ -452,7 +450,7 @@ export function FileConverter({ conversionType, setConversionType }: FileConvert
                     if (typeof errorJson.detail === 'string') {
                         errorMessage = errorJson.detail;
                     } else if (Array.isArray(errorJson.detail) && errorJson.detail[0]?.msg) {
-                        errorMessage = errorJson.detail.map((d: any) => `${d.loc.join(' -> ')}: ${d.msg}`).join(', ');
+                        errorMessage = errorJson.detail.map((d: { loc: (string | number)[]; msg: string }) => `${d.loc.join(' -> ')}: ${d.msg}`).join(', ');
                     } else {
                         errorMessage = JSON.stringify(errorJson.detail);
                     }
@@ -460,7 +458,7 @@ export function FileConverter({ conversionType, setConversionType }: FileConvert
             } else if (errorBody && !errorBody.trim().startsWith('<')) {
                 errorMessage = errorBody;
             }
-        } catch (e) {
+        } catch {
             // Parsing failed, do nothing and keep the default message
         }
         
@@ -536,7 +534,6 @@ export function FileConverter({ conversionType, setConversionType }: FileConvert
         files={files}
         additionalParams={additionalParams}
         progress={progress}
-        convertedFile={convertedFile}
         handleFileChange={handleFileChange}
         handleParamChange={handleParamChange}
         handleConvert={handleConvert}
