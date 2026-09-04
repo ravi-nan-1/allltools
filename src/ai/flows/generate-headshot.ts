@@ -8,6 +8,7 @@
  */
 
 import { ai } from '@/ai/genkit';
+import { googleAI } from '@genkit-ai/google-genai';
 import { z } from 'genkit';
 
 const GenerateHeadshotInputSchema = z.object({
@@ -47,7 +48,7 @@ const generateHeadshotFlow = ai.defineFlow(
   },
   async (input) => {
     const { media } = await ai.generate({
-      model: 'googleai/gemini-2.5-flash-image',
+      model: googleAI.model('gemini-3.1-flash-image'),
       prompt: [
         { media: { url: input.photoDataUri } },
         {
@@ -72,7 +73,7 @@ Specific instructions:
 
     if (!media?.url) {
       throw new Error(
-        'The image model did not return a headshot. Please try a clearer selfie and try again.'
+        'The AI service did not return an image. Please try a clearer, front-facing selfie and try again.'
       );
     }
 

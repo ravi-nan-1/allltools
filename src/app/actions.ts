@@ -27,6 +27,22 @@ const GenerateProductDescriptionInputSchema = z.object({
 
 const MAX_AI_IMAGE_BYTES = 4 * 1024 * 1024;
 const MAX_CHEAT_SHEET_CHARS = 50000;
+const ALLOWED_AI_IMAGE_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp']);
+
+function getErrorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : 'An unexpected error occurred.';
+}
+
+function isQuotaError(error: unknown): boolean {
+  const message = getErrorMessage(error).toLowerCase();
+  return (
+    message.includes('429') ||
+    message.includes('resource_exhausted') ||
+    message.includes('quota') ||
+    message.includes('rate limit') ||
+    message.includes('too many requests')
+  );
+}
 
 async function fileToDataUri(file: File): Promise<string> {
   if (!(file instanceof File) || file.size === 0) {
@@ -37,7 +53,7 @@ async function fileToDataUri(file: File): Promise<string> {
     throw new Error('Image file is too large. Please use an image under 4MB.');
   }
 
-  if (!file.type.startsWith('image/')) {
+  if (!ALLOWED_AI_IMAGE_TYPES.has(file.type)) {
     throw new Error('Unsupported file type. Please upload a JPG, PNG, or WEBP image.');
   }
 
@@ -275,11 +291,20 @@ export async function handleHeadshotGeneration(formData: FormData) {
     const result = await generateHeadshot({ photoDataUri, style });
     return result;
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'An unexpected error occurred during headshot generation.';
     console.error('Headshot generation action error:', error);
-    if (message.includes('upstream')) {
-        return { error: 'The AI service is currently unavailable. Please try again later.' };
+
+    if (isQuotaError(error)) {
+      return {
+        error:
+          'AI image generation is temporarily unavailable because the Gemini API quota or rate limit has been reached. Please try again later or check the Gemini project billing and usage limits.',
+      };
     }
+
+    const message = getErrorMessage(error);
+    if (message.toLowerCase().includes('upstream') || message.toLowerCase().includes('service unavailable')) {
+      return { error: 'The AI service is currently unavailable. Please try again later.' };
+    }
+
     return { error: message };
   }
 }
