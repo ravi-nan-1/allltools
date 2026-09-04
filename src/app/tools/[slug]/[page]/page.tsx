@@ -12,10 +12,11 @@ interface PageContent {
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string; page: string };
+  params: Promise<{ slug: string; page: string }>;
 }): Promise<Metadata> {
-  const tool = tools.find((t) => t.slug === params.slug);
-  const pageTitle = params.page.charAt(0).toUpperCase() + params.page.slice(1);
+  const { slug, page } = await params;
+  const tool = tools.find((t) => t.slug === slug);
+  const pageTitle = page.charAt(0).toUpperCase() + page.slice(1);
 
   if (!tool) {
     return {
@@ -25,20 +26,20 @@ export async function generateMetadata({
 
   return {
     alternates: {
-      canonical: `https://all2ools.com/tools/${params.slug}/${params.page}`,
+      canonical: `https://all2ools.com/tools/${slug}/${page}`,
     },
     title: `${pageTitle} | ${tool.name}`,
-    description: `Learn more about the ${params.page} for the ${tool.name} tool on All2ools.`,
+    description: `Learn more about the ${page} for the ${tool.name} tool on All2ools.`,
   };
 }
 
 export default async function ToolSubPage({
   params,
 }: {
-  params: { slug: string; page: string };
+  params: Promise<{ slug: string; page: string }>;
 }) {
-  const tool = tools.find((t) => t.slug === params.slug);
-  const { page } = params;
+  const { slug, page } = await params;
+  const tool = tools.find((t) => t.slug === slug);
 
   if (!tool || !['about', 'contact', 'privacy', 'terms'].includes(page)) {
     notFound();

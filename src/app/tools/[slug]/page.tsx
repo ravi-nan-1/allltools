@@ -9,9 +9,10 @@ import { placeholderImages } from '@/lib/placeholder-images';
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const tool = tools.find((t) => t.slug === params.slug);
+  const { slug } = await params;
+  const tool = tools.find((t) => t.slug === slug);
 
   if (!tool) {
     return {
@@ -27,7 +28,7 @@ export async function generateMetadata({
 
   return {
     alternates: {
-      canonical: `https://all2ools.com/tools/${params.slug}`,
+      canonical: `https://all2ools.com/tools/${slug}`,
     },
     title: seoTitle,
     description: seoDescription,
@@ -37,9 +38,9 @@ export async function generateMetadata({
 export default async function ToolPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const { slug } = params;
+  const { slug } = await params;
   const tool = tools.find((t) => t.slug === slug);
 
   if (!tool) {
