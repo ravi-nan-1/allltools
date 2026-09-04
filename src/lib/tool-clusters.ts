@@ -1,6 +1,10 @@
 
 export const toolClusters = [
   {
+    title: 'Finance & Loan Calculators',
+    slugs: ['emi-calculator','loan-calculator','mortgage-calculator','home-loan-calculator','car-loan-calculator','personal-loan-calculator','student-loan-calculator','credit-card-payoff-calculator','interest-calculator','simple-interest-calculator','compound-interest-calculator','investment-return-calculator','roi-calculator','inflation-calculator'],
+  },
+  {
     title: 'Related SEO Tools',
     slugs: [
       'plagiarism-checker',
