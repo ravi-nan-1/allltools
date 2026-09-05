@@ -1,22 +1,27 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  /* config options here */
-
   experimental: {
     serverActions: {
       bodySizeLimit: '8mb',
     },
   },
 
-  webpack: (config, { dev }) => {
+  webpack: (config, { dev, isServer }) => {
     config.resolve.alias = {
       ...config.resolve.alias,
-      'onnxruntime-node$': false,
+
+      // Prevent server-side code from pulling in the Node ONNX runtime.
+      // The Background Remover runs with Transformers.js in the browser.
+      ...(isServer
+        ? {
+            'onnxruntime-node$': false,
+          }
+        : {}),
     };
 
-    // Reduce Vercel build-container disk usage.
-    // The large Webpack filesystem cache is not needed for production deployment.
+    // Disable Webpack's filesystem cache for production builds.
+    // This prevents huge .next/cache/webpack/*.pack files.
     if (!dev) {
       config.cache = false;
     }
