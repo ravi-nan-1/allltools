@@ -9,11 +9,17 @@ const nextConfig: NextConfig = {
     },
   },
 
-  webpack: (config) => {
+  webpack: (config, { dev }) => {
     config.resolve.alias = {
       ...config.resolve.alias,
       'onnxruntime-node$': false,
     };
+
+    // Reduce Vercel build-container disk usage.
+    // The large Webpack filesystem cache is not needed for production deployment.
+    if (!dev) {
+      config.cache = false;
+    }
 
     return config;
   },
