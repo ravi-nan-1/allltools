@@ -56,12 +56,21 @@ export function AdvancedCalculator({ slug }: { slug: string }) {
 }
 
 function Shell({ title, description, children }: { title: string; description: string; children: ReactNode }) {
-  return <Card className="w-full overflow-hidden border-2 shadow-sm">
-    <CardHeader className="bg-gradient-to-r from-primary/10 via-background to-primary/5 border-b">
-      <CardTitle className="flex items-center gap-2 text-2xl"><Calculator className="h-6 w-6" />{title}</CardTitle>
-      <p className="text-sm md:text-base text-muted-foreground max-w-3xl">{description}</p>
+  return <Card className="w-full overflow-hidden border-2 shadow-sm transition-shadow hover:shadow-md">
+    <CardHeader className="relative overflow-hidden border-b bg-gradient-to-br from-primary/15 via-background to-primary/5 p-5 md:p-7">
+      <div className="absolute -right-12 -top-16 h-40 w-40 rounded-full bg-primary/10 blur-2xl" />
+      <div className="relative flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <div className="mb-2 inline-flex items-center gap-2 rounded-full border bg-background/80 px-3 py-1 text-xs font-medium text-muted-foreground backdrop-blur">
+            <Calculator className="h-3.5 w-3.5 text-primary" /> Advanced Tool
+          </div>
+          <CardTitle className="text-2xl font-bold tracking-tight md:text-3xl">{title}</CardTitle>
+          <p className="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground md:text-base">{description}</p>
+        </div>
+        <div className="hidden rounded-xl border bg-background/70 px-3 py-2 text-xs text-muted-foreground sm:block">Live calculation</div>
+      </div>
     </CardHeader>
-    <CardContent className="p-5 md:p-7">{children}</CardContent>
+    <CardContent className="p-4 md:p-7">{children}</CardContent>
   </Card>;
 }
 
@@ -75,11 +84,20 @@ function GenericAdvancedCalculator({ slug, cfg }: { slug: string; cfg: { title: 
   const fields = fieldsFor(slug);
 
   return <Shell title={cfg.title} description={cfg.description}>
-    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 rounded-2xl border bg-muted/20 p-4 md:p-5">
+    <div className="rounded-2xl border bg-gradient-to-b from-muted/30 to-background p-4 md:p-5">
+      <div className="mb-4 flex items-center justify-between gap-3">
+        <div><div className="text-sm font-semibold">Calculator inputs</div><div className="text-xs text-muted-foreground">Update any value to recalculate instantly.</div></div>
+        <Button type="button" size="sm" variant="ghost" onClick={()=>setV(p=>({ ...p }))}><RotateCcw className="mr-1.5 h-4 w-4" />Refresh</Button>
+      </div>
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
       {fields.map(f => f.key === 'currency' ? <div key={f.key}><Label>Currency</Label><Select value={currency} onValueChange={setCurrency}><SelectTrigger className="mt-1"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="USD">USD ($)</SelectItem><SelectItem value="INR">INR (₹)</SelectItem><SelectItem value="EUR">EUR (€)</SelectItem><SelectItem value="GBP">GBP (£)</SelectItem></SelectContent></Select></div> : f.key === 'sex' ? <div key={f.key}><Label>Sex</Label><Select value={v.sex} onValueChange={x=>set('sex',x)}><SelectTrigger className="mt-1"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="male">Male</SelectItem><SelectItem value="female">Female</SelectItem></SelectContent></Select></div> : <div key={f.key}><Label>{f.label}</Label><Input className="mt-1" type={f.type ?? 'number'} value={v[f.key] ?? ''} onChange={e => set(f.key, e.target.value)} /></div>)}
+      </div>
     </div>
-    <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {result.map(x => <div key={x.label} className="rounded-2xl border bg-background p-5 shadow-sm"><div className="text-sm text-muted-foreground">{x.label}</div><div className="mt-1 text-2xl font-bold break-words">{x.value}</div></div>)}
+    <div className="mt-6">
+      <div className="mb-3 flex items-center justify-between"><div><div className="text-sm font-semibold">Your results</div><div className="text-xs text-muted-foreground">Calculated from the values above.</div></div><div className="rounded-full border px-2.5 py-1 text-[11px] font-medium text-muted-foreground">Instant</div></div>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {result.map((x,i) => <div key={x.label} className={\`group rounded-2xl border p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md ${i===0?'bg-primary/[0.06] border-primary/30':''}\`}><div className="text-sm text-muted-foreground">{x.label}</div><div className="mt-1 text-2xl font-bold tracking-tight break-words">{x.value}</div></div>)}
+      </div>
     </div>
     <p className="mt-5 text-xs text-muted-foreground">Results are estimates for planning and education. Financial, tax, health, and currency outcomes can depend on laws, rates, fees, personal circumstances, and data sources.</p>
   </Shell>;
