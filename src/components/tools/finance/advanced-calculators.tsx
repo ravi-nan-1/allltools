@@ -96,7 +96,7 @@ function GenericAdvancedCalculator({ slug, cfg }: { slug: string; cfg: { title: 
     <div className="mt-6">
       <div className="mb-3 flex items-center justify-between"><div><div className="text-sm font-semibold">Your results</div><div className="text-xs text-muted-foreground">Calculated from the values above.</div></div><div className="rounded-full border px-2.5 py-1 text-[11px] font-medium text-muted-foreground">Instant</div></div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {result.map((x,i) => <div key={x.label} className={\`group rounded-2xl border p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md ${i===0?'bg-primary/[0.06] border-primary/30':''}\`}><div className="text-sm text-muted-foreground">{x.label}</div><div className="mt-1 text-2xl font-bold tracking-tight break-words">{x.value}</div></div>)}
+        {result.map((x,i) => <div key={x.label} className={`group rounded-2xl border p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md ${i===0?'bg-primary/[0.06] border-primary/30':''}`}><div className="text-sm text-muted-foreground">{x.label}</div><div className="mt-1 text-2xl font-bold tracking-tight break-words">{x.value}</div></div>)}
       </div>
     </div>
     <p className="mt-5 text-xs text-muted-foreground">Results are estimates for planning and education. Financial, tax, health, and currency outcomes can depend on laws, rates, fees, personal circumstances, and data sources.</p>
