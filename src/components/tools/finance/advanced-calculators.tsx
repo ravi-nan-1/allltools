@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
-import { Calculator, RotateCcw, Shuffle, Gauge, Info, Ruler, Scale, HeartPulse, TrendingUp, WalletCards, CircleDollarSign } from 'lucide-react';
+import { Play, Pause,  Calculator, RotateCcw, Shuffle, Gauge, Info, Ruler, Scale, HeartPulse, TrendingUp, WalletCards, CircleDollarSign } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';

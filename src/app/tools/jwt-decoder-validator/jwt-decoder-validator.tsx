@@ -110,7 +110,7 @@ export function JwtDecoderValidator() {
     
     verify();
     
-  }, [encodedToken, secretKey]);
+  }, [encodedToken, secretKey, payload?.exp, payload?.nbf]);
 
 
   return (
