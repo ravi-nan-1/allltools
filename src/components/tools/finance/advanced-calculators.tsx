@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
-import { Calculator, Play, Pause, RotateCcw, Shuffle, Gauge, Info, Ruler, Scale, HeartPulse } from 'lucide-react';
+import { Calculator, Play, Pause, RotateCcw, Shuffle, Gauge, Info, Ruler, Scale, HeartPulse, TrendingUp, WalletCards, CircleDollarSign } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -52,6 +52,7 @@ export function AdvancedCalculator({ slug }: { slug: string }) {
   if (slug === 'sip-calculator') return <SipCalculator />;
   if (slug === 'time-zone-converter') return <TimeZoneConverter />;
   if (slug === 'currency-converter') return <CurrencyConverter />;
+  if (slug === 'roi-calculator') return <RoiCalculator />;
 
   const cfg = configs[slug] ?? { title: 'Calculator', description: 'Calculate useful results instantly.' };
   return <GenericAdvancedCalculator slug={slug} cfg={cfg} />;
@@ -167,6 +168,122 @@ function calcAdvanced(slug:string,v:Record<string,string>,currency:string):Resul
   if(slug==='profit-margin-calculator'){const c=n('cost'),s=n('selling'),profit=s-c;return [{label:'Profit',value:fmt(profit)},{label:'Profit Margin',value:pct(s?profit/s*100:0)},{label:'Markup',value:pct(c?profit/c*100:0)}]}
   if(slug==='break-even-calculator'){const fixed=n('fixed'),variable=n('variable'),price=n('unitPrice'),q=price>variable?fixed/(price-variable):0;return [{label:'Break-Even Units',value:q.toFixed(2)},{label:'Break-Even Revenue',value:fmt(q*price)},{label:'Contribution Margin / Unit',value:fmt(price-variable)}]}
   return [{label:'Result',value:fmt(n('amount'))}];
+}
+
+function RoiCalculator() {
+  const [cost, setCost] = useState(100000);
+  const [finalValue, setFinalValue] = useState(140000);
+  const [additionalCosts, setAdditionalCosts] = useState(0);
+  const [years, setYears] = useState(1);
+  const [currency, setCurrency] = useState('INR');
+
+  const result = useMemo(() => {
+    const invested = Math.max(0, cost) + Math.max(0, additionalCosts);
+    const netGain = finalValue - invested;
+    const roi = invested > 0 ? (netGain / invested) * 100 : 0;
+    const returnMultiple = invested > 0 ? finalValue / invested : 0;
+    const annualized = invested > 0 && finalValue >= 0 && years > 0
+      ? (Math.pow(finalValue / invested, 1 / years) - 1) * 100
+      : 0;
+    const gainShare = finalValue > 0 ? Math.max(0, Math.min(100, netGain / finalValue * 100)) : 0;
+    const schedule: { year: number; invested: number; value: number; gain: number }[] = [];
+    const horizon = Math.max(1, Math.min(30, Math.round(years)));
+    const multiple = invested > 0 && finalValue >= 0 ? Math.pow(finalValue / invested, 1 / horizon) : 1;
+    for (let year = 1; year <= horizon; year++) {
+      const value = invested * Math.pow(multiple, year);
+      schedule.push({ year, invested, value, gain: value - invested });
+    }
+    return { invested, netGain, roi, returnMultiple, annualized, gainShare, schedule };
+  }, [cost, finalValue, additionalCosts, years]);
+
+  const fmt = (n: number) => money(n, currency);
+  const arc = `${Math.max(0, Math.min(100, result.gainShare)).toFixed(2)}%`;
+  const positive = result.netGain >= 0;
+
+  return (
+    <Card className="w-full overflow-hidden border border-slate-200 bg-white shadow-sm">
+      <CardContent className="p-0">
+        <div className="grid lg:grid-cols-[1.15fr_.85fr]">
+          <div className="p-5 sm:p-7 md:p-9">
+            <div className="mb-7 flex items-center justify-between gap-3">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-600">Online ROI Calculator</p>
+                <h2 className="mt-1 text-2xl font-bold tracking-tight text-slate-800 md:text-3xl">Calculate your return on investment</h2>
+                <p className="mt-2 max-w-xl text-sm leading-6 text-slate-500">Enter what you invested and what the investment is worth now to instantly calculate profit or loss, ROI percentage, return multiple and an optional annualized return.</p>
+              </div>
+              <div className="hidden h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600 sm:flex"><TrendingUp className="h-5 w-5" /></div>
+            </div>
+
+            <div className="mb-5 flex items-center gap-3 rounded-2xl border bg-slate-50/80 p-3">
+              <Label className="shrink-0">Currency</Label>
+              <Select value={currency} onValueChange={setCurrency}>
+                <SelectTrigger className="w-32 bg-white"><SelectValue /></SelectTrigger>
+                <SelectContent><SelectItem value="USD">USD ($)</SelectItem><SelectItem value="INR">INR (₹)</SelectItem></SelectContent>
+              </Select>
+            </div>
+
+            <RoiSlider label="Initial investment" value={cost} min={0} max={10000000} step={1000} prefix={currency === 'INR' ? '₹' : '$'} onChange={setCost} />
+            <RoiSlider label="Current / final value" value={finalValue} min={0} max={20000000} step={1000} prefix={currency === 'INR' ? '₹' : '$'} onChange={setFinalValue} />
+            <RoiSlider label="Additional costs" value={additionalCosts} min={0} max={2000000} step={1000} prefix={currency === 'INR' ? '₹' : '$'} onChange={setAdditionalCosts} />
+            <RoiSlider label="Holding period" value={years} min={1} max={30} step={1} suffix="yr" onChange={setYears} />
+
+            <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <div className={`rounded-2xl border p-4 ${positive ? 'border-emerald-100 bg-emerald-50/70' : 'border-rose-100 bg-rose-50/70'}`}>
+                <p className="text-sm text-slate-500">Net profit / loss</p>
+                <p className={`mt-1 text-2xl font-bold ${positive ? 'text-emerald-600' : 'text-rose-600'}`}>{fmt(result.netGain)}</p>
+              </div>
+              <div className="rounded-2xl border border-indigo-100 bg-indigo-50/70 p-4">
+                <p className="text-sm text-slate-500">ROI percentage</p>
+                <p className="mt-1 text-2xl font-bold text-indigo-600">{pct(result.roi)}</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="border-t bg-gradient-to-br from-slate-50 via-white to-indigo-50/60 p-5 sm:p-7 lg:border-l lg:border-t-0 md:p-9">
+            <div className="mb-4 flex items-center justify-between">
+              <div><p className="text-sm font-semibold text-slate-700">ROI performance meter</p><p className="text-xs text-slate-500">Investment cost compared with the final value</p></div>
+              <TrendingUp className={`h-5 w-5 ${positive ? 'text-emerald-500' : 'text-rose-500'}`} />
+            </div>
+            <div className="mx-auto my-5 flex max-w-[300px] items-center justify-center">
+              <div className="relative h-56 w-56 rounded-full" style={{ background: `conic-gradient(#5065f6 0 ${arc}, #e9edff ${arc} 100%)` }}>
+                <div className="absolute inset-[28px] flex flex-col items-center justify-center rounded-full bg-white text-center shadow-inner">
+                  <span className="text-xs font-medium text-slate-500">ROI</span>
+                  <strong className={`mt-1 text-3xl font-bold ${positive ? 'text-emerald-600' : 'text-rose-600'}`}>{pct(result.roi)}</strong>
+                  <span className="mt-1 text-xs text-slate-500">{result.returnMultiple.toFixed(2)}× return</span>
+                </div>
+              </div>
+            </div>
+            <div className="flex justify-center gap-5 text-xs text-slate-500"><span className="flex items-center gap-2"><i className="h-2.5 w-2.5 rounded-full bg-[#5065f6]" /> Net result</span><span className="flex items-center gap-2"><i className="h-2.5 w-2.5 rounded-full bg-[#e9edff]" /> Original value</span></div>
+            <div className="mt-8 space-y-4">
+              <LoanLikeResult label="Total invested" value={fmt(result.invested)} icon={<WalletCards className="h-4 w-4" />} />
+              <LoanLikeResult label="Profit / loss" value={fmt(result.netGain)} icon={<CircleDollarSign className="h-4 w-4" />} />
+              <LoanLikeResult label="Ending value" value={fmt(finalValue)} icon={<TrendingUp className="h-4 w-4" />} strong />
+              <LoanLikeResult label="Annualized return" value={pct(result.annualized)} icon={<Calculator className="h-4 w-4" />} />
+            </div>
+          </div>
+        </div>
+
+        <div className="border-t bg-white p-5 sm:p-7 md:p-9">
+          <div className="mb-5"><h3 className="text-xl font-bold text-slate-800">ROI growth projection</h3><p className="mt-1 text-sm text-slate-500">The annualized view shows a mathematical path from the invested amount to the final value over the selected holding period.</p></div>
+          <div className="overflow-x-auto rounded-2xl border"><table className="w-full min-w-[650px] text-sm"><thead className="bg-slate-50 text-left text-slate-500"><tr><th className="px-4 py-3">Year</th><th className="px-4 py-3">Invested</th><th className="px-4 py-3">Gain / Loss</th><th className="px-4 py-3">Estimated value</th></tr></thead><tbody>{result.schedule.map(r => <tr key={r.year} className="border-t"><td className="px-4 py-3 font-medium">{r.year}</td><td className="px-4 py-3">{fmt(r.invested)}</td><td className={`px-4 py-3 ${r.gain >= 0 ? 'text-emerald-600' : 'text-rose-600'}`}>{fmt(r.gain)}</td><td className="px-4 py-3 font-semibold">{fmt(r.value)}</td></tr>)}</tbody></table></div>
+          <p className="mt-5 flex gap-2 text-xs leading-5 text-slate-500"><Info className="mt-0.5 h-4 w-4 shrink-0" />Basic ROI measures gain or loss against the total amount invested. It does not automatically account for taxes, inflation, financing costs, cash-flow timing or risk. Annualized return is an estimate based on the selected holding period and assumes a mathematically consistent path between the two values.</p>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function RoiSlider({ label, value, min, max, step, prefix, suffix, onChange }: { label: string; value: number; min: number; max: number; step: number; prefix?: string; suffix?: string; onChange: (value: number) => void }) {
+  const display = `${prefix ?? ''}${value.toLocaleString(undefined, { maximumFractionDigits: 2 })}${suffix ? ` ${suffix}` : ''}`;
+  return <div className="mb-5">
+    <div className="mb-2 flex items-center justify-between gap-3"><Label className="text-base font-medium text-slate-700">{label}</Label><div className="rounded-lg bg-emerald-50 px-3 py-2 text-lg font-semibold text-emerald-600">{display}</div></div>
+    <input type="range" min={min} max={max} step={step} value={value} onChange={e => onChange(Number(e.target.value))} className="w-full accent-emerald-600" />
+    <div className="mt-1 flex justify-between text-[11px] text-slate-400"><span>{prefix ?? ''}{min.toLocaleString()}</span><span>{prefix ?? ''}{max.toLocaleString()} {suffix ?? ''}</span></div>
+  </div>;
+}
+
+function LoanLikeResult({ label, value, icon, strong }: { label: string; value: string; icon: ReactNode; strong?: boolean }) {
+  return <div className="flex items-center justify-between gap-3 rounded-2xl border bg-white p-4 shadow-sm"><div className="flex items-center gap-3"><span className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-50 text-indigo-500">{icon}</span><span className="text-sm text-slate-500">{label}</span></div><span className={strong ? 'text-base font-black text-slate-800' : 'text-base font-bold text-slate-700'}>{value}</span></div>;
 }
 
 function Stopwatch(){const [running,setRunning]=useState(false),[elapsed,setElapsed]=useState(0);useEffect(()=>{if(!running)return;const id=window.setInterval(()=>setElapsed(e=>e+10),10);return()=>window.clearInterval(id)},[running]);const h=Math.floor(elapsed/3600000),m=Math.floor(elapsed/60000)%60,s=Math.floor(elapsed/1000)%60,ms=Math.floor(elapsed/10)%100;return <Shell title="Online Stopwatch" description="A precise browser stopwatch with start, pause, reset, and hundredth-second display. It runs locally in your browser and works on desktop and mobile."><div className="rounded-3xl border bg-muted/20 p-8 text-center"><div className="font-mono text-5xl md:text-7xl font-bold tracking-tight">{String(h).padStart(2,'0')}:{String(m).padStart(2,'0')}:{String(s).padStart(2,'0')}<span className="text-primary">.{String(ms).padStart(2,'0')}</span></div><div className="mt-8 flex flex-wrap justify-center gap-3"><Button size="lg" onClick={()=>setRunning(x=>!x)}>{running?<><Pause/>Pause</>:<><Play/>Start</>}</Button><Button size="lg" variant="outline" onClick={()=>{setRunning(false);setElapsed(0)}}><RotateCcw/>Reset</Button></div></div></Shell>}

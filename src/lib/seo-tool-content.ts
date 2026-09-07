@@ -1381,60 +1381,25 @@ export const seoToolContent: Record<string, SeoToolContent> = {
   "conclusion": "Use the car-loan result to compare financing options, then confirm the lender’s APR, fees, and schedule."
 },
   "personal-loan-calculator": {
-  "how": "A personal loan is modeled as a fixed-payment amortizing balance. The calculator uses the principal, annual rate, and repayment term to estimate each payment and the total interest over the term.",
-  "features": [
-    "Personal-loan payment estimate",
-    "Rate and tenure controls",
-    "Total interest calculation",
-    "Monthly affordability view",
-    "Fixed-payment assumptions"
-  ],
-  "use": "For borrowers comparing personal-loan offers; people choosing between shorter and longer repayment periods; households estimating monthly obligations.",
-  "steps": [
-    "Enter the loan amount.",
-    "Enter the annual rate.",
-    "Choose the repayment term.",
-    "Review payment and total interest."
-  ],
-  "why": "Personal-loan offers are easier to compare when the payment and total borrowing cost are shown together. This calculator keeps the underlying amortization assumption explicit.",
-  "compare": [
-    [
-      "Loan type",
-      "Fixed-payment personal loan",
-      "Generic percentage calculation"
+    "how": "A personal loan calculator estimates the regular payment and overall borrowing cost for an unsecured loan from the amount borrowed, annual interest rate and repayment term. It can also show how an additional monthly payment may change the payoff timeline and interest cost.",
+    "features": ["Monthly personal-loan payment estimate", "Interactive amount, rate and tenure controls", "Principal-versus-interest repayment meter", "Total interest and repayment cost", "Optional extra-payment comparison", "First-year amortization schedule"],
+    "use": "Use it to compare personal-loan offers, test whether a payment fits your budget, or see how changing the term and extra payments can affect borrowing costs.",
+    "steps": ["Enter the amount you expect to borrow.", "Enter the annual interest rate.", "Choose the repayment term.", "Optionally add an extra monthly payment.", "Compare the payment, total interest, total repayment and schedule."],
+    "why": "The advertised rate alone does not show the full cost of borrowing. Seeing payment, principal, interest and repayment duration together makes personal-loan comparisons easier.",
+    "content": "Personal loans can be used for many planned expenses, including home improvements, education, large purchases, medical costs, travel or debt consolidation. Because repayment is spread across scheduled payments, the interest cost can become an important part of the total amount repaid. This calculator helps you explore those numbers before applying.\n\nFor a fixed-rate amortizing loan, every payment is made up of interest and principal. As the outstanding balance falls, the interest portion generally falls as well. A shorter repayment term normally produces a larger monthly payment but can reduce total interest, while a longer term can lower the monthly obligation but increase the overall borrowing cost.\n\nYou can also test an extra monthly payment. Additional principal payments may shorten the payoff period and reduce interest, but the actual benefit depends on the lender agreement and how overpayments are applied. Check for any prepayment restrictions or charges before making extra payments.\n\nWhen comparing personal loans, consider the lender's disclosed APR and all applicable fees, not just the headline rate. Processing or origination charges, late fees and other conditions can change the true cost. This calculator is an estimate and should not replace the lender's final offer or repayment schedule.",
+    "compare": [["Monthly budget", "Shows the estimated regular payment", "Looks only at the advertised rate"], ["Total cost", "Displays principal, interest and total repayment", "May focus on payment alone"], ["Term comparison", "Makes shorter and longer terms easy to test", "Requires separate calculations"], ["Early payoff", "Models an optional extra monthly payment", "Does not show overpayment impact"]],
+    "faqs": [
+      {"question":"What does a personal loan calculator calculate?","answer":"It estimates the regular payment, total interest and total repayment for a personal loan based on the amount, rate and term you enter."},
+      {"question":"Will a longer tenure reduce the total cost?","answer":"Usually not. A longer term can reduce each payment but may allow interest to accumulate for more months."},
+      {"question":"Can I use an interest rate of zero?","answer":"Yes. With a zero rate, the principal is divided across the selected number of payments."},
+      {"question":"Are processing fees included?","answer":"No. Lender fees and other charges should be considered separately when comparing offers."},
+      {"question":"Do extra payments save interest?","answer":"They may, because reducing principal sooner can reduce future interest. Check your lender's overpayment rules first."},
+      {"question":"Is this an eligibility calculator?","answer":"No. It estimates repayment costs. Loan eligibility depends on the lender's assessment of income, credit history and other factors."},
+      {"question":"Can I compare two personal-loan offers?","answer":"Yes. Run the calculator with each offer's amount, rate and term, then compare payment and total borrowing cost. Include lender fees in your wider comparison."},
+      {"question":"Is the calculated payment guaranteed?","answer":"No. It is an estimate. The lender's final APR, fees, payment dates, rounding rules and approved terms determine the actual payment."}
     ],
-    [
-      "Budgeting",
-      "Monthly payment focus",
-      "Interest only"
-    ],
-    [
-      "Comparison",
-      "Rate and term sensitivity",
-      "One scenario"
-    ],
-    [
-      "Cost clarity",
-      "Total interest shown",
-      "Headline payment only"
-    ]
-  ],
-  "faqs": [
-    {
-      "question": "Does the result include origination fees?",
-      "answer": "No. Add lender fees separately when comparing the total cost of a personal-loan offer."
-    },
-    {
-      "question": "Why does changing the term change total interest?",
-      "answer": "A longer term leaves the balance outstanding for more periods, so more interest can accumulate even if each payment is smaller."
-    },
-    {
-      "question": "Can I use a quoted APR?",
-      "answer": "Use the input definition consistently. If the lender’s APR includes fees, compare the final lender disclosure rather than treating APR and nominal interest as identical."
-    }
-  ],
-  "conclusion": "Use the estimate for early budgeting and comparison, then use the lender’s disclosed APR, fees, and repayment schedule for the final decision."
-},
+    "conclusion": "Use the personal-loan estimate to plan your budget and compare repayment choices, then confirm the lender's final APR, fees and schedule before accepting an offer."
+  },
   "student-loan-calculator": {
   "how": "The student-loan calculator treats education debt as a regular amortizing balance using principal, annual rate, and term. It does not automatically reproduce government program rules such as deferment, income-driven repayment, subsidies, or forgiveness.",
   "features": [
@@ -1711,114 +1676,158 @@ export const seoToolContent: Record<string, SeoToolContent> = {
   "conclusion": "Compound-interest results are assumption-driven. Use them to explore rate, time, frequency, and contribution effects."
 },
   "investment-return-calculator": {
-  "how": "The investment-return calculator projects a future balance from an initial investment, recurring contributions, time, and an assumed return. It separates contributed money from projected growth so the source of the balance is easier to understand.",
+  "how": "The investment return calculator estimates a potential future portfolio value from a starting amount, recurring contributions, an assumed annual return, a contribution schedule, and the number of years invested. It separates money you contribute from the mathematical growth produced by the return assumption.",
   "features": [
-    "Initial investment input",
-    "Recurring contribution scenario",
-    "Assumed return and time horizon",
-    "Contribution-versus-growth breakdown",
-    "Scenario comparison"
+    "Initial investment and recurring contribution inputs",
+    "Flexible annual, quarterly, monthly, biweekly, or weekly contributions",
+    "Adjustable expected annual return and investment period",
+    "Projected value, total invested, and estimated growth breakdown",
+    "Year-by-year projection table for long-term scenario planning"
   ],
-  "use": "For long-term savings planning; investors comparing contribution levels; students learning how recurring deposits and growth interact.",
+  "use": "Use it to explore retirement and wealth-building scenarios, compare contribution levels, estimate the effect of compounding over time, or test how different return assumptions change a long-term investment plan.",
   "steps": [
-    "Enter the initial investment.",
-    "Add the recurring contribution.",
-    "Enter the assumed return and time horizon.",
-    "Review projected value and growth."
+    "Enter the amount you plan to invest initially.",
+    "Add the amount you expect to contribute regularly and choose how often you will contribute.",
+    "Enter a return assumption and select the investment period.",
+    "Review the projected future value, total contributions, estimated growth, and yearly projection.",
+    "Repeat with different assumptions to compare realistic scenarios rather than relying on one forecast."
   ],
-  "why": "Investment projections are easier to interpret when the assumptions and contribution component are visible. This page is designed for scenario planning, not performance promises.",
+  "why": "A useful investment projection should show where the projected balance comes from. All2ools separates contributed capital from estimated growth and makes the time horizon and return assumption visible, helping you understand the impact of consistency and compounding without presenting the result as a promise.",
   "compare": [
     [
-      "Projection",
-      "Contribution plus assumed growth",
-      "Future value only"
+      "Starting point",
+      "Initial investment plus recurring contributions",
+      "Starting investment only"
     ],
     [
-      "Inputs",
-      "Initial and recurring amounts",
-      "Starting amount"
+      "Contribution timing",
+      "Annual to weekly schedules",
+      "Often fixed or not modeled"
     ],
     [
-      "Transparency",
-      "Return assumption visible",
-      "Return may be implicit"
+      "Growth view",
+      "Contributions and projected growth separated",
+      "May show only an ending balance"
     ],
     [
-      "Use",
-      "Long-term scenario planning",
-      "One static estimate"
+      "Planning use",
+      "Long-term scenario comparison",
+      "Single-return estimate"
     ]
   ],
   "faqs": [
     {
-      "question": "Does this guarantee an investment return?",
-      "answer": "No. The result follows the return assumption you enter. Actual market performance can differ substantially."
+      "question": "Is the projected investment return guaranteed?",
+      "answer": "No. The calculator applies the return assumption you enter as a mathematical projection. Actual investments can rise or fall and may produce very different results."
     },
     {
-      "question": "Why separate contributions from growth?",
-      "answer": "It shows how much of the projected balance comes from money added versus the assumed investment return."
+      "question": "How do recurring contributions affect the result?",
+      "answer": "Each contribution increases the amount invested and, under the calculator's model, has time to compound according to the selected return assumption and contribution frequency."
     },
     {
-      "question": "Can I model monthly contributions?",
-      "answer": "Yes when recurring contribution inputs are available. Keep the contribution period consistent with the calculator’s assumptions."
+      "question": "What contribution frequency should I choose?",
+      "answer": "Choose the schedule that most closely matches your real plan. Monthly is useful for many salary-based savings plans, while weekly, biweekly, quarterly, and annual schedules can model other strategies."
+    },
+    {
+      "question": "Why does a longer investment period change the result so much?",
+      "answer": "With a positive assumed return, earlier money has more periods in which to compound. The effect can become substantial over long horizons, although real-world returns are not constant."
+    },
+    {
+      "question": "Can I use this for SIP or recurring investment planning?",
+      "answer": "Yes. A recurring contribution with a monthly frequency can be used as a general scenario model for regular investment plans. It is not a substitute for the specific rules, fees, taxes, or return structure of a particular investment product."
+    },
+    {
+      "question": "Does the calculator include taxes and investment fees?",
+      "answer": "The core projection does not automatically model product-specific taxes, expense ratios, brokerage, or other fees. Include those separately when assessing an actual investment choice."
+    },
+    {
+      "question": "What return should I enter?",
+      "answer": "Use an assumption that fits your planning scenario and consider testing several rates. Avoid treating a historical or target return as a guaranteed future result."
+    },
+    {
+      "question": "Why can my actual result differ from the calculator?",
+      "answer": "Markets fluctuate, contributions may occur at different times, fees and taxes reduce net returns, and actual investment performance is rarely a constant annual rate."
     }
   ],
-  "conclusion": "Use the projection to compare saving and return assumptions, while evaluating actual fees, taxes, volatility, and investment performance separately."
+  "conclusion": "Use this calculator to understand how starting capital, recurring contributions, time, and an assumed return can interact. Compare multiple scenarios and account separately for risk, taxes, fees, inflation, and changing market performance before making an investment decision."
 },
   "roi-calculator": {
-  "how": "ROI compares gain or loss with the original investment. The standard percentage calculation is (return − cost) / cost × 100, while the absolute profit shows the monetary difference without the percentage scaling.",
+  "how": "The ROI calculator compares the total amount invested with the current or final value of an investment, project, purchase, or campaign. It calculates the net profit or loss and expresses that result as a percentage of the amount invested. An optional holding period also helps translate the result into an annualized return for easier time-based comparisons.",
   "features": [
-    "Investment cost and return inputs",
-    "Profit or loss result",
-    "ROI percentage",
-    "Project and campaign comparison",
-    "Clear amount-versus-percentage view"
+    "Initial investment, final value, and additional cost inputs",
+    "ROI percentage with profit or loss shown in money terms",
+    "Return multiple showing how many times the investment value changed",
+    "Optional holding period and annualized return estimate",
+    "Year-by-year projection for understanding the implied growth path",
+    "INR and USD currency support for flexible planning"
   ],
-  "use": "For marketing campaigns; project evaluation; purchase decisions; simple investment comparisons where a basic ROI measure is appropriate.",
+  "use": "Use it to evaluate investment outcomes, compare marketing campaigns, review project economics, assess purchases, or quickly compare opportunities where a straightforward return-on-investment measure is useful.",
   "steps": [
-    "Enter the original cost.",
-    "Enter the resulting return or value.",
-    "Review profit or loss.",
-    "Review the ROI percentage."
+    "Enter the original amount you invested.",
+    "Enter the current or final value of the investment.",
+    "Add extra costs if they should be included in the total amount invested.",
+    "Choose the holding period if you want an annualized return estimate.",
+    "Review ROI, net profit or loss, ending value, return multiple, and the projection table.",
+    "Run different scenarios to compare outcomes before making a decision."
   ],
-  "why": "ROI can be misunderstood when percentage and money values are mixed. This page shows both so the denominator and actual gain or loss remain clear.",
+  "why": "A useful ROI calculation should make the denominator visible instead of presenting a percentage without context. All2ools shows the total invested amount, actual gain or loss, ending value, and return multiple together. The optional annualized figure adds time context, while the calculator keeps the basic ROI definition separate from metrics such as annual return.",
   "compare": [
     [
-      "Metric",
-      "Profit and ROI percentage",
-      "Final value only"
+      "Result",
+      "ROI percentage plus money gain/loss",
+      "Ending value alone"
     ],
     [
-      "Denominator",
-      "Original investment",
-      "May be hidden"
+      "Investment base",
+      "Original investment plus selected additional costs",
+      "May omit related costs"
     ],
     [
-      "Use",
-      "Projects, campaigns, purchases",
-      "Interest products"
+      "Time factor",
+      "Optional annualized estimate",
+      "Basic ROI may ignore duration"
     ],
     [
-      "Time",
-      "Basic ROI does not annualize",
-      "Annualized metric"
+      "Best use",
+      "Projects, campaigns, purchases, investments",
+      "Single balance check"
     ]
   ],
   "faqs": [
     {
-      "question": "What does ROI measure?",
-      "answer": "ROI expresses gain or loss relative to the original investment, usually as a percentage."
+      "question": "What is the ROI formula?",
+      "answer": "Basic ROI is calculated as (final value − total investment) ÷ total investment × 100. If additional costs are included, they increase the total investment used as the denominator."
     },
     {
       "question": "Can ROI be negative?",
-      "answer": "Yes. A result below the original investment produces a negative ROI."
+      "answer": "Yes. If the final value is lower than the amount invested, the calculator shows a negative profit and a negative ROI percentage."
     },
     {
       "question": "Is ROI the same as annual return?",
-      "answer": "No. Basic ROI does not automatically account for how long the money was invested."
+      "answer": "No. Basic ROI describes the total gain or loss relative to the investment. It does not account for how long the money was invested. Annualized return adds a time-based assumption."
+    },
+    {
+      "question": "Why should I include additional costs?",
+      "answer": "Fees, setup costs, transaction expenses, or other direct costs can reduce the actual economic return. Including them gives the ROI denominator a more complete representation of what you spent."
+    },
+    {
+      "question": "What does the return multiple mean?",
+      "answer": "The return multiple is the final value divided by the total invested amount. For example, 1.50× means the final value is one and a half times the amount invested."
+    },
+    {
+      "question": "Can I use this ROI calculator for a business project?",
+      "answer": "Yes. You can use a simple ROI comparison for campaigns, projects, equipment purchases, or other initiatives when the investment and resulting value can be reasonably estimated."
+    },
+    {
+      "question": "Does ROI include taxes and inflation?",
+      "answer": "Not automatically. Taxes, inflation, financing costs, fees, and the timing of cash flows can materially change the real or net return and should be considered separately."
+    },
+    {
+      "question": "Is a higher ROI always better?",
+      "answer": "Not necessarily. A higher ROI can be attractive, but you should also consider the time required to earn it, risk, liquidity, cash-flow timing, and the reliability of the underlying assumptions."
     }
   ],
-  "conclusion": "ROI is useful for comparison, but interpret it alongside time period, risk, cash-flow timing, and other costs."
+  "conclusion": "ROI is a practical comparison metric, but it is only one part of a good financial decision. Use the result alongside time period, risk, taxes, inflation, fees, cash-flow timing, and the quality of the assumptions behind the final value."
 },
   "inflation-calculator": {
   "how": "The inflation calculator applies a constant annual inflation assumption over a selected number of years. A simple future-price model is current amount × (1 + inflation rate)^years, which illustrates how purchasing power changes when prices rise repeatedly.",

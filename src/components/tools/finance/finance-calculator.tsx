@@ -29,6 +29,8 @@ export function FinanceCalculator({ slug }: Props) {
   const config = getConfig(slug);
   if (slug === 'emi-calculator') return <EMICalculator />;
   if (slug === 'loan-calculator') return <LoanCalculator />;
+  if (slug === 'personal-loan-calculator') return <PersonalLoanCalculator />;
+  if (slug === 'investment-return-calculator') return <InvestmentReturnCalculator />;
   if (slug === 'mortgage-calculator') return <MortgageCalculator />;
   return (
     <Card className="w-full overflow-hidden border-2 shadow-sm">
@@ -288,6 +290,139 @@ function LoanCalculator() {
   );
 }
 
+
+function InvestmentReturnCalculator() {
+  const [initial, setInitial] = useState(10000);
+  const [contribution, setContribution] = useState(500);
+  const [returnRate, setReturnRate] = useState(8);
+  const [years, setYears] = useState(20);
+  const [frequency, setFrequency] = useState(12);
+  const [currency, setCurrency] = useState('USD');
+
+  const result = useMemo(() => {
+    const periods = Math.max(1, Math.round(years * frequency));
+    const ratePerPeriod = returnRate / 100 / frequency;
+    const growthFactor = Math.pow(1 + ratePerPeriod, periods);
+    const initialGrowth = initial * growthFactor;
+    const contributionGrowth = ratePerPeriod === 0
+      ? contribution * periods
+      : contribution * ((growthFactor - 1) / ratePerPeriod);
+    const invested = initial + contribution * periods;
+    const futureValue = Math.max(0, initialGrowth + contributionGrowth);
+    const gain = Math.max(0, futureValue - invested);
+    const growthShare = futureValue > 0 ? Math.min(100, gain / futureValue * 100) : 0;
+    const schedule: { year: number; invested: number; growth: number; value: number }[] = [];
+    for (let year = 1; year <= Math.min(years, 30); year++) {
+      const p = Math.max(1, Math.round(year * frequency));
+      const gf = Math.pow(1 + ratePerPeriod, p);
+      const iv = initial * gf;
+      const cv = ratePerPeriod === 0 ? contribution * p : contribution * ((gf - 1) / ratePerPeriod);
+      const value = Math.max(0, iv + cv);
+      const contributed = initial + contribution * p;
+      schedule.push({ year, invested: contributed, growth: Math.max(0, value - contributed), value });
+    }
+    return { periods, invested, futureValue, gain, growthShare, schedule };
+  }, [initial, contribution, returnRate, years, frequency]);
+
+  const fmt = (n: number) => money(n, currency);
+  const arc = `${result.growthShare.toFixed(2)}%`;
+  const frequencyLabel = frequency === 1 ? 'year' : frequency === 4 ? 'quarter' : frequency === 12 ? 'month' : frequency === 26 ? '2 weeks' : frequency === 52 ? 'week' : `${frequency} times/year`;
+
+  return <Card className="w-full overflow-hidden border border-slate-200 bg-white shadow-sm">
+    <CardContent className="p-0">
+      <div className="grid lg:grid-cols-[1.15fr_.85fr]">
+        <div className="p-5 sm:p-7 md:p-9">
+          <div className="mb-7 flex items-center justify-between gap-3">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-600">Online Investment Return Calculator</p>
+              <h2 className="mt-1 text-2xl font-bold tracking-tight text-slate-800 md:text-3xl">Estimate your investment growth</h2>
+              <p className="mt-2 max-w-xl text-sm leading-6 text-slate-500">Project a potential future value from your starting investment, regular contributions, expected return and time horizon.</p>
+            </div>
+            <div className="hidden h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600 sm:flex"><TrendingUp className="h-5 w-5" /></div>
+          </div>
+          <div className="mb-5 flex items-center gap-3 rounded-2xl border bg-slate-50/80 p-3">
+            <Label className="shrink-0">Currency</Label>
+            <Select value={currency} onValueChange={setCurrency}><SelectTrigger className="w-32 bg-white"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="USD">USD ($)</SelectItem><SelectItem value="INR">INR (₹)</SelectItem></SelectContent></Select>
+          </div>
+          <LoanSlider label="Initial investment" value={initial} min={0} max={5000000} step={1000} prefix={currency === 'INR' ? '₹' : '$'} onChange={setInitial} />
+          <LoanSlider label="Regular contribution" value={contribution} min={0} max={500000} step={100} prefix={currency === 'INR' ? '₹' : '$'} onChange={setContribution} />
+          <LoanSlider label="Expected annual return" value={returnRate} min={0} max={30} step={0.1} suffix="%" onChange={setReturnRate} />
+          <LoanSlider label="Investment period" value={years} min={1} max={50} step={1} suffix="yr" onChange={setYears} />
+          <div className="mt-5 rounded-2xl border bg-slate-50/80 p-4">
+            <Label>Contribution frequency</Label>
+            <Select value={String(frequency)} onValueChange={v => setFrequency(Number(v))}><SelectTrigger className="mt-1 bg-white"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="1">Annually</SelectItem><SelectItem value="4">Quarterly</SelectItem><SelectItem value="12">Monthly</SelectItem><SelectItem value="26">Every 2 weeks</SelectItem><SelectItem value="52">Weekly</SelectItem></SelectContent></Select>
+            <p className="mt-2 text-xs text-slate-500">Recurring contribution is assumed at the selected frequency for the projection.</p>
+          </div>
+          <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2"><div className="rounded-2xl border border-emerald-100 bg-emerald-50/70 p-4"><p className="text-sm text-slate-500">Estimated future value</p><p className="mt-1 text-2xl font-bold text-emerald-600">{fmt(result.futureValue)}</p></div><div className="rounded-2xl border border-indigo-100 bg-indigo-50/70 p-4"><p className="text-sm text-slate-500">Estimated investment gain</p><p className="mt-1 text-2xl font-bold text-indigo-600">{fmt(result.gain)}</p></div></div>
+        </div>
+        <div className="border-t bg-gradient-to-br from-slate-50 via-white to-indigo-50/60 p-5 sm:p-7 lg:border-l lg:border-t-0 md:p-9">
+          <div className="mb-4 flex items-center justify-between"><div><p className="text-sm font-semibold text-slate-700">Investment growth meter</p><p className="text-xs text-slate-500">Your contributions compared with projected growth</p></div><TrendingUp className="h-5 w-5 text-emerald-500" /></div>
+          <div className="mx-auto my-5 flex max-w-[300px] items-center justify-center"><div className="relative h-56 w-56 rounded-full" style={{ background: `conic-gradient(#5065f6 0 ${Math.max(0, Math.min(100, 100 - result.growthShare)).toFixed(2)}%, #dfe5ff ${Math.max(0, Math.min(100, 100 - result.growthShare)).toFixed(2)}% 100%)` }}><div className="absolute inset-[28px] flex flex-col items-center justify-center rounded-full bg-white shadow-inner"><span className="text-xs font-medium text-slate-500">Future value</span><strong className="mt-1 text-2xl font-bold text-slate-800">{fmt(result.futureValue)}</strong><span className="mt-1 text-xs text-emerald-600">{returnRate.toFixed(1)}% assumed return</span></div></div></div>
+          <div className="flex justify-center gap-5 text-xs text-slate-500"><span className="flex items-center gap-2"><i className="h-2.5 w-2.5 rounded-full bg-[#5065f6]" /> Contributions</span><span className="flex items-center gap-2"><i className="h-2.5 w-2.5 rounded-full bg-[#dfe5ff]" /> Growth</span></div>
+          <div className="mt-8 space-y-4"><LoanResult label="Total invested" value={fmt(result.invested)} icon={<WalletCards className="h-4 w-4" />} /><LoanResult label="Projected growth" value={fmt(result.gain)} icon={<CircleDollarSign className="h-4 w-4" />} /><LoanResult label="Projected future value" value={fmt(result.futureValue)} icon={<TrendingUp className="h-4 w-4" />} strong /><LoanResult label="Contribution schedule" value={frequencyLabel} icon={<Calculator className="h-4 w-4" />} /></div>
+        </div>
+      </div>
+      <div className="border-t bg-white p-5 sm:p-7 md:p-9"><div className="mb-5"><h3 className="text-xl font-bold text-slate-800">Investment growth projection</h3><p className="mt-1 text-sm text-slate-500">See how your estimated balance could develop over the selected time horizon.</p></div><div className="overflow-x-auto rounded-2xl border"><table className="w-full min-w-[650px] text-sm"><thead className="bg-slate-50 text-left text-slate-500"><tr><th className="px-4 py-3">Year</th><th className="px-4 py-3">Total invested</th><th className="px-4 py-3">Growth</th><th className="px-4 py-3">Estimated value</th></tr></thead><tbody>{result.schedule.map(r => <tr key={r.year} className="border-t"><td className="px-4 py-3 font-medium">{r.year}</td><td className="px-4 py-3">{fmt(r.invested)}</td><td className="px-4 py-3 text-emerald-600">{fmt(r.growth)}</td><td className="px-4 py-3 font-semibold">{fmt(r.value)}</td></tr>)}</tbody></table></div><p className="mt-5 flex gap-2 text-xs leading-5 text-slate-500"><Info className="mt-0.5 h-4 w-4 shrink-0" />This is a mathematical projection based on the return assumption you enter. Investment returns are not guaranteed, and actual results can vary because of market performance, fees, taxes, inflation and timing.</p></div>
+    </CardContent>
+  </Card>;
+}
+
+function PersonalLoanCalculator() {
+  const [loanAmount, setLoanAmount] = useState(500000);
+  const [rate, setRate] = useState(12);
+  const [years, setYears] = useState(5);
+  const [extra, setExtra] = useState(0);
+  const currency = 'INR';
+
+  const result = useMemo(() => {
+    const months = Math.max(1, Math.round(years * 12));
+    const monthlyRate = rate / 100 / 12;
+    const basePayment = monthlyRate === 0 ? loanAmount / months : loanAmount * monthlyRate * Math.pow(1 + monthlyRate, months) / (Math.pow(1 + monthlyRate, months) - 1);
+    const payment = basePayment + extra;
+    let balance = loanAmount, totalInterest = 0, totalPaid = 0, actualMonths = 0;
+    const rows: { month: number; payment: number; principal: number; interest: number; balance: number }[] = [];
+    while (balance > 0.01 && actualMonths < 1200) {
+      actualMonths += 1;
+      const interest = monthlyRate === 0 ? 0 : balance * monthlyRate;
+      const principal = Math.min(balance, Math.max(0, payment - interest));
+      const actualPayment = principal + interest;
+      balance = Math.max(0, balance - principal);
+      totalInterest += interest; totalPaid += actualPayment;
+      if (rows.length < 12 || balance === 0) rows.push({ month: actualMonths, payment: actualPayment, principal, interest, balance });
+      if (principal <= 0 && interest > 0) break;
+    }
+    const principalShare = totalPaid > 0 ? loanAmount / totalPaid : 1;
+    const payoffLabel = actualMonths >= 12 ? `${Math.floor(actualMonths / 12)}y ${actualMonths % 12 ? `${actualMonths % 12}m` : ''}`.trim() : `${actualMonths}m`;
+    const regularInterest = Math.max(0, basePayment * months - loanAmount);
+    return { payment, totalInterest, totalPaid, actualMonths, principalShare, rows, payoffLabel, interestSaved: Math.max(0, regularInterest - totalInterest) };
+  }, [loanAmount, rate, years, extra]);
+
+  const fmt = (n: number) => money(n, currency);
+  const donut = `${Math.max(0, Math.min(100, result.principalShare * 100))}%`;
+  return (
+    <Card className="w-full overflow-hidden border border-slate-200 bg-white shadow-sm">
+      <CardContent className="p-0">
+        <div className="grid lg:grid-cols-[1.15fr_.85fr]">
+          <div className="p-5 sm:p-7 md:p-9">
+            <div className="mb-7 flex items-center justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-600">Online Personal Loan Calculator</p><h2 className="mt-1 text-2xl font-bold tracking-tight text-slate-800 md:text-3xl">Estimate your personal loan payment</h2><p className="mt-2 max-w-xl text-sm leading-6 text-slate-500">Adjust the amount, interest rate and repayment period to compare your monthly payment, borrowing cost and the effect of paying extra.</p></div><div className="hidden h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600 sm:flex"><Calculator className="h-5 w-5" /></div></div>
+            <LoanSlider label="Personal loan amount" value={loanAmount} min={10000} max={5000000} step={10000} onChange={setLoanAmount} />
+            <LoanSlider label="Interest rate (p.a.)" value={rate} min={0} max={36} step={0.1} onChange={setRate} />
+            <LoanSlider label="Repayment tenure" value={years} min={1} max={10} step={1} onChange={setYears} />
+            <LoanSlider label="Extra monthly payment" value={extra} min={0} max={100000} step={1000} onChange={setExtra} />
+            <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2"><div className="rounded-2xl border border-emerald-100 bg-emerald-50/70 p-4"><p className="text-sm text-slate-500">Monthly payment</p><p className="mt-1 text-2xl font-bold text-emerald-600">{fmt(result.payment)}</p></div><div className="rounded-2xl border border-indigo-100 bg-indigo-50/70 p-4"><p className="text-sm text-slate-500">Estimated payoff</p><p className="mt-1 text-2xl font-bold text-indigo-600">{result.payoffLabel}</p></div></div>
+          </div>
+          <div className="border-t bg-gradient-to-br from-slate-50 via-white to-indigo-50/60 p-5 sm:p-7 lg:border-l lg:border-t-0 md:p-9">
+            <div className="mb-4 flex items-center justify-between"><div><p className="text-sm font-semibold text-slate-700">Personal loan cost meter</p><p className="text-xs text-slate-500">Principal compared with interest</p></div><TrendingUp className="h-5 w-5 text-emerald-500" /></div>
+            <div className="mx-auto my-5 flex max-w-[300px] items-center justify-center"><div className="relative h-56 w-56 rounded-full" style={{ background: `conic-gradient(#5065f6 0 ${donut}, #e9edff ${donut} 100%)` }}><div className="absolute inset-[28px] flex flex-col items-center justify-center rounded-full bg-white shadow-inner"><span className="text-xs font-medium text-slate-500">Monthly payment</span><strong className="mt-1 text-2xl font-bold text-slate-800">{fmt(result.payment)}</strong><span className="mt-1 text-xs text-emerald-600">{rate.toFixed(1)}% p.a.</span></div></div></div>
+            <div className="flex justify-center gap-5 text-xs text-slate-500"><span className="flex items-center gap-2"><i className="h-2.5 w-2.5 rounded-full bg-[#5065f6]" /> Principal</span><span className="flex items-center gap-2"><i className="h-2.5 w-2.5 rounded-full bg-[#e9edff]" /> Interest</span></div>
+            <div className="mt-8 space-y-4"><LoanResult label="Principal borrowed" value={fmt(loanAmount)} icon={<WalletCards className="h-4 w-4" />} /><LoanResult label="Total interest" value={fmt(result.totalInterest)} icon={<CircleDollarSign className="h-4 w-4" />} /><LoanResult label="Total amount paid" value={fmt(result.totalPaid)} icon={<TrendingUp className="h-4 w-4" />} strong />{extra > 0 && <LoanResult label="Estimated interest saved" value={fmt(result.interestSaved)} icon={<TrendingUp className="h-4 w-4" />} />}</div>
+          </div>
+        </div>
+        <div className="border-t bg-white p-5 sm:p-7 md:p-9"><div className="mb-5"><h3 className="text-xl font-bold text-slate-800">Personal loan repayment schedule</h3><p className="mt-1 text-sm text-slate-500">Review the first 12 payments and see how interest, principal and balance change over time.</p></div><div className="overflow-x-auto rounded-2xl border"><table className="w-full min-w-[650px] text-sm"><thead className="bg-slate-50 text-left text-slate-500"><tr><th className="px-4 py-3">Month</th><th className="px-4 py-3">Payment</th><th className="px-4 py-3">Principal</th><th className="px-4 py-3">Interest</th><th className="px-4 py-3">Balance</th></tr></thead><tbody>{result.rows.map(r => <tr key={r.month} className="border-t"><td className="px-4 py-3 font-medium">{r.month}</td><td className="px-4 py-3">{fmt(r.payment)}</td><td className="px-4 py-3 text-emerald-600">{fmt(r.principal)}</td><td className="px-4 py-3">{fmt(r.interest)}</td><td className="px-4 py-3">{fmt(r.balance)}</td></tr>)}</tbody></table></div><p className="mt-5 flex gap-2 text-xs leading-5 text-slate-500"><Info className="mt-0.5 h-4 w-4 shrink-0" />This estimate is for planning and comparison. Actual lender payments can differ because of APRs, fees, payment dates, rounding and other loan terms.</p></div>
+      </CardContent>
+    </Card>
+  );
+}
 
 function MortgageCalculator() {
   const [homePrice, setHomePrice] = useState(400000);
