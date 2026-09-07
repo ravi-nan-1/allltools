@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from 'react';
-import { ArrowDownUp, Calculator, CircleDollarSign, Info, Landmark, Percent, ShieldCheck, WalletCards } from 'lucide-react';
+import { ArrowDownUp, Calculator, CircleDollarSign, Info, Landmark,  ShieldCheck, WalletCards } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
