@@ -655,7 +655,6 @@ export const seoToolContent: Record<string, SeoToolContent> = {
     "faqs": [],
     "conclusion": "The Business Valuation Calculator is designed for scenario analysis, not a guaranteed sale price. Compare methods, document your assumptions, and use the result as one input in a broader financial valuation process."
   },
-  "ai-product-background-remover": {
     "how": "AI background removal separates the main foreground subject from surrounding pixels and creates a transparent result. Modern segmentation models estimate which parts of an image belong to the subject, then produce an alpha mask that hides the background. Fine details such as hair, thin edges, shadows, and transparent objects can be challenging, so the output should be inspected before commercial use.",
     "features": [
       "Automatic subject and background separation",
@@ -698,7 +697,6 @@ export const seoToolContent: Record<string, SeoToolContent> = {
     "faqs": [],
     "conclusion": "The AI Product Background Remover provides a fast first-pass cutout for product photos, portraits, and marketing assets. Inspect the edges before important commercial use and make final touch-ups when the image contains difficult details."
   },
-  "ai-headshot-generator": {
     "how": "An AI headshot generator uses an image-generation model to create a professional-looking portrait based on a supplied reference image and the selected visual direction. The prompt can guide clothing, lighting, background, framing, and overall business style. Because generated images can alter facial details or clothing, users should review the result for likeness and accuracy before using it professionally.",
     "features": [
       "Professional portrait generation from a reference selfie",
