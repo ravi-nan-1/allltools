@@ -40,7 +40,7 @@ export function FinanceCalculator({ slug }: Props) {
   if (slug === 'interest-calculator') return <InterestCalculator />;
   if (slug === 'simple-interest-calculator') return <SimpleInterestCalculator />;
   if (slug === 'compound-interest-calculator') return <CompoundInterestCalculator />;
-  if (slug === 'mortgage-calculator') return <HomeLoanCalculator />;
+  if (slug === 'mortgage-calculator') return <MortgageCalculator />;
   return (
     <Card className="w-full overflow-hidden border-2 shadow-sm">
       <CardHeader className="bg-muted/30">
@@ -990,7 +990,16 @@ function SimpleInterestCalculator() {
             <div className="mt-5 space-y-3"><LoanResult label="Original principal" value={fmt(principal)} icon={<WalletCards className="h-4 w-4"/>}/><LoanResult label="Interest per year" value={fmt(result.annualInterest)} icon={<CircleDollarSign className="h-4 w-4"/>}/><LoanResult label="Final amount" value={fmt(result.total)} icon={<TrendingUp className="h-4 w-4"/>} strong/></div>
           </div>
         </div>
-        <div className="border-t bg-white p-5 sm:p-7 md:p-9"><div className="mb-5"><h3 className="text-xl font-bold text-slate-800">Simple interest growth schedule</h3><p className="mt-1 text-sm text-slate-500">Because simple interest does not compound, the interest added each full year stays constant when the rate and principal do not change.</p></div><div className="overflow-x-auto rounded-2xl border"><table className="w-full min-w-[560px] text-sm"><thead className="bg-slate-50 text-left text-slate-500"><tr><th className="px-4 py-3">Year</th><th className="px-4 py-3">Cumulative interest</th><th className="px-4 py-3">Amount</th></tr></thead><tbody>{result.yearly.map(r=><tr key={r.year} className="border-t"><td className="px-4 py-3 font-semibold">{r.year}</td><td className="px-4 py-3 text-amber-600">{fmt(r.interest)}</td><td className="px-4 py-3">{fmt(r.amount)}</td></tr>)}</tbody></table></div><div className="mt-6 grid gap-3 md:grid-cols-3"><div className="rounded-2xl border bg-amber-50/60 p-4"><p className="text-xs font-semibold uppercase tracking-wide text-amber-700">Formula</p><p className="mt-2 text-sm font-semibold text-slate-700">I = P × r × t</p><p className="mt-1 text-xs text-slate-500">Rate is expressed as a decimal and time is measured in years.</p></div><div className="rounded-2xl border bg-slate-50 p-4"><p className="text-xs font-semibold uppercase tracking-wide text-slate-400">No compounding</p><p className="mt-2 text-sm font-semibold text-slate-700">Interest is based on the original principal rather than prior interest.</p></div><div className="rounded-2xl border bg-slate-50 p-4"><p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Compare carefully</p><p className="mt-2 text-sm font-semibold text-slate-700">Real products may use different payment, day-count, fee or rate conventions.</p></div></div><p className="mt-5 flex gap-2 text-xs leading-5 text-slate-500"><Info className="mt-0.5 h-4 w-4 shrink-0"/>This calculator models pure simple interest. It is not a quote for a loan, deposit or investment product, and actual
+        <div className="border-t bg-white p-5 sm:p-7 md:p-9"><div className="mb-5"><h3 className="text-xl font-bold text-slate-800">Simple interest growth schedule</h3><p className="mt-1 text-sm text-slate-500">Because simple interest does not compound, the interest added each full year stays constant when the rate and principal do not change.</p></div><div className="overflow-x-auto rounded-2xl border"><table className="w-full min-w-[560px] text-sm"><thead className="bg-slate-50 text-left text-slate-500"><tr><th className="px-4 py-3">Year</th><th className="px-4 py-3">Cumulative interest</th><th className="px-4 py-3">Amount</th></tr></thead><tbody>{result.yearly.map(r=><tr key={r.year} className="border-t"><td className="px-4 py-3 font-semibold">{r.year}</td><td className="px-4 py-3 text-amber-600">{fmt(r.interest)}</td><td className="px-4 py-3">{fmt(r.amount)}</td></tr>)}</tbody></table></div><div className="mt-6 grid gap-3 md:grid-cols-3"><div className="rounded-2xl border bg-amber-50/60 p-4"><p className="text-xs font-semibold uppercase tracking-wide text-amber-700">Formula</p><p className="mt-2 text-sm font-semibold text-slate-700">I = P × r × t</p><p className="mt-1 text-xs text-slate-500">Rate is expressed as a decimal and time is measured in years.</p></div><div className="rounded-2xl border bg-slate-50 p-4"><p className="text-xs font-semibold uppercase tracking-wide text-slate-400">No compounding</p><p className="mt-2 text-sm font-semibold text-slate-700">Interest is based on the original principal rather than prior interest.</p></div><div className="rounded-2xl border bg-slate-50 p-4"><p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Compare carefully</p><p className="mt-2 text-sm font-semibold text-slate-700">Real products may use different payment, day-count, fee or rate conventions.</p></div></div><p className="mt-5 flex gap-2 text-xs leading-5 text-slate-500"><Info className="mt-0.5 h-4 w-4 shrink-0"/>This calculator models pure simple interest. It is not a quote for a loan, deposit or investment product, and actual products may use different conventions.</p></div>
+      </CardContent>
+    </Card>
+  );
+}
+
+
+function MortgageCalculator() {
+  return <HomeLoanCalculator />;
+}
 
 function HomeLoanCalculator() {
   const [homePrice, setHomePrice] = useState(400000);
@@ -1062,10 +1071,10 @@ function HomeLoanCalculator() {
       </div>
       <div className="grid lg:grid-cols-[1.08fr_.92fr]">
         <div className="space-y-5 p-5 sm:p-7 md:p-8">
-          <LoanSlider label="Property price" value={homePrice} min={500000} max={100000000} step={100000} prefix="₹" onChange={setHomePrice} />
-          <LoanSlider label="Down payment" value={downPct} min={0} max={50} step={1} suffix="%" onChange={setDownPct} />
-          <LoanSlider label="Interest rate" value={rate} min={0} max={20} step={0.01} suffix="%" onChange={setRate} />
-          <LoanSlider label="Loan tenure" value={years} min={5} max={40} step={1} suffix="yr" onChange={setYears} />
+          <MortgageSlider label="Property price" value={homePrice} min={500000} max={100000000} step={100000} prefix="₹" onChange={setHomePrice} />
+          <MortgageSlider label="Down payment" value={downPct} min={0} max={50} step={1} suffix="%" onChange={setDownPct} />
+          <MortgageSlider label="Interest rate" value={rate} min={0} max={20} step={0.01} suffix="%" onChange={setRate} />
+          <MortgageSlider label="Loan tenure" value={years} min={5} max={40} step={1} suffix="yr" onChange={setYears} />
           <div className="grid gap-4 rounded-2xl border bg-slate-50/80 p-4 sm:grid-cols-2">
             <div><Label>Annual property tax</Label><div className="mt-1 flex"><Input type="number" min="0" step="0.1" value={propertyTax} onChange={e=>setPropertyTax(num(e.target.value))} /><span className="flex items-center rounded-r-md border border-l-0 bg-white px-3 text-sm text-slate-500">%</span></div></div>
             <div><Label>Annual home insurance</Label><Input className="mt-1" type="number" min="0" value={insurance} onChange={e=>setInsurance(num(e.target.value))}/></div>
@@ -1103,7 +1112,6 @@ function HomeLoanCalculator() {
     </CardContent>
   </Card>;
 }
-
 
 function InflationCalculator() {
   const [currentValue, setCurrentValue] = useState(100000);
@@ -1185,6 +1193,11 @@ function InflationCalculator() {
       </CardContent>
     </Card>
   );
+}
+
+function MortgageSlider({ label, value, min, max, step, prefix, suffix, onChange }: { label: string; value: number; min: number; max: number; step: number; prefix?: string; suffix?: string; onChange: (value: number) => void }) {
+  const display = `${prefix ?? ''}${value.toLocaleString(undefined, { maximumFractionDigits: 2 })}${suffix ? ` ${suffix}` : ''}`;
+  return <div><div className="mb-2 flex items-center justify-between gap-3"><Label className="text-base font-medium text-slate-700">{label}</Label><div className="rounded-lg bg-emerald-50 px-3 py-2 text-lg font-semibold text-emerald-600">{display}</div></div><Slider value={[value]} min={min} max={max} step={step} onValueChange={v=>onChange(v[0] ?? value)} className="py-2"/><div className="mt-1 flex justify-between text-[11px] text-slate-400"><span>{prefix ?? ''}{min.toLocaleString()}</span><span>{prefix ?? ''}{max.toLocaleString()} {suffix ?? ''}</span></div></div>;
 }
 
 function MortgageMetric({ label, value, highlight = false }: { label: string; value: string; highlight?: boolean }) {
