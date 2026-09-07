@@ -58,11 +58,11 @@ export function HomePageClient({ tools }: HomePageClientProps) {
       <section className="relative bg-background py-20 px-4 text-center">
         <div className="container mx-auto max-w-6xl text-center">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-            Free Online Tools for Work, Study & Everyday Tasks
+            Free Online AI Tools for Every Task
           </h1>
           
           <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
-             All2ools brings practical browser-based tools together in one place, including PDF utilities, image tools, SEO helpers, developer utilities, calculators, and AI-assisted workflows.
+             All2ools offers 30+ free AI tools for PDFs, PDF to Word, SEO, images, and business tasks. Fast, easy, and no signup required.
           </p>
           
           <div className="flex flex-wrap justify-center gap-6 mb-10 text-sm text-muted-foreground">
@@ -80,7 +80,7 @@ export function HomePageClient({ tools }: HomePageClientProps) {
             </div>
             <div className="flex items-center gap-2">
               <Check className="w-5 h-5 text-green-500" />
-              <span>70+ Online Tools</span>
+              <span>30+ AI Tools</span>
             </div>
           </div>
           
@@ -151,28 +151,6 @@ export function HomePageClient({ tools }: HomePageClientProps) {
           className="w-full min-h-[100px] flex items-center justify-center bg-muted rounded-lg"
         />
       </div>
-
-      <section className="mt-16 rounded-2xl border bg-muted/20 p-6 md:p-10">
-        <div className="max-w-3xl">
-          <p className="text-sm font-semibold text-primary">All2ools Guides</p>
-          <h2 className="mt-2 text-3xl font-bold font-headline">Practical guides for getting more from online tools</h2>
-          <p className="mt-3 text-muted-foreground">Learn how to choose compression settings, prepare documents, work with SEO data, and use calculators responsibly.</p>
-        </div>
-        <div className="mt-8 grid gap-4 md:grid-cols-3">
-          <Link href="/guides/pdf-compression" className="rounded-xl border bg-background p-5 hover:border-primary transition">
-            <h3 className="font-semibold">How to Compress a PDF</h3>
-            <p className="mt-2 text-sm text-muted-foreground">Understand file size, quality, compatibility, and when to compress.</p>
-          </Link>
-          <Link href="/guides/image-compression" className="rounded-xl border bg-background p-5 hover:border-primary transition">
-            <h3 className="font-semibold">Image Compression Guide</h3>
-            <p className="mt-2 text-sm text-muted-foreground">Choose formats and quality settings for websites, email, and sharing.</p>
-          </Link>
-          <Link href="/guides/calculator-guide" className="rounded-xl border bg-background p-5 hover:border-primary transition">
-            <h3 className="font-semibold">Choosing the Right Calculator</h3>
-            <p className="mt-2 text-sm text-muted-foreground">A practical guide to loans, investments, taxes, percentages, and dates.</p>
-          </Link>
-        </div>
-      </section>
 
       <WhyAll2ools />
 

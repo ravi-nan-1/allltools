@@ -102,14 +102,25 @@ export function SeoContent({ tool }: { tool: Tool }) {
 
       <section>
         <h2 className="text-3xl font-bold mb-4 tracking-tight">Frequently Asked Questions (FAQ)</h2>
-        <Accordion type="single" collapsible className="w-full">
-          {content.faqs.map((faq, index) => (
-            <AccordionItem value={`item-${index}`} key={faq.question}>
-              <AccordionTrigger className="text-left font-semibold">{faq.question}</AccordionTrigger>
-              <AccordionContent className="text-base">{faq.answer}</AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
+        {tool.slug === 'bmi-calculator' ? (
+          <div className="space-y-5">
+            {content.faqs.map((faq) => (
+              <div key={faq.question} className="rounded-xl border bg-card p-5">
+                <h3 className="text-lg font-semibold">{faq.question}</h3>
+                <p className="mt-2 text-base text-muted-foreground">{faq.answer}</p>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <Accordion type="single" collapsible className="w-full">
+            {content.faqs.map((faq, index) => (
+              <AccordionItem value={`item-${index}`} key={faq.question}>
+                <AccordionTrigger className="text-left font-semibold">{faq.question}</AccordionTrigger>
+                <AccordionContent className="text-base">{faq.answer}</AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        )}
       </section>
 
       <section>

@@ -5,11 +5,20 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { tools } from '@/lib/tools';
 import { useLanguage } from '@/hooks/use-language';
+import { usePathname } from 'next/navigation';
 
 export function Footer({ showRelatedTools = true }: { showRelatedTools?: boolean }) {
   const { translate } = useLanguage();
+  const pathname = usePathname();
+  const slug = pathname?.split('/tools/')[1]?.split('/')[0] || '';
+  const relatedMap: Record<string, string[]> = {
+    'bmi-calculator': ['calorie-calculator', 'age-calculator', 'retirement-calculator', 'percentage-calculator'],
+  };
+  const selectedSlugs = relatedMap[slug];
 
-  const relatedTools = tools.map(tool => ({
+  const relatedTools = tools
+    .filter(tool => !selectedSlugs || selectedSlugs.includes(tool.slug))
+    .map(tool => ({
     name: translate(tool.name),
     description: translate(tool.description),
     href: `/tools/${tool.slug}`,

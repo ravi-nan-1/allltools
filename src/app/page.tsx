@@ -32,7 +32,7 @@ export default function Home() {
     url: 'https://all2ools.com/',
     name: 'All2ools',
     description:
-      'The ultimate suite of 70+ free online tools. Explore tools for finance, SEO, image editing, business management, developers, and more.',
+      'The ultimate suite of 30+ free online tools powered by AI. Explore tools for finance, SEO, image editing, business management, developers, and more.',
     potentialAction: {
       '@type': 'SearchAction',
       target: {
@@ -85,7 +85,7 @@ export default function Home() {
         name: 'How many tools does All2ools offer?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'All2ools offers a growing suite of over 70 practical tools across various categories, including SEO, Business, Finance, Image, PDF, and Developer utilities. We are constantly adding new tools every month.',
+          text: 'All2ools offers a growing suite of over 25 essential tools across various categories, including SEO, Business, Finance, Image, PDF, and Developer utilities. We are constantly adding new tools every month.',
         },
       },
     ],

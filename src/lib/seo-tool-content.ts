@@ -1,4 +1,3 @@
-import { calculatorSeoOverrides } from './calculator-seo-overrides';
 export interface SeoToolContent {
   how: string;
   features: string[];
@@ -1501,14 +1500,14 @@ export const seoToolContent: Record<string, SeoToolContent> = {
   },
 
   "bmi-calculator": {
-    "how": "A BMI calculator divides weight in kilograms by height in meters squared to produce a body mass index estimate. BMI is a screening measure and does not account for every factor that influences health, fitness, or body composition.",
-    "features": ["Metric height and weight inputs", "Instant BMI estimate", "Reference category", "Responsive design", "Health-use disclaimer"],
-    "use": "For Personal Planning: General wellness awareness, fitness tracking, educational exercises, and understanding the standard BMI calculation.\nFor Professionals: Use the calculator to prepare quick scenario estimates before a detailed review.\nFor Students: Use the inputs and results to understand the underlying calculation.",
-    "steps": ["Enter your height in centimeters.", "Enter your weight in kilograms.", "Calculate BMI.", "Use the result as a general screening measure, not a diagnosis."],
-    "why": "All2ools focuses on the calculation and its limitations. A BMI number is one data point and should be interpreted in context.",
-    "compare": [["Inputs", "Clear, task-specific fields", "Manual arithmetic"], ["Results", "Instant breakdown of key values", "Calculate each value separately"], ["Accessibility", "Responsive browser tool", "Desktop-only workflow"], ["Transparency", "Assumptions shown on the page", "Hidden or mixed assumptions"]],
-    "faqs": [{"question": "How does the bmi calculator work?", "answer": "A BMI calculator divides weight in kilograms by height in meters squared to produce a body mass index estimate. BMI is a screening measure and does not account for every factor that influences health, fitness, or body composition."}, {"question": "Are the results guaranteed or official?", "answer": "No. Calculator results are estimates based on the assumptions and inputs you provide. Official rates, lender terms, tax rules, benefits, or professional assessments can differ."}, {"question": "Can I use it on a phone?", "answer": "Yes. The calculator interface is designed to work in modern desktop and mobile browsers."}, {"question": "Can I change the assumptions?", "answer": "Yes. Where the calculator uses an assumption such as an interest rate, return, tax rate, or contribution, changing the input lets you compare scenarios."}],
-    "conclusion": "All2ools focuses on the calculation and its limitations. A BMI number is one data point and should be interpreted in context. Use the result as a planning estimate and verify important financial, tax, health, or transaction-specific details with the applicable official source or professional."
+    "how": "BMI is calculated by dividing body weight in kilograms by height in metres squared: BMI = weight (kg) / height² (m²). The calculator converts US customary inches and pounds to metric units before applying the same formula. For adults, the result is compared with standard screening bands: below 18.5, 18.5–24.9, 25–29.9, and 30 or higher.",
+    "features": ["Metric and US customary units", "BMI calculated from the standard height/weight formula", "Adult reference category", "Immediate result with converted measurements", "Mobile-friendly input and result layout"],
+    "use": "For Personal Wellness: Check a BMI estimate as one general screening measure when reviewing height and weight.\nFor Fitness Planning: Use BMI as a simple reference alongside other measurements rather than as a standalone assessment of body composition.\nFor Education: See how changing height or weight changes the BMI calculation.",
+    "steps": ["Choose Metric (cm/kg) or US customary (in/lb) units.", "Enter a height greater than zero.", "Enter a weight greater than zero.", "Review the BMI value and adult reference category, then interpret it in context."],
+    "why": "The All2ools BMI Calculator exposes the units, calculation inputs, converted measurements, and resulting BMI in one place. It also makes the screening limitations clear instead of presenting BMI as a diagnosis.",
+    "compare": [["Unit support", "cm/kg and in/lb inputs", "Manual unit conversion required"], ["Calculation", "Automatic BMI formula", "Manual arithmetic"], ["Interpretation", "Adult reference category shown with the result", "Category lookup required separately"], ["Transparency", "Converted height and weight are displayed", "Intermediate values may be hidden"]],
+    "faqs": [{"question": "Does BMI account for muscle mass?", "answer": "No. BMI uses only height and weight, so it cannot distinguish muscle from body fat. A muscular person can have a higher BMI without having excess body fat."}, {"question": "What are the standard adult BMI ranges?", "answer": "For general adult screening, BMI below 18.5 is commonly classified as underweight, 18.5–24.9 as the healthy range, 25–29.9 as overweight, and 30 or higher as the obesity range. These ranges are screening categories rather than a diagnosis."}, {"question": "Is BMI interpreted differently for children?", "answer": "Yes. Adult BMI cutoffs should not be used to interpret children and teenagers. BMI for people aged 2–19 is generally interpreted using age- and sex-specific growth charts or percentiles."}],
+    "conclusion": "BMI is a useful, simple screening calculation based on height and weight, but it is only one measure of health. Use the number as a starting point and consider body composition, age, fitness, medical history, and other relevant factors when interpreting it."
   },
 
   "calorie-calculator": {
@@ -1632,5 +1631,3 @@ export const seoToolContent: Record<string, SeoToolContent> = {
     "conclusion": "All2ools keeps random-number generation flexible and fast while clearly positioning it for everyday uses rather than security-sensitive secrets. Use the result as a planning estimate and verify important financial, tax, health, or transaction-specific details with the applicable official source or professional."
   },
 };
-
-Object.assign(seoToolContent, calculatorSeoOverrides);
