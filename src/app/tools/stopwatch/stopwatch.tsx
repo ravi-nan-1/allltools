@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import {
   AlarmClock, CalendarDays, Check, Clock3, Dices, Flag, Gauge,
   GraduationCap, Group, Hourglass, Pause, Play, RotateCcw, Shuffle,
-  Sparkles, TimerReset, Trophy, Users, Maximize2, Volume2
+  Sparkles, Trophy, Users, Maximize2, Volume2
 } from 'lucide-react';
 
 const MODES = [
@@ -28,14 +28,6 @@ type Lap = { id: number; lap: number; split: number; total: number };
 type RaceLane = { id: number; name: string; elapsed: number; running: boolean };
 
 const pad = (n: number) => String(Math.max(0, Math.floor(n))).padStart(2, '0');
-const formatStopwatch = (ms: number) => {
-  const total = Math.max(0, ms);
-  const hours = Math.floor(total / 3600000);
-  const minutes = Math.floor((total % 3600000) / 60000);
-  const seconds = Math.floor((total % 60000) / 1000);
-  const millis = Math.floor(total % 1000);
-  return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}.${String(millis).padStart(3, '0')}`;
-};
 const formatShort = (ms: number) => {
   const total = Math.max(0, ms);
   const minutes = Math.floor(total / 60000);

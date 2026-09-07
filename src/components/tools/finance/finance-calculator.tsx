@@ -27,6 +27,7 @@ export function FinanceCalculator({ slug }: Props) {
   const result = useMemo(() => calculate(slug, values, currency), [slug, values, currency]);
 
   const config = getConfig(slug);
+  if (slug === 'emi-calculator') return <EMICalculator />;
   if (slug === 'loan-calculator') return <LoanCalculator />;
   if (slug === 'mortgage-calculator') return <MortgageCalculator />;
   return (
@@ -47,6 +48,153 @@ export function FinanceCalculator({ slug }: Props) {
       </CardContent>
     </Card>
   );
+}
+
+
+function EMICalculator() {
+  const [principal, setPrincipal] = useState(1000000);
+  const [rate, setRate] = useState(8.5);
+  const [years, setYears] = useState(10);
+  const [extra, setExtra] = useState(0);
+
+  const result = useMemo(() => {
+    const months = Math.max(1, Math.round(years * 12));
+    const monthlyRate = rate / 100 / 12;
+    const emi = monthlyRate === 0
+      ? principal / months
+      : principal * monthlyRate * Math.pow(1 + monthlyRate, months) /
+        (Math.pow(1 + monthlyRate, months) - 1);
+
+    const scheduledTotal = emi * months;
+    const scheduledInterest = Math.max(0, scheduledTotal - principal);
+    const paymentWithExtra = emi + extra;
+    let balance = principal;
+    let totalInterest = 0;
+    let totalPaid = 0;
+    let actualMonths = 0;
+    const schedule: { month: number; payment: number; principal: number; interest: number; balance: number }[] = [];
+
+    while (balance > 0.01 && actualMonths < 1200) {
+      actualMonths += 1;
+      const interest = monthlyRate === 0 ? 0 : balance * monthlyRate;
+      const plannedPrincipal = Math.max(0, paymentWithExtra - interest);
+      const principalPaid = Math.min(balance, plannedPrincipal);
+      const actualPayment = principalPaid + interest;
+      balance = Math.max(0, balance - principalPaid);
+      totalInterest += interest;
+      totalPaid += actualPayment;
+      if (schedule.length < 12 || balance === 0) {
+        schedule.push({ month: actualMonths, payment: actualPayment, principal: principalPaid, interest, balance });
+      }
+      if (principalPaid <= 0 && interest > 0) break;
+    }
+
+    const principalPct = totalPaid > 0 ? Math.min(100, principal / totalPaid * 100) : 100;
+    const interestPct = Math.max(0, 100 - principalPct);
+    const payoffLabel = actualMonths >= 12
+      ? `${Math.floor(actualMonths / 12)} yr${actualMonths % 12 ? ` ${actualMonths % 12} mo` : ''}`
+      : `${actualMonths} mo`;
+
+    return {
+      months,
+      emi,
+      scheduledTotal,
+      scheduledInterest,
+      totalInterest,
+      totalPaid,
+      actualMonths,
+      principalPct,
+      interestPct,
+      payoffLabel,
+      schedule,
+      interestSaved: Math.max(0, scheduledInterest - totalInterest),
+    };
+  }, [principal, rate, years, extra]);
+
+  const fmt = (n: number) => money(n, 'INR');
+  const principalArc = result.principalPct.toFixed(2);
+
+  return <Card className="w-full overflow-hidden border border-slate-200 bg-white shadow-sm">
+    <CardContent className="p-0">
+      <div className="border-b bg-gradient-to-r from-emerald-50 via-white to-indigo-50 px-5 py-5 md:px-8">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-600">Online EMI Calculator</p>
+            <h2 className="mt-1 text-2xl font-black text-slate-800 md:text-3xl">Calculate your monthly EMI</h2>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">Adjust the loan amount, interest rate and tenure to instantly see your EMI, total interest and repayment amount.</p>
+          </div>
+          <div className="rounded-2xl bg-emerald-600 px-5 py-3 text-right text-white shadow-sm">
+            <div className="text-xs opacity-80">Monthly EMI</div>
+            <div className="text-2xl font-black">{fmt(result.emi)}</div>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid lg:grid-cols-[1.08fr_.92fr]">
+        <div className="space-y-6 p-5 sm:p-7 md:p-8">
+          <EMISlider label="Loan amount" value={principal} min={10000} max={10000000} step={10000} prefix="₹" onChange={setPrincipal} />
+          <EMISlider label="Interest rate (p.a.)" value={rate} min={0} max={30} step={0.1} suffix="%" onChange={setRate} />
+          <EMISlider label="Loan tenure" value={years} min={1} max={40} step={1} suffix="yr" onChange={setYears} />
+          <EMISlider label="Extra monthly payment" value={extra} min={0} max={200000} step={1000} prefix="₹" onChange={setExtra} />
+
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div className="rounded-2xl border border-emerald-100 bg-emerald-50/70 p-4">
+              <p className="text-sm text-slate-500">Monthly EMI</p>
+              <p className="mt-1 text-2xl font-black text-emerald-600">{fmt(result.emi)}</p>
+              <p className="mt-1 text-xs text-slate-500">Regular payment before extra payment</p>
+            </div>
+            <div className="rounded-2xl border border-indigo-100 bg-indigo-50/70 p-4">
+              <p className="text-sm text-slate-500">Estimated payoff</p>
+              <p className="mt-1 text-2xl font-black text-indigo-600">{result.payoffLabel}</p>
+              <p className="mt-1 text-xs text-slate-500">{extra > 0 ? 'With extra monthly payment' : 'At the selected tenure'}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="border-t bg-gradient-to-br from-slate-50 via-white to-indigo-50/70 p-5 sm:p-7 lg:border-l lg:border-t-0 md:p-8">
+          <div className="rounded-3xl border bg-white p-5 shadow-sm">
+            <div className="flex items-center justify-between gap-3">
+              <div><p className="text-sm font-semibold text-slate-700">EMI repayment meter</p><p className="text-xs text-slate-500">Principal compared with interest</p></div>
+              <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">{result.principalPct.toFixed(0)}% principal</span>
+            </div>
+            <div className="mx-auto my-7 flex h-56 w-56 items-center justify-center rounded-full" style={{ background: `conic-gradient(#5065f6 0 ${principalArc}%, #dfe5ff ${principalArc}% 100%)` }}>
+              <div className="flex h-36 w-36 flex-col items-center justify-center rounded-full bg-white shadow-inner">
+                <span className="text-xs font-medium text-slate-500">Total repayment</span>
+                <strong className="mt-1 text-xl font-black text-slate-800">{fmt(result.totalPaid)}</strong>
+                <span className="mt-1 text-xs text-indigo-600">{result.interestPct.toFixed(0)}% interest</span>
+              </div>
+            </div>
+            <div className="flex flex-wrap justify-center gap-5 text-xs text-slate-500">
+              <span className="flex items-center gap-2"><i className="h-2.5 w-2.5 rounded-full bg-[#5065f6]" /> Principal</span>
+              <span className="flex items-center gap-2"><i className="h-2.5 w-2.5 rounded-full bg-[#dfe5ff]" /> Interest</span>
+            </div>
+          </div>
+
+          <div className="mt-5 space-y-3">
+            <LoanResult label="Principal amount" value={fmt(principal)} icon={<WalletCards className="h-4 w-4" />} />
+            <LoanResult label="Total interest" value={fmt(result.totalInterest)} icon={<CircleDollarSign className="h-4 w-4" />} />
+            <LoanResult label="Total amount payable" value={fmt(result.totalPaid)} icon={<TrendingUp className="h-4 w-4" />} strong />
+            {extra > 0 && <LoanResult label="Estimated interest saved" value={fmt(result.interestSaved)} icon={<TrendingUp className="h-4 w-4" />} />}
+          </div>
+        </div>
+      </div>
+
+      <div className="border-t bg-white p-5 sm:p-7 md:p-8">
+        <div className="mb-5"><h3 className="text-xl font-bold text-slate-800">First-year EMI schedule</h3><p className="mt-1 text-sm text-slate-500">See how the balance changes and how each monthly payment is split between principal and interest.</p></div>
+        <div className="overflow-x-auto rounded-2xl border"><table className="w-full min-w-[650px] text-sm"><thead className="bg-slate-50 text-left text-slate-500"><tr><th className="px-4 py-3">Month</th><th className="px-4 py-3">Payment</th><th className="px-4 py-3">Principal</th><th className="px-4 py-3">Interest</th><th className="px-4 py-3">Balance</th></tr></thead><tbody>{result.schedule.map(r => <tr key={r.month} className="border-t"><td className="px-4 py-3 font-semibold">{r.month}</td><td className="px-4 py-3">{fmt(r.payment)}</td><td className="px-4 py-3 text-emerald-600">{fmt(r.principal)}</td><td className="px-4 py-3">{fmt(r.interest)}</td><td className="px-4 py-3 font-semibold">{fmt(r.balance)}</td></tr>)}</tbody></table></div>
+        <p className="mt-5 flex gap-2 text-xs leading-5 text-slate-500"><Info className="mt-0.5 h-4 w-4 shrink-0" />This EMI calculator provides an estimate for planning. Your lender may use different rates, fees, rounding, payment dates, taxes, insurance or repayment rules.</p>
+      </div>
+    </CardContent>
+  </Card>;
+}
+
+function EMISlider({ label, value, min, max, step, prefix, suffix, onChange }: { label: string; value: number; min: number; max: number; step: number; prefix?: string; suffix?: string; onChange: (value: number) => void }) {
+  const display = `${prefix ?? ''}${value.toLocaleString(undefined, { maximumFractionDigits: 2 })}${suffix ? ` ${suffix}` : ''}`;
+  return <div>
+    <div className="mb-2 flex items-center justify-between gap-3"><Label className="text-base font-medium text-slate-700">{label}</Label><div className="rounded-lg bg-emerald-50 px-3 py-2 text-lg font-semibold text-emerald-600">{display}</div></div>
+    <Slider value={[value]} min={min} max={max} step={step} onValueChange={v => onChange(v[0] ?? value)} className="py-2" />
+    <div className="mt-1 flex justify-between text-[11px] text-slate-400"><span>{prefix ?? ''}{min.toLocaleString()}</span><span>{prefix ?? ''}{max.toLocaleString()} {suffix ?? ''}</span></div>
+  </div>;
 }
 
 
