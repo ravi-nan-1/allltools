@@ -43,7 +43,7 @@ export function BmiGuide() {
 
     <section>
       <h2 className="text-3xl font-bold">BMI for Children and Teens</h2>
-      <p className="mt-4">A child's BMI is calculated from the same height-and-weight relationship, but the result should not be interpreted with adult cutoffs. Because children are growing, BMI is compared with other children of the same age and sex using BMI-for-age percentiles.</p>
+      <p className="mt-4">A child&apos;s BMI is calculated from the same height-and-weight relationship, but the result should not be interpreted with adult cutoffs. Because children are growing, BMI is compared with other children of the same age and sex using BMI-for-age percentiles.</p>
       <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {[
           ['Underweight','Below the 5th percentile'],
@@ -65,7 +65,7 @@ export function BmiGuide() {
 
     <section>
       <h2 className="text-3xl font-bold">BMI Prime and Ponderal Index</h2>
-      <p className="mt-4">The calculator also shows two optional companion measures. BMI Prime compares a person's BMI with an upper reference value of 25, making it a unit-free ratio. The Ponderal Index uses height cubed rather than height squared and can be useful as an additional height-to-weight measure, particularly when comparing very tall or very short body types.</p>
+      <p className="mt-4">The calculator also shows two optional companion measures. BMI Prime compares a person&apos;s BMI with an upper reference value of 25, making it a unit-free ratio. The Ponderal Index uses height cubed rather than height squared and can be useful as an additional height-to-weight measure, particularly when comparing very tall or very short body types.</p>
       <div className="mt-5 grid gap-4 md:grid-cols-2"><div className="rounded-2xl border p-5"><div className="font-bold">BMI Prime</div><div className="mt-2 font-mono">BMI ÷ 25</div><p className="mt-2 text-sm text-muted-foreground">A value around 1 means the BMI is near the upper end of the common adult normal range.</p></div><div className="rounded-2xl border p-5"><div className="font-bold">Ponderal Index</div><div className="mt-2 font-mono">kg ÷ m³</div><p className="mt-2 text-sm text-muted-foreground">A height-weight index that uses the cube of height instead of the square used by BMI.</p></div></div>
     </section>
 

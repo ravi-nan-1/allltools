@@ -73,7 +73,6 @@ export async function generateStaticParams() {
   const excludedSlugs = new Set([
     'ai-humanizer',
     'tinyurl-maker',
-    'ai-product-background-remover',
     'content-gap-analyzer',
     'api-latency-checker',
     'pdf-to-word-converter',
@@ -86,7 +85,6 @@ export async function generateStaticParams() {
     'forex-arbitrage-checker',
     'ai-invoice-generator',
     'business-valuation-calculator',
-    'ai-headshot-generator',
     'keyword-cluster-generator',
     'ai-product-description-generator',
     'json-excel-converter',

@@ -23,43 +23,6 @@ const GenerateProductDescriptionInputSchema = z.object({
   tone: z.string().min(1, 'Please select a tone.'),
 });
 
-const MAX_AI_IMAGE_BYTES = 4 * 1024 * 1024;
-const MAX_CHEAT_SHEET_CHARS = 50000;
-const ALLOWED_AI_IMAGE_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp']);
-
-function getErrorMessage(error: unknown): string {
-  return error instanceof Error ? error.message : 'An unexpected error occurred.';
-}
-
-function isQuotaError(error: unknown): boolean {
-  const message = getErrorMessage(error).toLowerCase();
-  return (
-    message.includes('429') ||
-    message.includes('resource_exhausted') ||
-    message.includes('quota') ||
-    message.includes('rate limit') ||
-    message.includes('too many requests')
-  );
-}
-
-async function fileToDataUri(file: File): Promise<string> {
-  if (!(file instanceof File) || file.size === 0) {
-    throw new Error('Please provide a valid image file.');
-  }
-
-  if (file.size > MAX_AI_IMAGE_BYTES) {
-    throw new Error('Image file is too large. Please use an image under 4MB.');
-  }
-
-  if (!ALLOWED_AI_IMAGE_TYPES.has(file.type)) {
-    throw new Error('Unsupported file type. Please upload a JPG, PNG, or WEBP image.');
-  }
-
-  const arrayBuffer = await file.arrayBuffer();
-  const buffer = Buffer.from(arrayBuffer);
-  return `data:${file.type};base64,${buffer.toString('base64')}`;
-}
-
 
 export async function handleContentAnalysis(formData: FormData) {
   try {
