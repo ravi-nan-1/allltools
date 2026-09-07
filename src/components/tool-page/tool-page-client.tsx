@@ -9,6 +9,7 @@ import { ToolCard } from '@/components/homepage/tool-card';
 import { placeholderImages } from '@/lib/placeholder-images';
 import { ToolBreadcrumb, ToolHeader, ToolWorkspace, ToolMaxWidth } from './shell/tool-shell';
 import { SeoContent } from './seo-content';
+import { BmiGuide } from './bmi-guide';
 
 interface ToolPageClientProps {
   tool: Tool & { image: string; imageHint: string };
@@ -66,6 +67,7 @@ export function ToolPageClient({ tool, aiContent }: ToolPageClientProps) {
             </section>
           )}
 
+          {tool.slug === 'bmi-calculator' && <BmiGuide />}
           <SeoContent tool={tool} />
         </div>
       </ToolMaxWidth>

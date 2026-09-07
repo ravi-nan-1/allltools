@@ -1975,14 +1975,25 @@ export const seoToolContent: Record<string, SeoToolContent> = {
   },
 
   "sip-calculator": {
-    "how": "A SIP calculator estimates how recurring investments may grow when contributions are invested periodically and earn an assumed return. It separates total money invested from projected growth so the effect of compounding is easier to understand.",
-    "features": ["Monthly contribution modeling", "Expected annual return assumption", "Investment-period controls", "Projected corpus and gain", "Total contribution breakdown"],
-    "use": "For Personal Planning: Monthly mutual-fund SIP planning, recurring investments, retirement goals, education goals, and long-term savings comparisons.\nFor Professionals: Use the calculator to prepare quick scenario estimates before a detailed review.\nFor Students: Use the inputs and results to understand the underlying calculation.",
-    "steps": ["Enter the amount you plan to invest each month.", "Enter an assumed annual return.", "Choose the investment period.", "Review projected value, invested amount, and estimated gain."],
-    "why": "All2ools keeps SIP projections simple and transparent: the result is driven by the contribution, time, and return assumption you enter, not by a guaranteed market outcome.",
-    "compare": [["Inputs", "Clear, task-specific fields", "Manual arithmetic"], ["Results", "Instant breakdown of key values", "Calculate each value separately"], ["Accessibility", "Responsive browser tool", "Desktop-only workflow"], ["Transparency", "Assumptions shown on the page", "Hidden or mixed assumptions"]],
-    "faqs": [{"question": "How does the sip calculator work?", "answer": "A SIP calculator estimates how recurring investments may grow when contributions are invested periodically and earn an assumed return. It separates total money invested from projected growth so the effect of compounding is easier to understand."}, {"question": "Are the results guaranteed or official?", "answer": "No. Calculator results are estimates based on the assumptions and inputs you provide. Official rates, lender terms, tax rules, benefits, or professional assessments can differ."}, {"question": "Can I use it on a phone?", "answer": "Yes. The calculator interface is designed to work in modern desktop and mobile browsers."}, {"question": "Can I change the assumptions?", "answer": "Yes. Where the calculator uses an assumption such as an interest rate, return, tax rate, or contribution, changing the input lets you compare scenarios."}],
-    "conclusion": "All2ools keeps SIP projections simple and transparent: the result is driven by the contribution, time, and return assumption you enter, not by a guaranteed market outcome. Use the result as a planning estimate and verify important financial, tax, health, or transaction-specific details with the applicable official source or professional."
+    "how": "A SIP, or Systematic Investment Plan, is a way of investing a chosen amount at regular intervals, commonly each month, into an investment product such as a mutual fund. A SIP is not the same thing as a mutual fund: the SIP describes the investing method, while the mutual fund is the investment vehicle. This online SIP calculator estimates how your contribution could grow under an assumed return and clearly separates the money invested from the projected growth. You can also switch to Lumpsum mode to compare a one-time investment. For the projection, the calculator converts the annual return assumption into an effective monthly rate using (1 + annual return)^(1/12) - 1 rather than simply treating the annual percentage as twelve equal monthly percentages.",
+    "features": ["SIP and Lumpsum comparison", "Monthly investment and one-time investment inputs", "Expected annual return assumption", "Interactive color-coded investment meter", "Projected maturity value, invested amount and estimated gain", "Year-by-year projection table", "Multiple display currencies"],
+    "use": "For New Investors: Understand how contribution size, time and an assumed return can affect a long-term investment projection.\nFor Goal Planning: Explore scenarios for retirement, education, a home purchase, or other long-term goals.\nFor Learners: See how recurring contributions, compounding and time interact without doing the mathematics by hand.",
+    "steps": ["Select SIP for regular investing or Lumpsum for a one-time investment.", "Enter the amount you plan to invest and choose a display currency.", "Set the expected annual return as a scenario assumption.", "Choose the investment period in years.", "Review the visual meter, projected total value, total amount invested, estimated gain, and yearly breakdown.", "Change the assumptions to compare conservative and optimistic scenarios."],
+    "why": "The most useful SIP calculator is one that makes the assumptions easy to change and the result easy to understand. All2ools puts the investment amount, return assumption and time horizon in one place, then shows the relationship between contributions and projected growth visually. The calculator is intentionally presented as a scenario-planning tool rather than a promise of what a market-linked investment will actually earn.",
+    "compare": [["Inputs", "SIP or Lumpsum, amount, return and tenure", "Manual formula changes"], ["Results", "Projected value, invested amount and estimated gain", "Separate calculations"], ["Visualization", "Color-coded invested-versus-growth meter", "Usually no visual breakdown"], ["Scenario planning", "Change assumptions instantly", "Recalculate by hand"], ["Accessibility", "Responsive online calculator", "Often spreadsheet or calculator dependent"]],
+    "faqs": [
+      {"question": "What is a SIP?", "answer": "A SIP is a method of investing a fixed or chosen amount at regular intervals. It is an investment approach rather than a specific investment product; many investors use SIPs to make recurring investments into mutual funds."},
+      {"question": "What does a SIP calculator calculate?", "answer": "It estimates the future value of recurring investments using the contribution, assumed return and investment period you enter. It also shows how much you contributed and how much of the projected value comes from estimated growth."},
+      {"question": "Is a SIP calculator's result guaranteed?", "answer": "No. The result is a mathematical estimate based on an assumed rate of return. Market-linked investments can perform differently, and actual outcomes may be affected by expenses, taxes, timing and product-specific terms."},
+      {"question": "How is the monthly return calculated?", "answer": "For this calculator, the annual return assumption is converted to an effective monthly rate with (1 + annual return)^(1/12) - 1. This avoids simply dividing an annual compounded return by twelve."},
+      {"question": "Can I compare SIP and lumpsum investing?", "answer": "Yes. Switch between SIP and Lumpsum at the top of the calculator. SIP models regular contributions, while Lumpsum models a one-time investment, allowing you to compare the mathematical projections under the same return assumption and time period."},
+      {"question": "How much should I invest in a SIP?", "answer": "There is no universal amount that is right for everyone. A practical starting point is an amount that fits your income, expenses, emergency savings and financial goals without relying on a guaranteed investment return."},
+      {"question": "Can I change my SIP amount later?", "answer": "The amount and schedule of an actual SIP depend on the investment platform and product rules. Many platforms provide ways to increase, decrease, pause or stop contributions, but you should check the terms of your specific investment."},
+      {"question": "What is the maximum SIP tenure?", "answer": "There is no single universal maximum that applies to every SIP. Available tenures depend on the investment product, platform and investor's goals. This calculator supports a planning horizon of up to 50 years."},
+      {"question": "Can I pause a SIP?", "answer": "Whether you can pause contributions depends on the platform and investment product. A calculator cannot change an actual SIP mandate; use your investment provider's controls and review the applicable terms."},
+      {"question": "What are common SIP types?", "answer": "Depending on the provider, investors may encounter regular SIPs, flexible SIPs, step-up SIPs, and other variations. The exact features and names can differ between platforms and products."}
+    ],
+    "conclusion": "A SIP calculator is best used as a planning aid: test different monthly amounts, return assumptions and time periods, then compare how those choices affect the projected value. The visual meter makes the contribution-versus-growth relationship easier to see, while the yearly table helps explain how compounding can become more significant over longer periods. Treat every projected return as an assumption rather than a promise, and review the fees, taxes, risks and terms of the actual investment before making a financial decision."
   },
 
   "fd-calculator": {
@@ -2129,59 +2140,58 @@ export const seoToolContent: Record<string, SeoToolContent> = {
   },
 
   "bmi-calculator": {
-  "how": "BMI is calculated by dividing weight in kilograms by height in meters squared: BMI = kg / m². The resulting number is a general screening measure; it does not directly measure body fat or account for muscle mass, frame size, age, or sex.",
+  "how": "BMI is a height-to-weight screening measure. Our calculator converts metric or US customary measurements into a BMI score, shows the result on a visual reference meter, and adds context with an estimated adult healthy-weight range, BMI Prime, and Ponderal Index. For children and teens, BMI must be interpreted against age- and sex-specific growth references rather than adult cutoffs.",
   "features": [
-    "Metric height and weight inputs",
-    "BMI formula shown clearly",
-    "Adult reference category estimate",
-    "Input validation for impossible values",
-    "Responsive health-focused result"
+    "Metric, US customary, and alternative weight inputs",
+    "Color-coded BMI meter and category result",
+    "Estimated healthy-weight range for the entered height",
+    "BMI Prime and Ponderal Index",
+    "Detailed adult BMI classification table",
+    "Child and teen BMI-for-age guidance",
+    "Mobile-friendly inputs and results"
   ],
-  "use": "For adults who want a quick BMI screening estimate; students learning the BMI formula; people preparing questions for a healthcare professional.",
+  "use": "Adults checking a quick BMI screening result and healthy-weight range.\nFitness and wellness users tracking a simple height-to-weight measure over time.\nStudents and learners understanding BMI, BMI Prime, and Ponderal Index.\nPeople preparing questions for a healthcare professional and wanting a clear starting point.",
   "steps": [
-    "Enter height in centimeters.",
-    "Enter weight in kilograms.",
-    "Calculate BMI from weight divided by height squared.",
-    "Use the category as a screening reference, not a diagnosis."
+    "Choose metric, US customary, or the alternative weight input mode.",
+    "Enter your age, sex, height, and weight.",
+    "Review the BMI score, category, and position on the visual meter.",
+    "Check the estimated adult healthy-weight range for your height plus BMI Prime and Ponderal Index.",
+    "If the person is under 20, use age- and sex-specific BMI-for-age references instead of adult BMI cutoffs."
   ],
-  "why": "The BMI tool keeps the mathematical result prominent while explaining its limitations, so the number is less likely to be mistaken for a complete measure of health or body composition.",
+  "why": "Instead of returning only a single number, the All2ools BMI calculator presents the result in a visual meter and adds practical context. It supports common measurement systems, keeps the calculation easy to inspect, and clearly explains where adult BMI references stop being appropriate.",
   "compare": [
     [
-      "Calculation",
-      "Weight divided by height²",
-      "Visual guess"
+      "Inputs",
+      "Metric, US, age, sex, height and weight",
+      "Single-unit calculator"
     ],
     [
       "Result",
-      "Numeric BMI plus reference band",
-      "Unstructured estimate"
+      "BMI plus visual category meter",
+      "Number without visual context"
     ],
     [
-      "Context",
-      "Limitations explained",
-      "May imply diagnosis"
+      "Extra measures",
+      "Healthy-weight range, BMI Prime and Ponderal Index",
+      "BMI only"
     ],
     [
-      "Accessibility",
-      "Responsive inputs",
-      "Static chart lookup"
+      "Age guidance",
+      "Adult bands plus child/teen percentile guidance",
+      "Adult ranges applied to everyone"
     ]
   ],
   "faqs": [
-    {
-      "question": "Does BMI account for muscle mass?",
-      "answer": "No. BMI uses height and weight only, so muscular people can have a higher BMI without having high body fat."
-    },
-    {
-      "question": "What are the standard adult BMI ranges?",
-      "answer": "Common adult reference bands are under 18.5, 18.5–24.9, 25–29.9, and 30 or higher. These are screening ranges, not a diagnosis."
-    },
-    {
-      "question": "Is BMI interpreted the same way for children?",
-      "answer": "No. Children and adolescents are generally assessed using age- and sex-specific growth references rather than adult BMI cutoffs."
-    }
+    {"question":"What is a healthy BMI for adults?","answer":"A commonly used adult reference range is 18.5 to 24.9 kg/m². BMI is a screening measure, so the number should be interpreted alongside other health information."},
+    {"question":"Can I calculate BMI using feet, inches and pounds?","answer":"Yes. Select US Units and enter height in feet and inches plus weight in pounds. The calculator converts the measurements internally before calculating BMI."},
+    {"question":"Does BMI change for men and women?","answer":"The standard adult BMI formula is the same. However, body composition can differ between individuals, so BMI should not be interpreted as a complete measure of body fat."},
+    {"question":"Is BMI different for children?","answer":"Yes. Children and teens are still growing, so BMI is interpreted using age- and sex-specific BMI-for-age percentiles rather than adult cutoff values."},
+    {"question":"Does BMI measure body fat?","answer":"No. BMI uses height and weight and does not directly measure body fat. A muscular person, for example, may have a high BMI without having high body-fat levels."},
+    {"question":"What is BMI Prime?","answer":"BMI Prime is BMI divided by 25, using 25 kg/m² as the upper reference point of the common adult normal range. It is a unit-free ratio that gives another way to describe the BMI result."},
+    {"question":"What is the Ponderal Index?","answer":"The Ponderal Index is another height-to-weight measure that uses height cubed rather than height squared. It can provide additional context, particularly for people at the taller or shorter ends of the height range."},
+    {"question":"Is a BMI calculator a medical diagnosis?","answer":"No. BMI is a screening measure. A healthcare professional can interpret it together with medical history, physical findings, activity, body composition and other relevant information."}
   ],
-  "conclusion": "BMI is a screening estimate, not a diagnosis. Interpret it alongside other health information and seek professional advice when making health decisions."
+  "conclusion": "A BMI calculator is most useful when it gives you more than a number. Use the BMI score and meter as a screening reference, look at the healthy-weight estimate and companion measures for context, and remember that children and teens require age- and sex-specific interpretation. BMI should support—not replace—professional health advice when you have concerns about your weight or health."
 },
   "calorie-calculator": {
   "how": "This calculator uses the Mifflin–St Jeor equation to estimate basal metabolic rate (BMR) from age, sex, height, and weight, then multiplies BMR by an activity factor to estimate daily energy needs. Real energy requirements vary between individuals.",

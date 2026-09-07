@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
-import { Calculator, Play, Pause, RotateCcw, Shuffle } from 'lucide-react';
+import { Calculator, Play, Pause, RotateCcw, Shuffle, Gauge, Info, Ruler, Scale, HeartPulse } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -48,6 +48,8 @@ export function AdvancedCalculator({ slug }: { slug: string }) {
   if (slug === 'stopwatch') return <Stopwatch />;
   if (slug === 'scientific-calculator') return <ScientificCalculator />;
   if (slug === 'random-number-generator') return <RandomNumberGenerator />;
+  if (slug === 'bmi-calculator') return <BmiCalculator />;
+  if (slug === 'sip-calculator') return <SipCalculator />;
   if (slug === 'time-zone-converter') return <TimeZoneConverter />;
   if (slug === 'currency-converter') return <CurrencyConverter />;
 
@@ -127,7 +129,6 @@ function fieldsFor(slug: string) {
     'percentage-calculator':[f('amount','Base Number'),f('percentage','Percentage (%)')],
     'age-calculator':[f('birth','Birth Date','date'),f('target','Target Date','date')],
     'date-calculator':[f('birth','Start Date','date'),f('target','End Date','date'),f('days','Days to Add / Subtract')],
-    'bmi-calculator':[f('height','Height (cm)'),f('weight','Weight (kg)')],
     'calorie-calculator':[f('currentAge','Age'),f('weight','Weight (kg)'),f('height','Height (cm)'),f('sex','Sex','select'),f('activity','Activity Multiplier')],
     'mortgage-payment-calculator':[f('loan','Loan Amount'),f('rate','Interest Rate (%)'),f('term','Term (years)'),f('currency','Currency','select')],
     'auto-loan-calculator':[f('purchase','Vehicle Price'),f('down','Down Payment'),f('rate','Interest Rate (%)'),f('term','Loan Term (years)'),f('currency','Currency','select')],
@@ -158,7 +159,6 @@ function calcAdvanced(slug:string,v:Record<string,string>,currency:string):Resul
   if(slug==='percentage-calculator'){const a=n('amount'),p=n('percentage');return [{label:`${p}% of ${a}`,value:(a*p/100).toFixed(2)},{label:'Percentage as Decimal',value:(p/100).toFixed(4)},{label:'Base Number',value:a.toFixed(2)}]}
   if(slug==='age-calculator'){const b=new Date(v.birth+'T00:00:00'),t=new Date(v.target+'T00:00:00');let age=t.getFullYear()-b.getFullYear();const before=t.getMonth()<b.getMonth()||(t.getMonth()===b.getMonth()&&t.getDate()<b.getDate());if(before)age--;const days=Math.max(0,Math.floor((t.getTime()-b.getTime())/86400000));return [{label:'Age in Years',value:String(Math.max(0,age))},{label:'Age in Days',value:String(days)},{label:'Birth Date',value:v.birth}]}
   if(slug==='date-calculator'){const a=new Date(v.birth+'T00:00:00'),b=new Date(v.target+'T00:00:00'),diff=Math.round((b.getTime()-a.getTime())/86400000),add=Number.parseInt(v.days||'0',10)||0;const out=new Date(a);out.setDate(out.getDate()+add);return [{label:'Days Between Dates',value:String(Math.abs(diff))},{label:'Signed Difference',value:String(diff)},{label:'Date After Adding Days',value:out.toISOString().slice(0,10)}]}
-  if(slug==='bmi-calculator'){const height=n('height'),weight=n('weight');if(height<=0||weight<=0)return [{label:'BMI',value:'Enter a positive height and weight'},{label:'Category',value:'Not calculated'},{label:'Input check',value:'Height and weight must be greater than zero'}];const bmi=weight/Math.pow(height/100,2);const cat=bmi<18.5?'Underweight':bmi<25?'Healthy range':bmi<30?'Overweight':'Obesity range';return [{label:'BMI',value:bmi.toFixed(1)},{label:'Category',value:cat},{label:'Height / Weight',value:`${height} cm / ${weight} kg`}]}
   if(slug==='calorie-calculator'){const age=n('currentAge'),w=n('weight'),h=n('height'),activity=n('activity');if(age<=0||w<=0||h<=0||activity<=0)return [{label:'Result',value:'Enter positive age, height, weight, and activity values'},{label:'Status',value:'Not calculated'}];const sex=v.sex==='female'?-161:5,bmr=10*w+6.25*h-5*age+sex,tdee=bmr*activity;return [{label:'Estimated BMR',value:`${Math.round(bmr)} kcal/day`},{label:'Estimated Daily Calories',value:`${Math.round(tdee)} kcal/day`},{label:'Activity Multiplier',value:activity.toFixed(2)}]}
   if(slug==='mortgage-payment-calculator'){const m=loanPayment(n('loan'),n('rate'),n('term'));return [{label:'Monthly Principal & Interest',value:fmt(m)},{label:'Total Payments',value:fmt(m*n('term')*12)},{label:'Total Interest',value:fmt(m*n('term')*12-n('loan'))}]}
   if(slug==='auto-loan-calculator'){const loan=Math.max(0,n('purchase')-n('down')),m=loanPayment(loan,n('rate'),n('term'));return [{label:'Amount Financed',value:fmt(loan)},{label:'Monthly Payment',value:fmt(m)},{label:'Total Interest',value:fmt(m*n('term')*12-loan)}]}
@@ -170,6 +170,150 @@ function calcAdvanced(slug:string,v:Record<string,string>,currency:string):Resul
 }
 
 function Stopwatch(){const [running,setRunning]=useState(false),[elapsed,setElapsed]=useState(0);useEffect(()=>{if(!running)return;const id=window.setInterval(()=>setElapsed(e=>e+10),10);return()=>window.clearInterval(id)},[running]);const h=Math.floor(elapsed/3600000),m=Math.floor(elapsed/60000)%60,s=Math.floor(elapsed/1000)%60,ms=Math.floor(elapsed/10)%100;return <Shell title="Online Stopwatch" description="A precise browser stopwatch with start, pause, reset, and hundredth-second display. It runs locally in your browser and works on desktop and mobile."><div className="rounded-3xl border bg-muted/20 p-8 text-center"><div className="font-mono text-5xl md:text-7xl font-bold tracking-tight">{String(h).padStart(2,'0')}:{String(m).padStart(2,'0')}:{String(s).padStart(2,'0')}<span className="text-primary">.{String(ms).padStart(2,'0')}</span></div><div className="mt-8 flex flex-wrap justify-center gap-3"><Button size="lg" onClick={()=>setRunning(x=>!x)}>{running?<><Pause/>Pause</>:<><Play/>Start</>}</Button><Button size="lg" variant="outline" onClick={()=>{setRunning(false);setElapsed(0)}}><RotateCcw/>Reset</Button></div></div></Shell>}
+
+
+function SipCalculator(){
+  const [mode,setMode]=useState<'sip'|'lumpsum'>('sip');
+  const [monthly,setMonthly]=useState('25000');
+  const [lumpSum,setLumpSum]=useState('1000000');
+  const [returnRate,setReturnRate]=useState('12');
+  const [years,setYears]=useState('10');
+  const [currency,setCurrency]=useState('INR');
+  const moneyFmt=(n:number)=>money(n,currency);
+  const values=useMemo(()=>{
+    const principal=Math.max(0,Number.parseFloat(mode==='sip'?monthly:lumpSum)||0);
+    const annual=Math.max(-99.9,Number.parseFloat(returnRate)||0)/100;
+    const yrs=Math.max(1,Math.min(50,Number.parseFloat(years)||0));
+    const months=Math.round(yrs*12);
+    const monthlyRate=Math.pow(1+annual,1/12)-1;
+    let future=0;
+    if(mode==='sip') future=monthlyRate===0?principal*months:principal*((Math.pow(1+monthlyRate,months)-1)/monthlyRate)*(1+monthlyRate);
+    else future=principal*Math.pow(1+annual,yrs);
+    const invested=mode==='sip'?principal*months:principal;
+    const gain=future-invested;
+    const ratio=future>0?Math.min(100,Math.max(0,(Math.max(0,gain)/future)*100)):0;
+    const yearly=Array.from({length:Math.min(10,Math.ceil(yrs))},(_,i)=>{
+      const y=i+1; const m=Math.min(months,y*12);
+      const value=mode==='sip'?(monthlyRate===0?principal*m:principal*((Math.pow(1+monthlyRate,m)-1)/monthlyRate)*(1+monthlyRate)):principal*Math.pow(1+annual,y);
+      const contrib=mode==='sip'?principal*m:principal;
+      return {year:y,value,invested:contrib,gain:value-contrib};
+    });
+    return {future,invested,gain,ratio,years:yrs,months,yearly};
+  },[mode,monthly,lumpSum,returnRate,years]);
+  const slider=(label:string,value:string,setter:(v:string)=>void,min:number,max:number,step:number,suffix='')=>(
+    <div className="space-y-2">
+      <div className="flex items-center justify-between gap-3"><Label className="text-sm font-semibold">{label}</Label><div className="flex items-center rounded-lg border bg-emerald-50 px-3 py-1.5 text-emerald-700"><span className="mr-1 text-sm font-semibold">{label.toLowerCase().includes('return')?'':currency==='INR'?'₹':currency==='USD'?'$':currency==='EUR'?'€':'£'}</span><Input aria-label={label} className="h-7 w-28 border-0 bg-transparent p-0 text-right text-base font-semibold shadow-none focus-visible:ring-0" value={value} onChange={e=>setter(e.target.value)} type="number" min={min} max={max} step={step}/>{suffix&&<span className="ml-1 text-sm font-semibold">{suffix}</span>}</div></div>
+      <input aria-label={`${label} slider`} type="range" min={min} max={max} step={step} value={Number(value)||min} onChange={e=>setter(e.target.value)} className="h-2 w-full cursor-pointer accent-emerald-500" />
+      <div className="flex justify-between text-[11px] text-muted-foreground"><span>{label.toLowerCase().includes('return')?`${min}%`:currency==='INR'?moneyFmt(min):min}</span><span>{label.toLowerCase().includes('return')?`${max}%`:currency==='INR'?moneyFmt(max):`${max}${suffix}`}</span></div>
+    </div>
+  );
+  return <Shell title="Online SIP Calculator" description="Estimate how a regular investment or one-time lump sum could grow over time. Adjust the contribution, expected return, and tenure to compare scenarios instantly.">
+    <div className="overflow-hidden rounded-3xl border bg-gradient-to-br from-emerald-50 via-background to-indigo-50 shadow-sm">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b bg-background/80 p-3 md:p-4"><div className="flex rounded-full bg-muted p-1"><button type="button" onClick={()=>setMode('sip')} className={`rounded-full px-5 py-2 text-sm font-bold transition ${mode==='sip'?'bg-emerald-500 text-white shadow':'text-muted-foreground hover:text-foreground'}`}>SIP</button><button type="button" onClick={()=>setMode('lumpsum')} className={`rounded-full px-5 py-2 text-sm font-bold transition ${mode==='lumpsum'?'bg-indigo-500 text-white shadow':'text-muted-foreground hover:text-foreground'}`}>Lumpsum</button></div><Select value={currency} onValueChange={setCurrency}><SelectTrigger className="w-[130px] bg-background"><SelectValue/></SelectTrigger><SelectContent><SelectItem value="INR">INR (₹)</SelectItem><SelectItem value="USD">USD ($)</SelectItem><SelectItem value="EUR">EUR (€)</SelectItem><SelectItem value="GBP">GBP (£)</SelectItem></SelectContent></Select></div>
+      <div className="grid gap-8 p-5 md:p-8 xl:grid-cols-[1.05fr_.95fr]"><div className="space-y-8">{mode==='sip'?slider('Monthly investment',monthly,setMonthly,500,500000,500):slider('Lumpsum investment',lumpSum,setLumpSum,10000,10000000,10000)}{slider('Expected return rate (p.a.)',returnRate,setReturnRate,-10,30,0.1,'%')}{slider('Time period',years,setYears,1,50,1,' Yr')}<div className="rounded-2xl border bg-background/80 p-4"><div className="text-sm font-semibold">Quick scenario</div><p className="mt-1 text-xs leading-5 text-muted-foreground">Change any slider or value above and the projection updates immediately. The return is an assumption, not a guaranteed market outcome.</p></div></div>
+        <div className="flex flex-col items-center justify-center rounded-3xl border bg-background/70 p-5 md:p-7"><div className="mb-4 flex w-full items-center justify-between text-xs text-muted-foreground"><span className="inline-flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-indigo-100"/>Invested amount</span><span className="inline-flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-indigo-500"/>Estimated returns</span></div><div className="relative grid h-56 w-56 place-items-center rounded-full" style={{background:`conic-gradient(#536dfe 0deg ${values.ratio*3.6}deg, #e9edff ${values.ratio*3.6}deg 360deg)`}}><div className="grid h-36 w-36 place-items-center rounded-full bg-background text-center shadow-inner"><div><div className="text-xs text-muted-foreground">Total value</div><div className="mt-1 text-2xl font-black tracking-tight">{moneyFmt(values.future)}</div></div></div></div><div className="mt-6 w-full space-y-3"><div className="flex items-center justify-between gap-4"><span className="text-sm text-muted-foreground">Invested amount</span><strong>{moneyFmt(values.invested)}</strong></div><div className="flex items-center justify-between gap-4"><span className="text-sm text-muted-foreground">Estimated returns</span><strong className="text-indigo-600">{moneyFmt(values.gain)}</strong></div><div className="flex items-center justify-between gap-4 border-t pt-3"><span className="font-semibold">Total value</span><strong className="text-xl">{moneyFmt(values.future)}</strong></div></div></div></div>
+    </div>
+    <div className="mt-6 grid gap-4 md:grid-cols-3"><div className="rounded-2xl border bg-emerald-50 p-5"><div className="text-xs font-semibold uppercase tracking-wide text-emerald-700">Investment amount</div><div className="mt-2 text-2xl font-black">{mode==='sip'?moneyFmt(Number(monthly)||0):moneyFmt(Number(lumpSum)||0)}</div><p className="mt-1 text-xs text-muted-foreground">{mode==='sip'?'Regular contribution':'One-time investment'}</p></div><div className="rounded-2xl border bg-indigo-50 p-5"><div className="text-xs font-semibold uppercase tracking-wide text-indigo-700">Growth assumption</div><div className="mt-2 text-2xl font-black">{Number(returnRate||0).toFixed(1)}%</div><p className="mt-1 text-xs text-muted-foreground">Illustrative annual return</p></div><div className="rounded-2xl border bg-amber-50 p-5"><div className="text-xs font-semibold uppercase tracking-wide text-amber-700">Investment horizon</div><div className="mt-2 text-2xl font-black">{values.years} years</div><p className="mt-1 text-xs text-muted-foreground">{values.months} monthly periods</p></div></div>
+    <div className="mt-6 rounded-3xl border p-5 md:p-7"><div className="mb-4"><h3 className="text-xl font-bold">Projected growth by year</h3><p className="mt-1 text-sm text-muted-foreground">See how contributions and estimated growth can build throughout the selected horizon.</p></div><div className="overflow-x-auto"><table className="w-full min-w-[620px] text-sm"><thead><tr className="border-b text-left"><th className="p-3">Year</th><th className="p-3">Amount invested</th><th className="p-3">Estimated gain</th><th className="p-3">Projected value</th></tr></thead><tbody>{values.yearly.map(row=><tr key={row.year} className="border-b last:border-0"><td className="p-3 font-semibold">{row.year}</td><td className="p-3">{moneyFmt(row.invested)}</td><td className="p-3 text-indigo-600">{moneyFmt(row.gain)}</td><td className="p-3 font-bold">{moneyFmt(row.value)}</td></tr>)}</tbody></table></div></div>
+    <div className="mt-6 rounded-2xl border bg-muted/30 p-4 text-xs leading-5 text-muted-foreground"><strong>Investment note:</strong> This calculator is a mathematical projection using the return assumption you enter. Mutual-fund and other market-linked investments can rise or fall, and actual results may differ because of market performance, expenses, taxes, timing, and product-specific terms.</div>
+  </Shell>;
+}
+
+function BmiCalculator(){
+  const [unit,setUnit]=useState<'metric'|'us'|'other'>('metric');
+  const [age,setAge]=useState('25');
+  const [sex,setSex]=useState<'male'|'female'>('male');
+  const [heightCm,setHeightCm]=useState('178');
+  const [heightFt,setHeightFt]=useState('5');
+  const [heightIn,setHeightIn]=useState('10');
+  const [weightKg,setWeightKg]=useState('72.6');
+  const [weightLb,setWeightLb]=useState('160');
+  const [stones,setStones]=useState('11');
+  const [stoneLb,setStoneLb]=useState('6');
+  const [showDetails,setShowDetails]=useState(true);
+
+  const metrics=useMemo(()=>{
+    const a=Math.max(0,Number.parseFloat(age)||0);
+    let h=Number.parseFloat(heightCm)||0;
+    let w=Number.parseFloat(weightKg)||0;
+    if(unit==='us'){
+      const ft=Math.max(0,Number.parseFloat(heightFt)||0), inches=Math.max(0,Number.parseFloat(heightIn)||0);
+      h=(ft*12+inches)*2.54;
+      w=(Math.max(0,Number.parseFloat(weightLb)||0))*0.45359237;
+    } else if(unit==='other'){
+      const st=Math.max(0,Number.parseFloat(stones)||0), lb=Math.max(0,Number.parseFloat(stoneLb)||0);
+      w=(st*14+lb)*0.45359237;
+    }
+    const bmi=h>0&&w>0?w/Math.pow(h/100,2):0;
+    const category=bmi<18.5?'Underweight':bmi<25?'Healthy range':bmi<30?'Overweight':bmi<35?'Obesity class I':bmi<40?'Obesity class II':'Obesity class III';
+    const healthyMin=h>0?18.5*Math.pow(h/100,2):0;
+    const healthyMax=h>0?24.9*Math.pow(h/100,2):0;
+    const prime=bmi/25;
+    const pi=h>0? (w/Math.pow(h/100,3)) : 0;
+    return {age:a,height:h,weight:w,bmi,category,healthyMin,healthyMax,prime,pi};
+  },[age,unit,heightCm,heightFt,heightIn,weightKg,weightLb,stones,stoneLb]);
+
+  const gauge=Math.min(100,Math.max(0,((metrics.bmi-10)/(45-10))*100));
+  const angle=-90+(gauge*180/100);
+  const isAdult=metrics.age>=20;
+  const colorClass=metrics.bmi<18.5?'text-sky-600':metrics.bmi<25?'text-emerald-600':metrics.bmi<30?'text-amber-600':'text-rose-600';
+  const updateMetricWeight=(kg:string)=>setWeightKg(kg);
+
+  return <Shell title="Online BMI Calculator" description="Calculate BMI instantly in metric or US units, see your result on a color-coded BMI meter, estimate a healthy weight range, and explore BMI Prime and Ponderal Index. Designed for adults and with clear guidance for children and teens.">
+    <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(360px,0.9fr)]">
+      <div className="rounded-3xl border bg-gradient-to-br from-sky-50 via-background to-emerald-50 p-4 md:p-6">
+        <div className="mb-5 flex flex-wrap gap-2">
+          {([['metric','Metric Units'],['us','US Units'],['other','Other Units']] as const).map(([key,label])=><Button key={key} type="button" variant={unit===key?'default':'outline'} onClick={()=>setUnit(key)}>{label}</Button>)}
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div><Label>Age</Label><Input className="mt-1" type="number" min="2" max="120" value={age} onChange={e=>setAge(e.target.value)} /><p className="mt-1 text-xs text-muted-foreground">Use adult BMI categories from age 20.</p></div>
+          <div><Label>Sex</Label><Select value={sex} onValueChange={v=>setSex(v as 'male'|'female')}><SelectTrigger className="mt-1"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="male">Male</SelectItem><SelectItem value="female">Female</SelectItem></SelectContent></Select></div>
+          {unit==='metric' && <><div><Label>Height (cm)</Label><Input className="mt-1" type="number" min="30" step="0.1" value={heightCm} onChange={e=>setHeightCm(e.target.value)} /></div><div><Label>Weight (kg)</Label><Input className="mt-1" type="number" min="1" step="0.1" value={weightKg} onChange={e=>updateMetricWeight(e.target.value)} /></div></>}
+          {unit==='us' && <><div><Label>Height (feet)</Label><Input className="mt-1" type="number" min="1" value={heightFt} onChange={e=>setHeightFt(e.target.value)} /></div><div><Label>Height (inches)</Label><Input className="mt-1" type="number" min="0" max="11.99" step="0.1" value={heightIn} onChange={e=>setHeightIn(e.target.value)} /></div><div className="sm:col-span-2"><Label>Weight (lb)</Label><Input className="mt-1" type="number" min="1" step="0.1" value={weightLb} onChange={e=>setWeightLb(e.target.value)} /></div></>}
+          {unit==='other' && <><div><Label>Height (cm)</Label><Input className="mt-1" type="number" min="30" step="0.1" value={heightCm} onChange={e=>setHeightCm(e.target.value)} /></div><div><Label>Weight (stones)</Label><Input className="mt-1" type="number" min="0" step="0.1" value={stones} onChange={e=>setStones(e.target.value)} /></div><div className="sm:col-span-2"><Label>Additional pounds</Label><Input className="mt-1" type="number" min="0" max="13.99" step="0.1" value={stoneLb} onChange={e=>setStoneLb(e.target.value)} /></div></>}
+        </div>
+        <div className="mt-6 grid gap-3 sm:grid-cols-3">
+          <div className="rounded-2xl border bg-background/80 p-4"><Ruler className="mb-2 h-5 w-5 text-sky-600"/><div className="text-xs text-muted-foreground">Height</div><div className="text-lg font-bold">{metrics.height.toFixed(1)} cm</div></div>
+          <div className="rounded-2xl border bg-background/80 p-4"><Scale className="mb-2 h-5 w-5 text-emerald-600"/><div className="text-xs text-muted-foreground">Weight</div><div className="text-lg font-bold">{metrics.weight.toFixed(1)} kg</div></div>
+          <div className="rounded-2xl border bg-background/80 p-4"><HeartPulse className="mb-2 h-5 w-5 text-rose-500"/><div className="text-xs text-muted-foreground">Status</div><div className={`text-lg font-bold ${colorClass}`}>{metrics.category}</div></div>
+        </div>
+      </div>
+
+      <div className="rounded-3xl border bg-background p-5 md:p-7 shadow-sm">
+        <div className="flex items-center justify-between gap-3"><div><div className="text-sm font-semibold text-muted-foreground">Your BMI</div><div className={`mt-1 text-4xl font-black ${colorClass}`}>{metrics.bmi.toFixed(1)} <span className="text-base font-medium">kg/m²</span></div></div><div className="rounded-full bg-primary/10 p-3"><Gauge className="h-7 w-7 text-primary"/></div></div>
+        <div className="relative mx-auto mt-7 h-44 max-w-[360px] overflow-hidden">
+          <div className="absolute left-1/2 top-0 h-[320px] w-[320px] -translate-x-1/2 rounded-full" style={{background:'conic-gradient(from 270deg at 50% 50%, #0284c7 0deg 44deg, #16a34a 44deg 77deg, #facc15 77deg 103deg, #fb923c 103deg 128deg, #dc2626 128deg 180deg, transparent 180deg 360deg)'}} />
+          <div className="absolute left-1/2 top-8 h-[240px] w-[240px] -translate-x-1/2 rounded-full bg-background" />
+          <div className="absolute bottom-5 left-1/2 h-1 w-[115px] origin-left rounded-full bg-foreground/80" style={{transform:`translateX(0) rotate(${angle}deg)`,transformOrigin:'left center'}} />
+          <div className="absolute bottom-[13px] left-1/2 h-4 w-4 -translate-x-1/2 rounded-full bg-foreground" />
+          <div className="absolute bottom-1 left-0 text-xs font-medium">10</div><div className="absolute bottom-1 left-1/2 -translate-x-1/2 text-xs font-medium">25</div><div className="absolute bottom-1 right-0 text-xs font-medium">45+</div>
+        </div>
+        <div className="text-center"><div className="text-2xl font-bold">{metrics.category}</div><div className="mt-1 text-sm text-muted-foreground">Adult reference bands use BMI 18.5–24.9 as the usual healthy range.</div></div>
+        <div className="mt-5 grid grid-cols-2 gap-3">
+          <div className="rounded-2xl bg-muted/50 p-4"><div className="text-xs text-muted-foreground">Healthy weight range</div><div className="mt-1 font-bold">{metrics.healthyMin.toFixed(1)}–{metrics.healthyMax.toFixed(1)} kg</div></div>
+          <div className="rounded-2xl bg-muted/50 p-4"><div className="text-xs text-muted-foreground">BMI Prime</div><div className="mt-1 font-bold">{metrics.prime.toFixed(2)}</div></div>
+          <div className="col-span-2 rounded-2xl bg-muted/50 p-4"><div className="text-xs text-muted-foreground">Ponderal Index</div><div className="mt-1 font-bold">{metrics.pi.toFixed(1)} kg/m³</div></div>
+        </div>
+        {!isAdult && <div className="mt-4 flex gap-2 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900"><Info className="h-5 w-5 shrink-0"/><p>For ages 2–19, BMI should be interpreted with age- and sex-specific BMI-for-age percentiles rather than adult cutoffs. This tool shows the mathematical BMI and points you to the appropriate child/teen reference.</p></div>}
+      </div>
+    </div>
+
+    <div className="mt-8 rounded-3xl border p-5 md:p-7">
+      <button type="button" className="flex w-full items-center justify-between text-left" onClick={()=>setShowDetails(x=>!x)}><span className="text-xl font-bold">BMI categories & detailed results</span><span className="text-sm text-muted-foreground">{showDetails?'Hide':'Show'}</span></button>
+      {showDetails && <div className="mt-5 overflow-x-auto"><table className="w-full min-w-[600px] text-sm"><thead><tr className="border-b text-left"><th className="p-3">Classification</th><th className="p-3">BMI range</th><th className="p-3">BMI Prime</th></tr></thead><tbody>{[['Severe thinness','Below 16','Below 0.64'],['Moderate thinness','16–16.9','0.64–0.68'],['Mild thinness','17–18.4','0.68–0.74'],['Normal range','18.5–24.9','0.74–1.00'],['Overweight','25–29.9','1.00–1.20'],['Obesity class I','30–34.9','1.20–1.40'],['Obesity class II','35–39.9','1.40–1.60'],['Obesity class III','40+','Above 1.60']].map(row=><tr key={row[0]} className="border-b last:border-0"><td className="p-3 font-medium">{row[0]}</td><td className="p-3">{row[1]} kg/m²</td><td className="p-3">{row[2]}</td></tr>)}</tbody></table></div>}
+    </div>
+
+    <div className="mt-6 grid gap-4 md:grid-cols-3">
+      <div className="rounded-2xl border bg-sky-50/60 p-5"><h3 className="font-bold">BMI formula</h3><p className="mt-2 text-sm text-muted-foreground">BMI = weight in kilograms ÷ height in metres squared.</p></div>
+      <div className="rounded-2xl border bg-emerald-50/60 p-5"><h3 className="font-bold">What BMI can tell you</h3><p className="mt-2 text-sm text-muted-foreground">It is a quick screening measure that can help flag whether further assessment may be useful.</p></div>
+      <div className="rounded-2xl border bg-amber-50/60 p-5"><h3 className="font-bold">What BMI cannot tell you</h3><p className="mt-2 text-sm text-muted-foreground">It does not directly measure body fat and can be misleading for some muscular people, older adults, and other body types.</p></div>
+    </div>
+
+    <div className="mt-6 rounded-2xl border bg-muted/30 p-4 text-xs leading-5 text-muted-foreground">
+      <strong>Health note:</strong> BMI is a screening measure, not a diagnosis. Consider other health information and speak with a qualified healthcare professional before making medical or major nutrition decisions. For children and teens, use age- and sex-specific growth references.
+    </div>
+  </Shell>;
+}
 
 function ScientificCalculator(){const [display,setDisplay]=useState('0');const press=(x:string)=>setDisplay(d=>d==='0'?x:d+x);const clear=()=>setDisplay('0');const evaluate=()=>{try{const safe=display.replace(/×/g,'*').replace(/÷/g,'/').replace(/[^0-9+\-*/().\s]/g,'');setDisplay(String(Function(`"use strict";return (${safe})`)()))}catch{setDisplay('Error')}};const fn=(name:string)=>{const x=Number(display);if(!Number.isFinite(x))return;const map:Record<string,number>={sin:Math.sin(x),cos:Math.cos(x),tan:Math.tan(x),sqrt:Math.sqrt(x),ln:Math.log(x),log:Math.log10(x)};setDisplay(String(map[name]));};return <Shell title="Scientific Calculator" description="A responsive scientific calculator for arithmetic, powers, roots, logarithms, and trigonometric functions."><div className="mx-auto max-w-xl rounded-3xl border p-4"><Input readOnly value={display} className="h-16 text-right text-2xl font-mono mb-4"/><div className="grid grid-cols-4 gap-2">{['sin','cos','tan','sqrt','ln','log','(',')','7','8','9','÷','4','5','6','×','1','2','3','-','0','.','+','^'].map(k=><Button key={k} variant="outline" onClick={()=>['sin','cos','tan','sqrt','ln','log'].includes(k)?fn(k):press(k==='^'?'**':k)}>{k}</Button>)}<Button variant="destructive" onClick={clear}>C</Button><Button className="col-span-3" onClick={evaluate}>= Calculate</Button></div></div></Shell>}
 
