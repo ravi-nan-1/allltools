@@ -2,12 +2,10 @@
 "use server";
 
 import { z } from 'zod';
-import { removeBackground } from "@/ai/flows/ai-product-background-remover";
 import { analyzeContentGap } from "@/ai/flows/analyze-content-gap";
 import { translateContent } from "@/ai/flows/translate-content";
 import { generateInvoiceFromPrompt } from "@/ai/flows/generate-invoice-from-prompt";
 import { generateFinancialsFromPrompt } from "@/ai/flows/generate-financials-from-prompt";
-import { generateHeadshot } from '@/ai/flows/generate-headshot';
 import { generateKeywordClusters } from '@/ai/flows/generate-keyword-clusters';
 import { generateProductDescription } from '@/ai/flows/generate-product-description';
 import { generateRegexFromText, describeRegex } from '@/ai/flows/generate-regex-from-text';
@@ -62,25 +60,6 @@ async function fileToDataUri(file: File): Promise<string> {
   return `data:${file.type};base64,${buffer.toString('base64')}`;
 }
 
-export async function handleBackgroundRemoval(formData: FormData) {
-  try {
-    const imageFile = formData.get('image');
-    if (!(imageFile instanceof File)) {
-      return { error: 'No image file provided.' };
-    }
-
-    const productPhotoDataUri = await fileToDataUri(imageFile);
-    const result = await removeBackground({ productPhotoDataUri });
-    return result;
-  } catch (error) {
-    const message = error instanceof Error ? error.message : 'An unexpected error occurred during background removal.';
-    console.error('Background removal action error:', error);
-    if (message.includes('upstream')) {
-        return { error: 'The AI service is currently unavailable. Please try again later.' };
-    }
-    return { error: message };
-  }
-}
 
 export async function handleContentAnalysis(formData: FormData) {
   try {
@@ -274,40 +253,6 @@ export async function handleFinancialsGeneration(prompt: string) {
     }
 }
 
-export async function handleHeadshotGeneration(formData: FormData) {
-  try {
-    const imageFile = formData.get('image');
-    const styleValue = formData.get('style');
-    const style = typeof styleValue === 'string' ? styleValue.trim() : '';
-
-    if (!(imageFile instanceof File)) {
-      return { error: 'No image file provided.' };
-    }
-    if (!style) {
-        return { error: 'No style selected.' };
-    }
-
-    const photoDataUri = await fileToDataUri(imageFile);
-    const result = await generateHeadshot({ photoDataUri, style });
-    return result;
-  } catch (error) {
-    console.error('Headshot generation action error:', error);
-
-    if (isQuotaError(error)) {
-      return {
-        error:
-          'AI image generation is temporarily unavailable because the Gemini API quota or rate limit has been reached. Please try again later or check the Gemini project billing and usage limits.',
-      };
-    }
-
-    const message = getErrorMessage(error);
-    if (message.toLowerCase().includes('upstream') || message.toLowerCase().includes('service unavailable')) {
-      return { error: 'The AI service is currently unavailable. Please try again later.' };
-    }
-
-    return { error: message };
-  }
-}
 
 export async function handleKeywordClusterGeneration(formData: FormData) {
     try {

@@ -10,7 +10,6 @@ import { CryptoTaxCalculator } from '@/app/tools/crypto-tax-calculator/crypto-ta
 import { ForexArbitrageChecker } from '@/app/tools/forex-arbitrage-checker/forex-arbitrage-checker';
 import { AiInvoiceGenerator } from '@/app/tools/ai-invoice-generator/ai-invoice-generator';
 import { BusinessValuationCalculator } from '@/app/tools/business-valuation-calculator/business-valuation-calculator';
-import { AiHeadshotGenerator } from '@/app/tools/ai-headshot-generator/ai-headshot-generator';
 import { KeywordClusterGenerator } from '@/app/tools/keyword-cluster-generator/keyword-cluster-generator';
 import { AiProductDescriptionGenerator } from '@/app/tools/ai-product-description-generator/ai-product-description-generator';
 import { JsonExcelConverter } from '@/app/tools/json-excel-converter/json-excel-converter';
@@ -27,7 +26,6 @@ import { PdfToWordConverter } from '@/app/tools/pdf-to-word-converter/pdf-to-wor
 import { AiTutor } from '@/app/tools/ai-tutor/ai-tutor';
 import { ExcelPowerTools } from '@/app/tools/excel-power-tools/excel-power-tools';
 import { FinanceCalculator } from '@/components/tools/finance/finance-calculator';
-import { AiProductBackgroundRemover } from '@/app/tools/ai-product-background-remover/ai-product-background-remover';
 import { AdvancedCalculator } from '@/components/tools/finance/advanced-calculators';
 
 interface ToolInterfaceProps {
@@ -53,8 +51,6 @@ export function ToolInterface({ slug }: ToolInterfaceProps) {
         return <FreeQrCodeGenerator />;
       case 'tinyurl-maker':
         return <TinyUrlMaker />;
-      case 'ai-product-background-remover':
-        return <AiProductBackgroundRemover />;
       case 'content-gap-analyzer':
         return <ContentGapAnalyzer />;
       case 'api-latency-checker':
@@ -81,8 +77,6 @@ export function ToolInterface({ slug }: ToolInterfaceProps) {
         return <AiInvoiceGenerator />;
       case 'business-valuation-calculator':
         return <BusinessValuationCalculator />;
-      case 'ai-headshot-generator':
-        return <AiHeadshotGenerator />;
       case 'keyword-cluster-generator':
         return <KeywordClusterGenerator />;
       case 'ai-product-description-generator':

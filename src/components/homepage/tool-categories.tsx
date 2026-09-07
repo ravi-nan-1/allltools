@@ -39,8 +39,6 @@ const toolCategories = [
     description: 'Compress images for faster websites with our image compressor online, remove backgrounds from product photos, cartoonize photos with AI, and generate professional AI headshots without a photoshoot.',
      links: [
         {name: 'Image Compressor', href: '/tools/image-compressor'},
-        {name: 'AI Product Background Remover', href: '/tools/ai-product-background-remover'},
-        {name: 'AI Headshot Generator', href: '/tools/ai-headshot-generator'},
     ]
   },
   {

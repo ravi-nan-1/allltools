@@ -9,7 +9,7 @@ import { usePathname } from 'next/navigation';
 
 const guideRelations: Record<string, string[]> = {
   'pdf-compression': ['free-image-file-compressor', 'pdf-to-word-converter', 'invoice-excel-extractor', 'excel-power-tools'],
-  'image-compression': ['free-image-file-compressor', 'ai-product-background-remover', 'ai-headshot-generator'],
+  'image-compression': ['free-image-file-compressor',],
   'calculator-guide': ['emi-calculator', 'compound-interest-calculator', 'percentage-calculator', 'bmi-calculator', 'calorie-calculator'],
 };
 
