@@ -1,3 +1,4 @@
+import { calculatorSeoOverrides } from './calculator-seo-overrides';
 export interface SeoToolContent {
   how: string;
   features: string[];
@@ -1631,3 +1632,5 @@ export const seoToolContent: Record<string, SeoToolContent> = {
     "conclusion": "All2ools keeps random-number generation flexible and fast while clearly positioning it for everyday uses rather than security-sensitive secrets. Use the result as a planning estimate and verify important financial, tax, health, or transaction-specific details with the applicable official source or professional."
   },
 };
+
+Object.assign(seoToolContent, calculatorSeoOverrides);
