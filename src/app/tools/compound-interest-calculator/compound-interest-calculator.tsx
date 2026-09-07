@@ -1,7 +1,7 @@
 'use client';
 
-import { AdvancedCalculator } from '@/components/tools/finance/advanced-calculators';
+import { FinanceCalculator } from '@/components/tools/finance/finance-calculator';
 
-export default function CompoundInterestCalculator( ) {
-  return <AdvancedCalculator slug="compound-interest-calculator" />;
+export default function CompoundInterestCalculator() {
+  return <FinanceCalculator slug="compound-interest-calculator" />;
 }

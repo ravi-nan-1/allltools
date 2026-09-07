@@ -1326,60 +1326,46 @@ export const seoToolContent: Record<string, SeoToolContent> = {
   "conclusion": "Use the home-loan estimate to compare tenure and rate choices, then verify the complete repayment schedule with the lender."
 },
   "car-loan-calculator": {
-  "how": "The car-loan calculation starts with the financed amount: vehicle price minus down payment. That balance is then amortized using the annual interest rate and selected term to estimate the periodic payment and total interest.",
-  "features": [
-    "Vehicle price and down-payment inputs",
-    "Amount financed calculation",
-    "Monthly payment estimate",
-    "Total interest projection",
-    "Financing-only cost view"
-  ],
-  "use": "For car buyers comparing down payments; shoppers comparing loan terms; households checking vehicle-payment affordability.",
-  "steps": [
-    "Enter the vehicle price.",
-    "Enter the down payment.",
-    "Enter the rate and loan term.",
-    "Review amount financed, payment, and interest."
-  ],
-  "why": "The most useful car-loan comparison separates the cash paid upfront from the amount financed, making the effect of a larger down payment easy to see.",
-  "compare": [
-    [
-      "Upfront cash",
-      "Down payment reduces financed balance",
-      "Payment-only view"
+    "how": "A car loan calculator estimates how much of a vehicle purchase will be financed after your down payment and trade-in credit. It then applies the interest rate and repayment term to estimate the monthly payment, total interest, payoff time and overall financing cost. You can also test an extra monthly payment to see how faster principal reduction may change the result.",
+    "features": [
+      "Vehicle price, down payment and trade-in inputs",
+      "Amount financed calculation",
+      "Estimated monthly auto-loan payment",
+      "Principal-versus-interest cost meter",
+      "Extra-payment and early-payoff scenario",
+      "First-year and annual amortization details",
+      "Financed-fee adjustment",
+      "Upfront cash versus total financing comparison"
     ],
-    [
-      "Financing result",
-      "Payment plus total interest",
-      "Payment alone"
+    "use": "Use this calculator when shopping for a new or used car, comparing dealer or bank financing, deciding how much to put down, checking a target monthly payment, or comparing shorter and longer auto-loan terms.",
+    "steps": [
+      "Enter the vehicle purchase price.",
+      "Set your down payment and, if applicable, the trade-in value.",
+      "Enter the expected interest rate and choose the repayment term.",
+      "Add any loan fees that you plan to finance and test an optional extra monthly payment.",
+      "Review the amount financed, monthly payment, total interest, payoff time and amortization schedule.",
+      "Compare alternative rates, terms and upfront contributions before choosing a financing offer."
     ],
-    [
-      "Vehicle context",
-      "Price-to-loan relationship",
-      "Generic loan amount"
+    "why": "A vehicle price by itself does not tell you what the financing will cost. This calculator connects the purchase price, upfront contribution, financed fees, interest rate and term so you can see the difference between a lower monthly payment and a lower total borrowing cost.",
+    "compare": [
+      ["Upfront contribution", "Down payment and trade-in reduce the financed balance", "May focus only on the advertised vehicle price"],
+      ["Monthly affordability", "Shows the estimated payment after financing inputs", "A sticker price does not show the payment"],
+      ["Total borrowing cost", "Shows interest and total loan payments", "Payment-only comparisons can hide long-term interest"],
+      ["Early payoff", "Models an optional extra monthly payment", "Standard quotes may assume the original schedule"],
+      ["Vehicle financing", "Includes vehicle-specific purchase inputs", "Generic loan tools may omit down payment and trade-in context"]
     ],
-    [
-      "Scope",
-      "Financing cost",
-      "Complete ownership cost"
-    ]
-  ],
-  "faqs": [
-    {
-      "question": "How does a down payment affect the loan?",
-      "answer": "A larger down payment reduces the amount financed, which generally lowers the payment and total interest."
-    },
-    {
-      "question": "Does this include insurance and registration?",
-      "answer": "No. Those are vehicle purchase or ownership costs outside the core loan calculation."
-    },
-    {
-      "question": "Can I compare loan terms?",
-      "answer": "Yes. Compare several terms and rates to see the trade-off between payment size and total interest."
-    }
-  ],
-  "conclusion": "Use the car-loan result to compare financing options, then confirm the lender’s APR, fees, and schedule."
-},
+    "faqs": [
+      {"question":"How is the amount financed calculated?","answer":"The estimate starts with the vehicle price, subtracts the down payment and trade-in credit, and adds any fees you choose to finance. It cannot account for every dealer or lender adjustment."},
+      {"question":"Does a larger down payment lower my car payment?","answer":"Generally yes. Putting more money down reduces the amount borrowed, which usually lowers the scheduled payment and the interest charged over the loan term."},
+      {"question":"Should I choose a shorter or longer car-loan term?","answer":"A shorter term usually means higher monthly payments but less interest overall. A longer term can make the payment easier to manage while increasing the total financing cost."},
+      {"question":"Can I include my trade-in value?","answer":"Yes. Entering a trade-in value treats it as an upfront credit that reduces the estimated amount financed. Actual trade-in equity depends on the vehicle's value and any remaining loan balance."},
+      {"question":"Does the calculator include car insurance and fuel?","answer":"No. Insurance, fuel, maintenance, registration, taxes and depreciation are ownership costs rather than core loan amortization and should be budgeted separately."},
+      {"question":"What happens if I make extra payments?","answer":"An extra monthly amount can reduce principal faster and may shorten the payoff period and lower interest. Confirm that your lender applies extra payments to principal and check for any applicable rules or charges."},
+      {"question":"Are dealer fees and taxes included?","answer":"Only fees that you explicitly enter as financed fees are included. Sales tax, registration, documentation charges and other purchase costs vary by location and deal structure, so verify them separately."},
+      {"question":"Is the calculated car payment guaranteed?","answer":"No. It is a planning estimate. The lender's final APR, fees, payment dates, taxes, approved amount, credit terms and contract conditions determine the actual repayment schedule."}
+    ],
+    "conclusion": "Use the estimate to compare vehicle prices, down payments, rates and loan terms before shopping for financing. Then compare the lender's complete APR, fees, taxes and final repayment schedule rather than choosing an offer from the monthly payment alone."
+  },
   "personal-loan-calculator": {
     "how": "A personal loan calculator estimates the regular payment and overall borrowing cost for an unsecured loan from the amount borrowed, annual interest rate and repayment term. It can also show how an additional monthly payment may change the payoff timeline and interest cost.",
     "features": ["Monthly personal-loan payment estimate", "Interactive amount, rate and tenure controls", "Principal-versus-interest repayment meter", "Total interest and repayment cost", "Optional extra-payment comparison", "First-year amortization schedule"],
@@ -1400,60 +1386,46 @@ export const seoToolContent: Record<string, SeoToolContent> = {
     "conclusion": "Use the personal-loan estimate to plan your budget and compare repayment choices, then confirm the lender's final APR, fees and schedule before accepting an offer."
   },
   "student-loan-calculator": {
-  "how": "The student-loan calculator treats education debt as a regular amortizing balance using principal, annual rate, and term. It does not automatically reproduce government program rules such as deferment, income-driven repayment, subsidies, or forgiveness.",
-  "features": [
-    "Education-debt repayment estimate",
-    "Principal, rate, and term inputs",
-    "Total interest projection",
-    "Repayment-term comparison",
-    "Clear program-limitations note"
-  ],
-  "use": "For students planning repayment; graduates comparing fixed-payment scenarios; families estimating education-debt affordability.",
-  "steps": [
-    "Enter the current or expected balance.",
-    "Enter the annual rate.",
-    "Choose a repayment term.",
-    "Review payment and total interest."
-  ],
-  "why": "Student debt can have special rules, so this page is deliberately a basic amortization model rather than pretending to reproduce every loan program.",
-  "compare": [
-    [
-      "Debt context",
-      "Student-loan repayment scenario",
-      "Generic payment"
+    "how": "This student loan calculator models education debt as a fixed-rate amortizing loan. Enter the balance, annual interest rate and repayment term to estimate the regular payment, total interest and total amount repaid. You can also test an extra monthly payment and account for interest that has already been added to the balance.",
+    "features": [
+      "Monthly student loan payment estimate",
+      "Principal and interest breakdown",
+      "Optional extra-payment scenario",
+      "Capitalized-interest adjustment",
+      "First-year payment schedule",
+      "Year-by-year balance projection",
+      "Total borrowing-cost estimate",
+      "Clear federal and private loan limitations"
     ],
-    [
-      "Assumptions",
-      "Fixed amortization is explicit",
-      "Program rules hidden"
+    "use": "Useful for students, graduates and families estimating education-debt payments, comparing repayment terms, testing extra-payment strategies, or preparing a budget before reviewing a lender or servicer statement.",
+    "steps": [
+      "Enter the current student loan balance or the balance you expect to repay.",
+      "Enter the annual interest rate shown by your lender or servicer.",
+      "Select the repayment term you want to examine.",
+      "Optionally enter an extra monthly payment to test faster repayment.",
+      "If interest has already been capitalized into a separate amount, enter it in the adjustment field.",
+      "Review the estimated payment, total interest, payoff time and repayment schedule."
     ],
-    [
-      "Cost view",
-      "Total interest estimate",
-      "Payment only"
+    "why": "Education debt can behave differently depending on the loan type and repayment program. This calculator keeps its core assumptions visible so you can understand the basic amortization cost without presenting a generic payment estimate as a government-program calculation.",
+    "compare": [
+      ["Payment planning", "Shows an estimated monthly payment under fixed amortization", "May show only a starting payment"],
+      ["Interest cost", "Separates estimated interest from principal", "Can focus on the payment amount alone"],
+      ["Extra payments", "Models an additional monthly amount and potential interest savings", "May require a separate calculation"],
+      ["Repayment visibility", "Includes monthly and annual balance projections", "May not show how the balance changes"],
+      ["Program assumptions", "Clearly states that forgiveness and income-driven rules are not modeled", "Can make program-specific behavior look universal"]
     ],
-    [
-      "Planning",
-      "Compare repayment terms",
-      "Single scenario"
-    ]
-  ],
-  "faqs": [
-    {
-      "question": "Does this model federal student-loan programs?",
-      "answer": "No. It is a general amortization estimate and does not reproduce every government repayment or forgiveness program."
-    },
-    {
-      "question": "What if interest is capitalized?",
-      "answer": "Capitalization can increase the balance used for future interest. Enter the updated balance when modeling that situation."
-    },
-    {
-      "question": "Can it be used for private student loans?",
-      "answer": "Yes for a basic fixed-payment scenario, but compare the private lender’s actual rate, fees, and repayment conditions."
-    }
-  ],
-  "conclusion": "Use this as an education-debt planning estimate and check the actual servicer or lender schedule for program-specific terms."
-},
+    "faqs": [
+      {"question":"What does a student loan calculator estimate?","answer":"It estimates the regular payment, total interest, total amount repaid and payoff timeline for a loan using the balance, interest rate and repayment term you enter."},
+      {"question":"Does this calculator include federal student loan forgiveness?","answer":"No. Forgiveness, income-driven repayment, public-service programs and other government rules require program-specific information and are not represented by this general amortization model."},
+      {"question":"Can I use it for a private student loan?","answer":"Yes, for a basic fixed-payment scenario. Use the private lender's actual rate, fees, repayment period and contract terms when making a final comparison."},
+      {"question":"What is capitalized interest?","answer":"Capitalized interest is unpaid interest that is added to the loan balance. Once added, future interest can be calculated on the higher balance. Use the adjustment field when you need to model an amount that has already been added."},
+      {"question":"Will paying extra every month reduce my total interest?","answer":"Usually, paying principal sooner can reduce the balance on which future interest is calculated. The exact result depends on how your servicer applies extra payments and whether the loan has any restrictions or fees."},
+      {"question":"Why can my actual payment differ from the calculator?","answer":"Your servicer may use different rounding, payment dates, fees, capitalization events, rate rules or repayment-program requirements. The statement from your lender or servicer is the authoritative payment schedule."},
+      {"question":"Should I choose a shorter repayment term?","answer":"A shorter term generally increases the required monthly payment but can reduce the number of months that interest accrues. Compare the payment against your budget before choosing a term."},
+      {"question":"Can this calculator tell me whether I qualify for a student loan?","answer":"No. Eligibility, borrowing limits, credit requirements and financial-aid decisions depend on the lender, school and applicable program rules."}
+    ],
+    "conclusion": "Use the student loan estimate to understand the basic cost of repayment and compare scenarios. Before making a repayment decision, verify your current balance, interest rate, fees and program-specific options with your lender or loan servicer."
+  },
   "credit-card-payoff-calculator": {
   "how": "The payoff model starts with a revolving credit-card balance and APR, applies periodic interest, and subtracts a planned payment. Repeating that process estimates how long the balance could take to reach zero and how much interest may accrue.",
   "features": [
@@ -1565,115 +1537,83 @@ export const seoToolContent: Record<string, SeoToolContent> = {
   "conclusion": "Use the interest calculation to compare assumptions and understand the math, then check the actual financial product terms for a final figure."
 },
   "simple-interest-calculator": {
-  "how": "Simple interest is calculated as I = P × r × t, where P is the original principal, r is the annual rate expressed as a decimal, and t is time in years. Interest is not added back into the principal under this method.",
+  "how": "Simple interest grows in a straight line because each period uses the original principal as the interest base. The core formula is I = P × r × t, where P is principal, r is the annual rate as a decimal, and t is time in years. The final amount is P + I.",
   "features": [
-    "Principal, rate, and time inputs",
-    "Simple-interest formula",
-    "Interest amount and final balance",
-    "Linear-growth explanation",
-    "Useful comparison with compound interest"
+    "Adjustable principal, annual rate, time period and currency",
+    "Instant simple-interest and final-amount results",
+    "Interest-share visual meter",
+    "Annual growth schedule",
+    "Simple-interest formula breakdown",
+    "Clear comparison with compound interest"
   ],
-  "use": "For classroom exercises; simple-interest agreements; quick comparisons where the stated method is explicitly simple interest.",
+  "use": "Useful for simple-interest homework, basic lending or deposit examples, short-term financial comparisons, and situations where the stated agreement explicitly uses simple interest rather than compounding.",
   "steps": [
-    "Enter the original principal.",
-    "Enter the annual rate.",
-    "Enter the time period consistently with the rate.",
-    "Review interest and total amount."
+    "Choose USD or INR for the displayed amounts.",
+    "Enter the original principal or starting amount.",
+    "Set the annual interest rate.",
+    "Choose the time period in years, including fractional years when appropriate.",
+    "Review the interest earned, annual interest, final amount and growth schedule.",
+    "Compare the result with a compound-interest calculation when the product uses compounding."
   ],
-  "why": "This calculator keeps simple interest separate from compounding, which helps users understand why the two methods produce different results over longer periods.",
+  "why": "The calculator separates the original principal from the interest it generates, making the linear nature of simple interest easy to see. It also shows how the same annual interest amount accumulates over time instead of hiding the calculation behind a single final number.",
   "compare": [
-    [
-      "Interest base",
-      "Original principal",
-      "Growing balance"
-    ],
-    [
-      "Growth",
-      "Linear under constant inputs",
-      "Compound growth"
-    ],
-    [
-      "Inputs",
-      "Principal, rate, time",
-      "May also need frequency"
-    ],
-    [
-      "Best use",
-      "Simple-interest examples",
-      "Compound products"
-    ]
+    ["Interest base", "Original principal", "Growing balance"],
+    ["Growth pattern", "Linear when inputs stay constant", "Accelerates as interest compounds"],
+    ["Core inputs", "Principal, annual rate and time", "Usually also needs compounding frequency"],
+    ["Useful for", "Explicit simple-interest calculations", "Savings, investments and loans that compound"],
+    ["Formula", "I = P × r × t", "A = P(1 + r/n)^(nt) for a basic lump-sum model"]
   ],
   "faqs": [
-    {
-      "question": "Does simple interest compound?",
-      "answer": "No. Interest is calculated from the original principal under the simple-interest assumption."
-    },
-    {
-      "question": "What is the formula?",
-      "answer": "Simple interest is principal multiplied by the annual rate and the time period in years."
-    },
-    {
-      "question": "Can I enter months?",
-      "answer": "Yes, but convert the time consistently with an annual rate, for example months divided by 12."
-    }
+    {"question":"What is simple interest?","answer":"Simple interest is interest calculated from the original principal. Previously earned interest is not added to the base for later interest calculations."},
+    {"question":"What is the simple-interest formula?","answer":"The standard formula is I = P × r × t. P is principal, r is the annual rate written as a decimal, and t is time in years."},
+    {"question":"How do I calculate simple interest for months?","answer":"If the rate is annual, express the period in years. For example, 6 months can be represented as 0.5 years when that convention matches the calculation."},
+    {"question":"What is the difference between simple and compound interest?","answer":"Simple interest keeps the original principal as the interest base, while compound interest can add previous interest to the balance and then calculate further interest on that larger balance."},
+    {"question":"Can I use this for a loan?","answer":"You can use it for an educational simple-interest estimate, but many real loans use amortization, daily accrual, fees or other conventions instead of pure simple interest."},
+    {"question":"Why is the yearly interest the same in the schedule?","answer":"With a constant principal, rate and simple-interest method, each year adds the same amount because prior interest is not added to the interest base."},
+    {"question":"Does a higher rate always mean more interest?","answer":"For the same principal and time under the same simple-interest method, a higher annual rate produces more interest. Real products can add fees or other terms that change the overall cost or return."},
+    {"question":"Are these results guaranteed?","answer":"No. The calculator is a mathematical estimate based on the inputs you provide. Actual financial agreements can use different rates, timing, fees, taxes or calculation conventions."}
   ],
-  "conclusion": "Use simple interest when the agreement or exercise calls for that method; use compound interest when prior interest is added to the balance."
+  "conclusion": "Simple interest is best understood as a linear calculation tied to the original principal. Use the result to learn the math or compare a clearly stated simple-interest scenario, then check the actual agreement for its rate basis, timing, fees and compounding rules."
 },
   "compound-interest-calculator": {
-  "how": "Compound interest repeatedly applies the rate to the growing balance. For a single starting amount, the standard model is A = P(1 + r/n)^(nt); recurring contributions, where supported, are added according to their schedule.",
-  "features": [
-    "Compounding-frequency selection",
-    "Starting amount and rate",
-    "Time-horizon modeling",
-    "Growth versus contributions",
-    "Long-term scenario comparison"
-  ],
-  "use": "For savings projections; investment-growth education; planners comparing rates, time horizons, and compounding schedules.",
-  "steps": [
-    "Enter the starting amount.",
-    "Enter the annual rate or return assumption.",
-    "Choose time and compounding frequency.",
-    "Review projected balance and growth."
-  ],
-  "why": "The page makes the compounding mechanism visible so users can see how frequency and time affect a growing balance rather than treating the result as a black box.",
-  "compare": [
-    [
-      "Growth model",
-      "Interest on the growing balance",
-      "Linear simple interest"
+    "how": "Compound interest estimates how an initial balance can grow when each compounding period applies the assumed rate to the balance, including previously earned interest. The calculator also supports recurring contributions so you can separate money added by you from growth produced by the rate assumption.",
+    "features": [
+      "Initial principal and annual rate controls",
+      "Annual, semi-annual, quarterly, monthly and daily compounding",
+      "Flexible investment horizon up to 40 years",
+      "Optional recurring contributions with weekly, biweekly, monthly, quarterly or annual schedules",
+      "Future value, total invested, estimated growth and return multiple",
+      "Year-by-year projection table for scenario planning"
     ],
-    [
-      "Frequency",
-      "Explicit periods",
-      "Fixed or hidden"
+    "use": "Use it for savings planning, investment education, deposit comparisons, long-term wealth scenarios, and learning how rate, time, contribution size and compounding frequency interact.",
+    "steps": [
+      "Enter the starting principal and choose your currency.",
+      "Set the annual interest or return assumption and investment period.",
+      "Choose how often the starting balance compounds.",
+      "Optionally add a recurring contribution and choose its frequency.",
+      "Review projected value, total invested, estimated compound growth and the yearly schedule.",
+      "Run alternative rate, time and contribution scenarios before making a financial decision."
     ],
-    [
-      "Time effect",
-      "Compounding over multiple periods",
-      "Single-period result"
+    "why": "The calculator exposes the major drivers of compound growth instead of returning only one final number. Users can see how much money they put in, how much the assumed rate contributes, and how the balance changes year by year.",
+    "compare": [
+      ["Growth model", "Interest can earn further interest as the balance grows", "Simple interest stays tied to the original principal"],
+      ["Compounding", "Frequency can be annual, semi-annual, quarterly, monthly or daily", "No compounding in a pure simple-interest model"],
+      ["Recurring contributions", "Can be modeled separately from the starting principal", "Usually requires a different calculation model"],
+      ["Time effect", "Longer periods can create increasingly larger mathematical growth", "Growth is linear when principal and rate stay constant"],
+      ["Best use", "Savings and investment growth scenarios", "Straightforward simple-interest calculations"]
     ],
-    [
-      "Scenario testing",
-      "Rate, time, frequency",
-      "Manual comparison"
-    ]
-  ],
-  "faqs": [
-    {
-      "question": "Does more frequent compounding always matter a lot?",
-      "answer": "The difference depends on the rate and time horizon. It may be modest over short periods and more noticeable over longer periods."
-    },
-    {
-      "question": "Can recurring contributions be included?",
-      "answer": "Use the contribution inputs when provided; recurring deposits are separate from the growth of the starting balance."
-    },
-    {
-      "question": "Is an investment projection guaranteed?",
-      "answer": "No. A return assumption produces a mathematical projection, not a guarantee of future market performance."
-    }
-  ],
-  "conclusion": "Compound-interest results are assumption-driven. Use them to explore rate, time, frequency, and contribution effects."
-},
+    "faqs": [
+      {"question":"What is compound interest?","answer":"Compound interest is interest calculated on a balance that can include previously earned interest. This allows the balance to grow on an expanding base over multiple periods."},
+      {"question":"What is the compound interest formula?","answer":"For a basic lump-sum model, A = P(1 + r/n)^(nt), where P is the starting principal, r is the annual rate as a decimal, n is the number of compounding periods per year, and t is time in years."},
+      {"question":"Does monthly compounding always produce more than annual compounding?","answer":"For the same positive nominal annual rate and time horizon, more frequent compounding generally produces a slightly higher mathematical result, although the difference depends on the rate and duration."},
+      {"question":"Can I add monthly investments to compound interest?","answer":"Yes. This calculator lets you enter a recurring contribution and select a contribution schedule. Those deposits are tracked separately from the original principal so you can see how much you contributed versus the projected growth."},
+      {"question":"How does time affect compound growth?","answer":"Time gives the assumed return more periods in which to compound. The effect can become increasingly significant over long horizons because each period builds on the previous balance."},
+      {"question":"What is the Rule of 72?","answer":"The Rule of 72 is a quick estimate for how long a balance may take to double: divide 72 by the assumed annual percentage rate. It is a rough shortcut, not a replacement for a full calculation."},
+      {"question":"Is compound interest guaranteed for investments?","answer":"No. A calculator uses the rate you enter as an assumption. Market investments can have variable returns, losses, fees and taxes, so a projection should not be treated as a guaranteed outcome."},
+      {"question":"Why can my bank or investment statement differ from this calculator?","answer":"Actual products may use daily balances, different compounding conventions, contribution timing, promotional rates, fees, taxes, minimum balances or changing rates. Always compare the calculator assumptions with the actual product terms."}
+    ],
+    "conclusion": "Compound interest is most powerful to understand as a relationship between starting money, rate, time, compounding and additional contributions. Use the projections to compare scenarios, but verify the actual rate, fees, taxes and account rules before relying on a financial product's expected result."
+  },
   "investment-return-calculator": {
   "how": "The investment return calculator estimates a potential future portfolio value from a starting amount, recurring contributions, an assumed annual return, a contribution schedule, and the number of years invested. It separates money you contribute from the mathematical growth produced by the return assumption.",
   "features": [
@@ -1829,60 +1769,46 @@ export const seoToolContent: Record<string, SeoToolContent> = {
   "conclusion": "ROI is a practical comparison metric, but it is only one part of a good financial decision. Use the result alongside time period, risk, taxes, inflation, fees, cash-flow timing, and the quality of the assumptions behind the final value."
 },
   "inflation-calculator": {
-  "how": "The inflation calculator applies a constant annual inflation assumption over a selected number of years. A simple future-price model is current amount × (1 + inflation rate)^years, which illustrates how purchasing power changes when prices rise repeatedly.",
-  "features": [
-    "Annual inflation assumption",
-    "Time-horizon control",
-    "Future purchasing-power estimate",
-    "Rate-sensitivity comparison",
-    "Clear distinction between estimate and forecast"
-  ],
-  "use": "For household budgeting; long-term savings and salary planning; classroom exercises about purchasing power.",
-  "steps": [
-    "Enter the current amount.",
-    "Enter the annual inflation assumption.",
-    "Set the number of years.",
-    "Review the projected future amount or purchasing-power effect."
-  ],
-  "why": "Inflation is cumulative, so a useful calculator should show the effect of repeated percentage increases rather than adding the rate once.",
-  "compare": [
-    [
-      "Economic model",
-      "Repeated annual percentage change",
-      "Single percentage adjustment"
+    "how": "The Inflation Calculator estimates how a price or amount could change when it grows by a constant annual inflation rate for a selected period. It uses the compound inflation model: future cost = current amount × (1 + annual inflation rate)^years. The same model can be viewed in reverse to illustrate how much purchasing power the original amount may represent in the future.",
+    "features": [
+      "Current amount, inflation rate and time-horizon controls",
+      "USD and INR display options",
+      "Estimated future cost equivalent",
+      "Purchasing-power estimate",
+      "Additional future cost and percentage impact",
+      "Year-by-year projection table",
+      "Formula and scenario summary",
+      "Clear distinction between a planning model and an inflation forecast"
     ],
-    [
-      "Time effect",
-      "Compounds over years",
-      "Ignores duration"
+    "use": "Use it for long-term household budgeting, retirement and savings discussions, salary planning, education-cost estimates, business planning, historical-style inflation exercises and comparing different inflation assumptions. It is especially useful when you want to see why a small annual percentage can create a much larger cumulative change over a long period.",
+    "steps": [
+      "Enter the amount you want to evaluate in today's money.",
+      "Choose the currency used for the scenario.",
+      "Set an annual inflation assumption.",
+      "Select the number of years you want to model.",
+      "Review the future cost equivalent, purchasing-power estimate and yearly projection.",
+      "Change the rate or time horizon to compare alternative scenarios."
     ],
-    [
-      "Scenario testing",
-      "Rate and years are editable",
-      "One assumption"
+    "why": "Inflation affects prices cumulatively rather than as a one-time adjustment. Showing both the future cost of today's purchase and the estimated purchasing power of today's amount makes the effect easier to understand and compare. The calculator also exposes the assumptions so users can test more than one scenario instead of treating a single rate as a guaranteed forecast.",
+    "compare": [
+      ["Calculation", "Compounds the selected annual inflation rate", "Adds one percentage change only"],
+      ["Time horizon", "Shows the effect across multiple years", "May ignore the duration of the change"],
+      ["Purchasing power", "Estimates what today's amount may represent later", "Shows price change without the reverse view"],
+      ["Scenario planning", "Rate and years can be changed instantly", "Usually requires separate calculations"],
+      ["Transparency", "Displays formula, assumptions and projections", "May hide the calculation method"]
     ],
-    [
-      "Use",
-      "Budget and purchasing-power planning",
-      "Transaction quote"
-    ]
-  ],
-  "faqs": [
-    {
-      "question": "Does this predict actual inflation?",
-      "answer": "No. It applies the inflation rate you provide. Actual inflation varies by year and by the goods and services a household buys."
-    },
-    {
-      "question": "Why does inflation compound?",
-      "answer": "Each period’s increase applies to an already changed price level, so the cumulative effect grows over time."
-    },
-    {
-      "question": "Can household inflation differ from an official index?",
-      "answer": "Yes. Official measures represent defined baskets, while individual households can face different price changes."
-    }
-  ],
-  "conclusion": "Use the inflation calculation to explore purchasing-power scenarios, not as an official economic forecast."
-},
+    "faqs": [
+      {"question":"What does an inflation calculator tell me?","answer":"It estimates how much a current price or amount could become in the future if a constant annual inflation rate is applied for a chosen number of years. It can also estimate the future purchasing power of today's amount."},
+      {"question":"How is future cost calculated?","answer":"The model multiplies the current amount by (1 + annual inflation rate) raised to the number of years. This represents repeated annual price increases rather than applying the rate only once."},
+      {"question":"Does this predict actual inflation?","answer":"No. It is a scenario calculator. Actual inflation changes over time and differs between countries, years, product categories and individual households."},
+      {"question":"Why does a 3% inflation rate matter over a long period?","answer":"Because the increase compounds. Each year's percentage change applies to a price level that already includes earlier increases, so the cumulative effect becomes larger over longer periods."},
+      {"question":"What is purchasing power?","answer":"Purchasing power describes how much goods or services a given amount of money can buy. When prices rise, the same nominal amount generally buys less than it did previously."},
+      {"question":"Can my personal inflation rate be different?","answer":"Yes. An official inflation index represents a defined basket and methodology, while your personal spending pattern may contain different proportions of housing, food, transport, healthcare, education and other categories."},
+      {"question":"Should I use inflation when planning savings?","answer":"It can be useful as one planning assumption. For a realistic financial plan, compare several inflation scenarios and consider taxes, investment returns, fees, changing expenses and the time horizon rather than relying on one fixed rate."},
+      {"question":"Can I use the calculator for salary planning?","answer":"Yes. You can model the future cost equivalent of today's salary or expenses, then compare different inflation assumptions. This does not determine what your future salary will actually be."}
+    ],
+    "conclusion": "Use the Inflation Calculator to understand the cumulative effect of rising prices and to test purchasing-power scenarios. Because future inflation is uncertain, treat the result as an estimate for planning rather than an official economic forecast. For historical or current inflation statistics, use the relevant official statistical source for the country and period you are studying."
+  },
   "stopwatch": {
     "how": "A digital stopwatch measures elapsed time from the moment you press start. All2ools keeps the timer in the browser, with start, pause, and reset controls and a hundredth-second display for practical timing tasks.",
     "features": ["Instant browser timing with no installation", "Start, pause, and reset controls", "Hundredth-second display for precise everyday timing", "Responsive interface for phones, tablets, and desktops", "Runs locally in the browser"],

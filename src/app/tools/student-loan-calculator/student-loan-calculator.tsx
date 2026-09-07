@@ -1,7 +1,7 @@
 'use client';
 
-import { AdvancedCalculator } from '@/components/tools/finance/advanced-calculators';
+import { FinanceCalculator } from '@/components/tools/finance/finance-calculator';
 
-export default function StudentLoanCalculator( ) {
-  return <AdvancedCalculator slug="student-loan-calculator" />;
+export default function StudentLoanCalculator() {
+  return <FinanceCalculator slug="student-loan-calculator" />;
 }

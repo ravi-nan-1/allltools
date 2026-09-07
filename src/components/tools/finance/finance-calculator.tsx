@@ -30,7 +30,13 @@ export function FinanceCalculator({ slug }: Props) {
   if (slug === 'emi-calculator') return <EMICalculator />;
   if (slug === 'loan-calculator') return <LoanCalculator />;
   if (slug === 'personal-loan-calculator') return <PersonalLoanCalculator />;
+  if (slug === 'car-loan-calculator') return <CarLoanCalculator />;
   if (slug === 'investment-return-calculator') return <InvestmentReturnCalculator />;
+  if (slug === 'roi-calculator') return <ROICalculator />;
+  if (slug === 'inflation-calculator') return <InflationCalculator />;
+  if (slug === 'student-loan-calculator') return <StudentLoanCalculator />;
+  if (slug === 'simple-interest-calculator') return <SimpleInterestCalculator />;
+  if (slug === 'compound-interest-calculator') return <CompoundInterestCalculator />;
   if (slug === 'mortgage-calculator') return <MortgageCalculator />;
   return (
     <Card className="w-full overflow-hidden border-2 shadow-sm">
@@ -366,6 +372,179 @@ function InvestmentReturnCalculator() {
   </Card>;
 }
 
+function ROICalculator() {
+  const [initial, setInitial] = useState(10000);
+  const [finalValue, setFinalValue] = useState(12500);
+  const [additionalCosts, setAdditionalCosts] = useState(0);
+  const [years, setYears] = useState(1);
+  const [currency, setCurrency] = useState('USD');
+
+  const result = useMemo(() => {
+    const totalInvested = Math.max(0, initial) + Math.max(0, additionalCosts);
+    const endingValue = Math.max(0, finalValue);
+    const profit = endingValue - totalInvested;
+    const roi = totalInvested > 0 ? (profit / totalInvested) * 100 : 0;
+    const multiple = totalInvested > 0 ? endingValue / totalInvested : 0;
+    const annualized = totalInvested > 0 && endingValue > 0 && years > 0
+      ? (Math.pow(endingValue / totalInvested, 1 / years) - 1) * 100
+      : 0;
+    const growthShare = endingValue > 0 ? Math.max(0, Math.min(100, profit / endingValue * 100)) : 0;
+    const projection: { year: number; value: number; profit: number }[] = [];
+    for (let year = 1; year <= Math.min(30, Math.max(1, Math.round(years))); year++) {
+      const value = totalInvested > 0 && endingValue > 0
+        ? totalInvested * Math.pow(endingValue / totalInvested, year / years)
+        : totalInvested;
+      projection.push({ year, value, profit: value - totalInvested });
+    }
+    return { totalInvested, endingValue, profit, roi, multiple, annualized, growthShare, projection };
+  }, [initial, finalValue, additionalCosts, years]);
+
+  const fmt = (n: number) => money(n, currency);
+  const positive = result.profit >= 0;
+  const investedShare = result.endingValue > 0 ? Math.max(0, Math.min(100, 100 - result.growthShare)) : 100;
+  const roiColor = positive ? 'text-emerald-600' : 'text-rose-600';
+  const ringColor = positive ? '#5065f6' : '#ef4444';
+
+  return <Card className="w-full overflow-hidden border border-slate-200 bg-white shadow-sm">
+    <CardContent className="p-0">
+      <div className="grid lg:grid-cols-[1.15fr_.85fr]">
+        <div className="p-5 sm:p-7 md:p-9">
+          <div className="mb-7 flex items-center justify-between gap-3">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-600">Online ROI Calculator</p>
+              <h2 className="mt-1 text-2xl font-bold tracking-tight text-slate-800 md:text-3xl">Measure your return on investment</h2>
+              <p className="mt-2 max-w-xl text-sm leading-6 text-slate-500">Compare what you put into an investment with what it is worth now. Include extra costs to get a more realistic ROI, profit or loss and annualized return.</p>
+            </div>
+            <div className="hidden h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600 sm:flex"><TrendingUp className="h-5 w-5" /></div>
+          </div>
+          <div className="mb-5 flex items-center justify-between gap-3 rounded-2xl border bg-slate-50/80 p-3">
+            <div><Label>Currency</Label><p className="mt-0.5 text-xs text-slate-500">Used for money results</p></div>
+            <Select value={currency} onValueChange={setCurrency}><SelectTrigger className="w-32 bg-white"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="USD">USD ($)</SelectItem><SelectItem value="INR">INR (₹)</SelectItem></SelectContent></Select>
+          </div>
+          <LoanSlider label="Initial investment" value={initial} min={0} max={5000000} step={1000} prefix={currency === 'INR' ? '₹' : '$'} onChange={setInitial} />
+          <LoanSlider label="Current / final value" value={finalValue} min={0} max={10000000} step={1000} prefix={currency === 'INR' ? '₹' : '$'} onChange={setFinalValue} />
+          <LoanSlider label="Additional costs" value={additionalCosts} min={0} max={1000000} step={1000} prefix={currency === 'INR' ? '₹' : '$'} onChange={setAdditionalCosts} />
+          <LoanSlider label="Holding period" value={years} min={1} max={30} step={1} suffix="yr" onChange={setYears} />
+          <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div className={`rounded-2xl border p-4 ${positive ? 'border-emerald-100 bg-emerald-50/70' : 'border-rose-100 bg-rose-50/70'}`}><p className="text-sm text-slate-500">ROI</p><p className={`mt-1 text-2xl font-bold ${roiColor}`}>{pct(result.roi)}</p></div>
+            <div className="rounded-2xl border border-indigo-100 bg-indigo-50/70 p-4"><p className="text-sm text-slate-500">Profit / loss</p><p className={`mt-1 text-2xl font-bold ${positive ? 'text-indigo-600' : 'text-rose-600'}`}>{fmt(result.profit)}</p></div>
+          </div>
+        </div>
+        <div className="border-t bg-gradient-to-br from-slate-50 via-white to-indigo-50/60 p-5 sm:p-7 lg:border-l lg:border-t-0 md:p-9">
+          <div className="mb-4 flex items-center justify-between"><div><p className="text-sm font-semibold text-slate-700">ROI performance meter</p><p className="text-xs text-slate-500">Investment base compared with the ending value</p></div><TrendingUp className={`h-5 w-5 ${positive ? 'text-emerald-500' : 'text-rose-500'}`} /></div>
+          <div className="mx-auto my-5 flex max-w-[300px] items-center justify-center"><div className="relative h-56 w-56 rounded-full" style={{ background: `conic-gradient(${ringColor} 0 ${investedShare.toFixed(2)}%, #e9edff ${investedShare.toFixed(2)}% 100%)` }}><div className="absolute inset-[28px] flex flex-col items-center justify-center rounded-full bg-white shadow-inner"><span className="text-xs font-medium text-slate-500">Return on investment</span><strong className={`mt-1 text-3xl font-bold ${roiColor}`}>{pct(result.roi)}</strong><span className="mt-1 text-xs text-slate-500">{result.multiple.toFixed(2)}× return multiple</span></div></div></div>
+          <div className="flex justify-center gap-5 text-xs text-slate-500"><span className="flex items-center gap-2"><i className="h-2.5 w-2.5 rounded-full bg-[#5065f6]" /> Investment base</span><span className="flex items-center gap-2"><i className="h-2.5 w-2.5 rounded-full bg-[#e9edff]" /> Value change</span></div>
+          <div className="mt-8 space-y-4"><LoanResult label="Total invested" value={fmt(result.totalInvested)} icon={<WalletCards className="h-4 w-4" />} /><LoanResult label="Ending value" value={fmt(result.endingValue)} icon={<CircleDollarSign className="h-4 w-4" />} strong /><LoanResult label="Net profit / loss" value={fmt(result.profit)} icon={<TrendingUp className="h-4 w-4" />} /><LoanResult label="Annualized return" value={pct(result.annualized)} icon={<Calculator className="h-4 w-4" />} /></div>
+        </div>
+      </div>
+      <div className="border-t bg-white p-5 sm:p-7 md:p-9">
+        <div className="mb-5 flex flex-wrap items-end justify-between gap-3"><div><h3 className="text-xl font-bold text-slate-800">ROI growth projection</h3><p className="mt-1 text-sm text-slate-500">A smooth annual path implied by the selected beginning value, ending value and holding period.</p></div><div className="rounded-xl bg-slate-50 px-4 py-2 text-xs text-slate-500">Return multiple: <strong className="text-slate-800">{result.multiple.toFixed(2)}×</strong></div></div>
+        <div className="overflow-x-auto rounded-2xl border"><table className="w-full min-w-[600px] text-sm"><thead className="bg-slate-50 text-left text-slate-500"><tr><th className="px-4 py-3">Year</th><th className="px-4 py-3">Estimated value</th><th className="px-4 py-3">Profit / loss</th><th className="px-4 py-3">Implied ROI</th></tr></thead><tbody>{result.projection.map(r => <tr key={r.year} className="border-t"><td className="px-4 py-3 font-medium">{r.year}</td><td className="px-4 py-3 font-semibold">{fmt(r.value)}</td><td className={`px-4 py-3 ${r.profit >= 0 ? 'text-emerald-600' : 'text-rose-600'}`}>{fmt(r.profit)}</td><td className={`px-4 py-3 font-semibold ${r.profit >= 0 ? 'text-emerald-600' : 'text-rose-600'}`}>{pct(result.totalInvested > 0 ? r.profit / result.totalInvested * 100 : 0)}</td></tr>)}</tbody></table></div>
+        <div className="mt-5 grid gap-3 md:grid-cols-3"><div className="rounded-2xl bg-slate-50 p-4"><p className="text-xs font-semibold uppercase tracking-wide text-slate-500">ROI formula</p><p className="mt-2 text-sm leading-6 text-slate-700">(Ending value − total invested) ÷ total invested × 100</p></div><div className="rounded-2xl bg-slate-50 p-4"><p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Return multiple</p><p className="mt-2 text-sm leading-6 text-slate-700">Ending value ÷ total invested. A 1.50× result means the ending value is 150% of the investment base.</p></div><div className="rounded-2xl bg-amber-50 p-4"><p className="text-xs font-semibold uppercase tracking-wide text-amber-800">Important</p><p className="mt-2 text-sm leading-6 text-amber-900">ROI does not automatically account for taxes, inflation, financing costs, risk or cash-flow timing.</p></div></div>
+        <p className="mt-5 flex gap-2 text-xs leading-5 text-slate-500"><Info className="mt-0.5 h-4 w-4 shrink-0" />This calculator provides a mathematical comparison, not an investment recommendation. Actual outcomes can differ because values, fees, taxes and timing change over time.</p>
+      </div>
+    </CardContent>
+  </Card>;
+}
+
+function CarLoanCalculator() {
+  const [vehiclePrice, setVehiclePrice] = useState(2500000);
+  const [downPayment, setDownPayment] = useState(500000);
+  const [rate, setRate] = useState(8.5);
+  const [years, setYears] = useState(5);
+  const [extra, setExtra] = useState(0);
+  const [tradeIn, setTradeIn] = useState(0);
+  const [fees, setFees] = useState(0);
+  const currency = 'INR';
+
+  const result = useMemo(() => {
+    const financed = Math.max(0, vehiclePrice - downPayment - tradeIn + fees);
+    const months = Math.max(1, Math.round(years * 12));
+    const monthlyRate = rate / 100 / 12;
+    const basePayment = monthlyRate === 0 ? financed / months : financed * monthlyRate * Math.pow(1 + monthlyRate, months) / (Math.pow(1 + monthlyRate, months) - 1);
+    const payment = basePayment + Math.max(0, extra);
+    let balance = financed, totalInterest = 0, totalPaid = 0, actualMonths = 0;
+    const rows: { month: number; payment: number; principal: number; interest: number; balance: number }[] = [];
+    while (balance > 0.01 && actualMonths < 1200) {
+      actualMonths += 1;
+      const interest = monthlyRate === 0 ? 0 : balance * monthlyRate;
+      const principal = Math.min(balance, Math.max(0, payment - interest));
+      const actualPayment = principal + interest;
+      balance = Math.max(0, balance - principal);
+      totalInterest += interest;
+      totalPaid += actualPayment;
+      if (rows.length < 12 || balance === 0) rows.push({ month: actualMonths, payment: actualPayment, principal, interest, balance });
+      if (principal <= 0 && interest > 0) break;
+    }
+    const regularInterest = Math.max(0, basePayment * months - financed);
+    const principalShare = totalPaid > 0 ? financed / totalPaid : 1;
+    const payoffLabel = actualMonths >= 12 ? `${Math.floor(actualMonths / 12)}y ${actualMonths % 12 ? `${actualMonths % 12}m` : ''}`.trim() : `${actualMonths}m`;
+    const cashUpfront = Math.max(0, downPayment + tradeIn);
+    const totalVehicleCost = cashUpfront + fees + totalPaid;
+    const loanCostShare = totalPaid > 0 ? totalInterest / totalPaid * 100 : 0;
+    const schedule: { year: number; interest: number; principal: number; balance: number }[] = [];
+    let b = financed;
+    for (let year = 1; year <= Math.min(years, 10); year++) {
+      let yi = 0, yp = 0;
+      for (let m = 0; m < 12 && b > 0.01; m++) {
+        const i = monthlyRate === 0 ? 0 : b * monthlyRate;
+        const pr = Math.min(b, Math.max(0, payment - i));
+        yi += i; yp += pr; b = Math.max(0, b - pr);
+      }
+      schedule.push({ year, interest: yi, principal: yp, balance: b });
+    }
+    return { financed, basePayment, payment, totalInterest, totalPaid, actualMonths, principalShare, rows, payoffLabel, regularInterest, interestSaved: Math.max(0, regularInterest - totalInterest), cashUpfront, totalVehicleCost, loanCostShare, schedule };
+  }, [vehiclePrice, downPayment, rate, years, extra, tradeIn, fees]);
+
+  const fmt = (n: number) => money(n, currency);
+  const principalPct = Math.max(0, Math.min(100, result.principalShare * 100));
+  const interestPct = Math.max(0, 100 - principalPct);
+  const downPct = vehiclePrice > 0 ? Math.min(100, (downPayment + tradeIn) / vehiclePrice * 100) : 0;
+
+  return <Card className="w-full overflow-hidden border border-slate-200 bg-white shadow-sm">
+    <CardContent className="p-0">
+      <div className="grid lg:grid-cols-[1.15fr_.85fr]">
+        <div className="p-5 sm:p-7 md:p-9">
+          <div className="mb-7 flex items-center justify-between gap-3">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-600">Advanced Car Loan Calculator</p>
+              <h2 className="mt-1 text-2xl font-bold tracking-tight text-slate-800 md:text-3xl">Estimate your car payment and financing cost</h2>
+              <p className="mt-2 max-w-xl text-sm leading-6 text-slate-500">Adjust the vehicle price, upfront payment, interest rate, term and extra payment to see what you may pay each month and over the life of the auto loan.</p>
+            </div>
+            <div className="hidden h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600 sm:flex"><CircleDollarSign className="h-5 w-5" /></div>
+          </div>
+          <div className="mb-5 rounded-2xl border bg-slate-50/80 p-4">
+            <div className="flex items-center justify-between gap-3"><div><Label>Vehicle price</Label><p className="mt-0.5 text-xs text-slate-500">Use the negotiated purchase price before financing.</p></div><span className="rounded-xl bg-white px-3 py-2 text-lg font-bold text-slate-800">{fmt(vehiclePrice)}</span></div>
+          </div>
+          <LoanSlider label="Vehicle price" value={vehiclePrice} min={100000} max={10000000} step={10000} prefix="₹" onChange={setVehiclePrice} />
+          <LoanSlider label="Down payment" value={downPayment} min={0} max={Math.max(100000, vehiclePrice)} step={10000} prefix="₹" onChange={v => setDownPayment(Math.min(v, vehiclePrice))} />
+          <LoanSlider label="Interest rate" value={rate} min={0} max={25} step={0.1} suffix="%" onChange={setRate} />
+          <LoanSlider label="Loan term" value={years} min={1} max={10} step={1} suffix="yr" onChange={setYears} />
+          <LoanSlider label="Extra monthly payment" value={extra} min={0} max={100000} step={500} prefix="₹" onChange={setExtra} />
+          <div className="mt-4 grid gap-4 rounded-2xl border bg-slate-50/80 p-4 sm:grid-cols-2">
+            <div><Label>Trade-in value</Label><Input className="mt-1 bg-white" type="number" min="0" value={tradeIn} onChange={e => setTradeIn(Math.max(0, Number(e.target.value) || 0))} /><p className="mt-1 text-xs text-slate-500">Applied as an upfront credit toward the vehicle.</p></div>
+            <div><Label>Loan fees added to financing</Label><Input className="mt-1 bg-white" type="number" min="0" value={fees} onChange={e => setFees(Math.max(0, Number(e.target.value) || 0))} /><p className="mt-1 text-xs text-slate-500">Examples: lender or documentation fees you choose to finance.</p></div>
+          </div>
+          <div className="mt-7 grid gap-3 sm:grid-cols-2"><div className="rounded-2xl border border-emerald-100 bg-emerald-50/70 p-4"><p className="text-sm text-slate-500">Monthly car payment</p><p className="mt-1 text-2xl font-bold text-emerald-600">{fmt(result.payment)}</p></div><div className="rounded-2xl border border-indigo-100 bg-indigo-50/70 p-4"><p className="text-sm text-slate-500">Amount financed</p><p className="mt-1 text-2xl font-bold text-indigo-600">{fmt(result.financed)}</p></div></div>
+        </div>
+        <div className="border-t bg-gradient-to-br from-slate-50 via-white to-indigo-50/60 p-5 sm:p-7 lg:border-l lg:border-t-0 md:p-9">
+          <div className="mb-4 flex items-center justify-between"><div><p className="text-sm font-semibold text-slate-700">Auto loan cost meter</p><p className="text-xs text-slate-500">Principal versus interest across scheduled payments</p></div><WalletCards className="h-5 w-5 text-emerald-500" /></div>
+          <div className="mx-auto my-5 flex max-w-[300px] items-center justify-center"><div className="relative h-56 w-56 rounded-full" style={{ background: `conic-gradient(#5065f6 0 ${principalPct.toFixed(2)}%, #dfe5ff ${principalPct.toFixed(2)}% 100%)` }}><div className="absolute inset-[28px] flex flex-col items-center justify-center rounded-full bg-white text-center shadow-inner"><span className="text-xs font-medium text-slate-500">Monthly payment</span><strong className="mt-1 text-2xl font-bold text-slate-800">{fmt(result.payment)}</strong><span className="mt-1 text-xs text-emerald-600">{rate.toFixed(1)}% APR assumption</span></div></div></div>
+          <div className="flex justify-center gap-5 text-xs text-slate-500"><span className="flex items-center gap-2"><i className="h-2.5 w-2.5 rounded-full bg-[#5065f6]" /> Principal</span><span className="flex items-center gap-2"><i className="h-2.5 w-2.5 rounded-full bg-[#dfe5ff]" /> Interest</span></div>
+          <div className="mt-8 space-y-3"><LoanResult label="Total interest" value={fmt(result.totalInterest)} icon={<TrendingUp className="h-4 w-4" />} /><LoanResult label="Total loan payments" value={fmt(result.totalPaid)} icon={<WalletCards className="h-4 w-4" />} strong /><LoanResult label="Cash upfront" value={fmt(result.cashUpfront)} icon={<CircleDollarSign className="h-4 w-4" />} /><LoanResult label="Estimated payoff" value={result.payoffLabel} icon={<Calculator className="h-4 w-4" />} /><LoanResult label="Estimated interest saved" value={fmt(result.interestSaved)} icon={<TrendingUp className="h-4 w-4" />} /></div>
+          <div className="mt-4 rounded-2xl bg-white p-4 text-xs leading-5 text-slate-500 shadow-sm"><strong className="text-slate-700">Down payment + trade-in:</strong> {downPct.toFixed(0)}% of vehicle price. A larger upfront contribution can reduce the amount financed and future interest.</div>
+        </div>
+      </div>
+      <div className="border-t bg-white p-5 sm:p-7 md:p-9">
+        <div className="mb-5 flex flex-wrap items-end justify-between gap-3"><div><h3 className="text-xl font-bold text-slate-800">Car loan amortization schedule</h3><p className="mt-1 text-sm text-slate-500">See how the balance changes as payments are split between principal and interest.</p></div><div className="rounded-xl bg-slate-50 px-4 py-2 text-xs text-slate-500">Vehicle cost including financing: <strong className="text-slate-800">{fmt(result.totalVehicleCost)}</strong></div></div>
+        <div className="overflow-x-auto rounded-2xl border"><table className="w-full min-w-[650px] text-sm"><thead className="bg-slate-50 text-left text-slate-500"><tr><th className="px-4 py-3">Year</th><th className="px-4 py-3">Interest</th><th className="px-4 py-3">Principal</th><th className="px-4 py-3">Ending balance</th></tr></thead><tbody>{result.schedule.map(r => <tr key={r.year} className="border-t"><td className="px-4 py-3 font-medium">{r.year}</td><td className="px-4 py-3">{fmt(r.interest)}</td><td className="px-4 py-3 text-emerald-600">{fmt(r.principal)}</td><td className="px-4 py-3 font-semibold">{fmt(r.balance)}</td></tr>)}</tbody></table></div>
+        <div className="mt-5 grid gap-3 md:grid-cols-3"><div className="rounded-2xl bg-slate-50 p-4"><p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Financed amount</p><p className="mt-2 text-sm leading-6 text-slate-700">Vehicle price minus down payment and trade-in, plus any fees you choose to finance.</p></div><div className="rounded-2xl bg-slate-50 p-4"><p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Payment trade-off</p><p className="mt-2 text-sm leading-6 text-slate-700">A longer term can lower the monthly payment but usually increases the total interest paid.</p></div><div className="rounded-2xl bg-amber-50 p-4"><p className="text-xs font-semibold uppercase tracking-wide text-amber-800">Ownership costs</p><p className="mt-2 text-sm leading-6 text-amber-900">Fuel, insurance, registration, maintenance and depreciation are not included in the financing result.</p></div></div>
+        <p className="mt-5 flex gap-2 text-xs leading-5 text-slate-500"><Info className="mt-0.5 h-4 w-4 shrink-0" />This car-loan calculator is an estimate for planning. Actual APR, taxes, lender fees, payment timing, insurance requirements and approved terms can change the final payment and total cost.</p>
+      </div>
+    </CardContent>
+  </Card>;
+}
+
 function PersonalLoanCalculator() {
   const [loanAmount, setLoanAmount] = useState(500000);
   const [rate, setRate] = useState(12);
@@ -418,6 +597,243 @@ function PersonalLoanCalculator() {
           </div>
         </div>
         <div className="border-t bg-white p-5 sm:p-7 md:p-9"><div className="mb-5"><h3 className="text-xl font-bold text-slate-800">Personal loan repayment schedule</h3><p className="mt-1 text-sm text-slate-500">Review the first 12 payments and see how interest, principal and balance change over time.</p></div><div className="overflow-x-auto rounded-2xl border"><table className="w-full min-w-[650px] text-sm"><thead className="bg-slate-50 text-left text-slate-500"><tr><th className="px-4 py-3">Month</th><th className="px-4 py-3">Payment</th><th className="px-4 py-3">Principal</th><th className="px-4 py-3">Interest</th><th className="px-4 py-3">Balance</th></tr></thead><tbody>{result.rows.map(r => <tr key={r.month} className="border-t"><td className="px-4 py-3 font-medium">{r.month}</td><td className="px-4 py-3">{fmt(r.payment)}</td><td className="px-4 py-3 text-emerald-600">{fmt(r.principal)}</td><td className="px-4 py-3">{fmt(r.interest)}</td><td className="px-4 py-3">{fmt(r.balance)}</td></tr>)}</tbody></table></div><p className="mt-5 flex gap-2 text-xs leading-5 text-slate-500"><Info className="mt-0.5 h-4 w-4 shrink-0" />This estimate is for planning and comparison. Actual lender payments can differ because of APRs, fees, payment dates, rounding and other loan terms.</p></div>
+      </CardContent>
+    </Card>
+  );
+}
+
+
+function StudentLoanCalculator() {
+  const [balance, setBalance] = useState(250000);
+  const [rate, setRate] = useState(6.5);
+  const [years, setYears] = useState(10);
+  const [extra, setExtra] = useState(0);
+  const [graceInterest, setGraceInterest] = useState(0);
+  const currency = 'USD';
+
+  const result = useMemo(() => {
+    const startingBalance = Math.max(0, balance + Math.max(0, graceInterest));
+    const months = Math.max(1, Math.round(years * 12));
+    const r = rate / 100 / 12;
+    const basePayment = r === 0 ? startingBalance / months : startingBalance * r * Math.pow(1 + r, months) / (Math.pow(1 + r, months) - 1);
+    const payment = basePayment + Math.max(0, extra);
+    let b = startingBalance, totalInterest = 0, totalPaid = 0, actualMonths = 0;
+    const rows: { month: number; payment: number; principal: number; interest: number; balance: number }[] = [];
+    const annual: { year: number; interest: number; principal: number; balance: number }[] = [];
+    let yi = 0, yp = 0;
+    while (b > 0.01 && actualMonths < 1200) {
+      actualMonths += 1;
+      const interest = r === 0 ? 0 : b * r;
+      const principal = Math.min(b, Math.max(0, payment - interest));
+      const actualPayment = principal + interest;
+      b = Math.max(0, b - principal);
+      totalInterest += interest; totalPaid += actualPayment;
+      yi += interest; yp += principal;
+      if (rows.length < 12 || b === 0) rows.push({ month: actualMonths, payment: actualPayment, principal, interest, balance: b });
+      if (actualMonths % 12 === 0 || b === 0) { annual.push({ year: Math.ceil(actualMonths / 12), interest: yi, principal: yp, balance: b }); yi = 0; yp = 0; }
+      if (principal <= 0 && interest > 0) break;
+    }
+    const regularInterest = Math.max(0, basePayment * months - startingBalance);
+    const principalShare = totalPaid > 0 ? startingBalance / totalPaid : 1;
+    const payoffLabel = actualMonths >= 12 ? `${Math.floor(actualMonths / 12)}y ${actualMonths % 12 ? `${actualMonths % 12}m` : ''}`.trim() : `${actualMonths}m`;
+    return { startingBalance, basePayment, payment, totalInterest, totalPaid, actualMonths, rows, annual, regularInterest, interestSaved: Math.max(0, regularInterest - totalInterest), principalShare, payoffLabel };
+  }, [balance, rate, years, extra, graceInterest]);
+
+  const fmt = (n: number) => money(n, currency);
+  const principalPct = Math.max(0, Math.min(100, result.principalShare * 100));
+  const interestPct = 100 - principalPct;
+
+  return <Card className="w-full overflow-hidden border border-slate-200 bg-white shadow-sm">
+    <CardContent className="p-0">
+      <div className="border-b bg-gradient-to-r from-sky-50 via-white to-indigo-50 px-5 py-5 md:px-8">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div><p className="text-xs font-bold uppercase tracking-[0.18em] text-indigo-600">Advanced Student Loan Calculator</p><h2 className="mt-1 text-2xl font-black text-slate-800 md:text-3xl">Plan your student loan repayment</h2><p className="mt-1 max-w-2xl text-sm leading-6 text-slate-500">Estimate your monthly payment, total interest and payoff time, then test how an extra monthly payment could change the cost of education debt.</p></div>
+          <div className="rounded-2xl bg-indigo-600 px-5 py-3 text-right text-white shadow-sm"><div className="text-xs opacity-80">Estimated monthly payment</div><div className="text-2xl font-black">{fmt(result.payment)}</div></div>
+        </div>
+      </div>
+      <div className="grid lg:grid-cols-[1.08fr_.92fr]">
+        <div className="space-y-5 p-5 sm:p-7 md:p-8">
+          <LoanSlider label="Current student loan balance" value={balance} min={1000} max={500000} step={1000} prefix="$" onChange={setBalance} />
+          <LoanSlider label="Interest rate" value={rate} min={0} max={20} step={0.1} suffix="%" onChange={setRate} />
+          <LoanSlider label="Repayment term" value={years} min={1} max={30} step={1} suffix="yr" onChange={setYears} />
+          <LoanSlider label="Extra monthly payment" value={extra} min={0} max={5000} step={25} prefix="$" onChange={setExtra} />
+          <div className="rounded-2xl border bg-slate-50/80 p-4"><Label>Interest already added to the balance</Label><Input className="mt-1 bg-white" type="number" min="0" step="100" value={graceInterest} onChange={e=>setGraceInterest(num(e.target.value))}/><p className="mt-2 text-xs leading-5 text-slate-500">Use this for accrued interest that has already been capitalized. Leave it at zero when your entered balance already includes that interest.</p></div>
+          <div className="grid gap-3 sm:grid-cols-2"><div className="rounded-2xl border border-indigo-100 bg-indigo-50/70 p-4"><p className="text-sm text-slate-500">Monthly payment</p><p className="mt-1 text-2xl font-bold text-indigo-600">{fmt(result.payment)}</p></div><div className="rounded-2xl border border-emerald-100 bg-emerald-50/70 p-4"><p className="text-sm text-slate-500">Estimated payoff</p><p className="mt-1 text-2xl font-bold text-emerald-600">{result.payoffLabel}</p></div></div>
+        </div>
+        <div className="border-t bg-gradient-to-br from-slate-50 via-white to-indigo-50/70 p-5 sm:p-7 lg:border-l lg:border-t-0 md:p-8">
+          <div className="rounded-3xl border bg-white p-5 shadow-sm"><div className="flex items-center justify-between"><div><p className="text-sm font-semibold text-slate-500">Repayment cost meter</p><p className="text-xs text-slate-400">Principal compared with interest</p></div><span className="rounded-full bg-indigo-50 px-3 py-1 text-xs font-bold text-indigo-600">{interestPct.toFixed(0)}% interest</span></div>
+            <div className="mx-auto my-7 flex h-56 w-56 items-center justify-center rounded-full" style={{background:`conic-gradient(#5065f6 0 ${principalPct}%, #e9edff ${principalPct}% 100%)`}}><div className="flex h-36 w-36 flex-col items-center justify-center rounded-full bg-white text-center shadow-inner"><span className="text-xs text-slate-400">Monthly payment</span><strong className="mt-1 text-2xl font-black text-slate-800">{fmt(result.payment)}</strong><span className="mt-1 text-xs text-indigo-600">{rate.toFixed(1)}% rate</span></div></div>
+            <div className="flex justify-center gap-5 text-xs text-slate-500"><span className="flex items-center gap-2"><i className="h-2.5 w-2.5 rounded-full bg-[#5065f6]"/> Principal</span><span className="flex items-center gap-2"><i className="h-2.5 w-2.5 rounded-full bg-[#e9edff]"/> Interest</span></div>
+          </div>
+          <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-1"><LoanResult label="Balance being repaid" value={fmt(result.startingBalance)} icon={<WalletCards className="h-4 w-4"/>}/><LoanResult label="Total interest" value={fmt(result.totalInterest)} icon={<CircleDollarSign className="h-4 w-4"/>}/><LoanResult label="Total amount paid" value={fmt(result.totalPaid)} icon={<TrendingUp className="h-4 w-4"/>} strong/>{extra > 0 && <LoanResult label="Estimated interest saved" value={fmt(result.interestSaved)} icon={<TrendingUp className="h-4 w-4"/>}/>}</div>
+        </div>
+      </div>
+      <div className="border-t bg-white p-5 sm:p-7 md:p-9"><div className="mb-5 flex flex-wrap items-end justify-between gap-3"><div><h3 className="text-xl font-bold text-slate-800">Student loan repayment schedule</h3><p className="mt-1 text-sm text-slate-500">See the first 12 payments and how your balance changes as principal is repaid.</p></div><div className="rounded-xl bg-indigo-50 px-4 py-2 text-xs font-semibold text-indigo-700">{years} years · {rate.toFixed(1)}% annual rate</div></div>
+        <div className="overflow-x-auto rounded-2xl border"><table className="w-full min-w-[650px] text-sm"><thead className="bg-slate-50 text-left text-slate-500"><tr><th className="px-4 py-3">Month</th><th className="px-4 py-3">Payment</th><th className="px-4 py-3">Principal</th><th className="px-4 py-3">Interest</th><th className="px-4 py-3">Balance</th></tr></thead><tbody>{result.rows.map(r=><tr key={r.month} className="border-t"><td className="px-4 py-3 font-medium">{r.month}</td><td className="px-4 py-3">{fmt(r.payment)}</td><td className="px-4 py-3 text-indigo-600">{fmt(r.principal)}</td><td className="px-4 py-3">{fmt(r.interest)}</td><td className="px-4 py-3">{fmt(r.balance)}</td></tr>)}</tbody></table></div>
+        <div className="mt-6 overflow-x-auto rounded-2xl border"><table className="w-full min-w-[650px] text-sm"><thead className="bg-indigo-50 text-left text-indigo-900"><tr><th className="px-4 py-3">Year</th><th className="px-4 py-3">Principal repaid</th><th className="px-4 py-3">Interest paid</th><th className="px-4 py-3">Ending balance</th></tr></thead><tbody>{result.annual.slice(0,10).map(r=><tr key={r.year} className="border-t"><td className="px-4 py-3 font-semibold">{r.year}</td><td className="px-4 py-3">{fmt(r.principal)}</td><td className="px-4 py-3">{fmt(r.interest)}</td><td className="px-4 py-3">{fmt(r.balance)}</td></tr>)}</tbody></table></div>
+        <div className="mt-6 grid gap-3 md:grid-cols-3"><div className="rounded-2xl border bg-slate-50 p-4"><p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Payment formula</p><p className="mt-2 text-sm font-semibold text-slate-700">Payment = principal × monthly rate adjusted for the number of payments.</p></div><div className="rounded-2xl border bg-slate-50 p-4"><p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Extra payments</p><p className="mt-2 text-sm font-semibold text-slate-700">Paying additional principal may reduce the payoff time and future interest.</p></div><div className="rounded-2xl border bg-slate-50 p-4"><p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Program rules</p><p className="mt-2 text-sm font-semibold text-slate-700">Federal and private loans can have different repayment, deferment and forgiveness rules.</p></div></div>
+        <p className="mt-5 flex gap-2 text-xs leading-5 text-slate-500"><Info className="mt-0.5 h-4 w-4 shrink-0"/>This is a general amortization estimate. It does not calculate income-driven payments, forgiveness, subsidies, deferment, capitalization rules or other program-specific benefits. Confirm your actual payment with your loan servicer.</p>
+      </div>
+    </CardContent>
+  </Card>;
+}
+
+
+function CompoundInterestCalculator() {
+  const [principal, setPrincipal] = useState(100000);
+  const [rate, setRate] = useState(8);
+  const [years, setYears] = useState(10);
+  const [frequency, setFrequency] = useState(12);
+  const [contribution, setContribution] = useState(0);
+  const [contributionFrequency, setContributionFrequency] = useState(12);
+  const [currency, setCurrency] = useState('USD');
+
+  const result = useMemo(() => {
+    const p = Math.max(0, principal);
+    const annualRate = Math.max(0, rate) / 100;
+    const t = Math.max(0, years);
+    const n = Math.max(1, Math.round(frequency));
+    const periods = Math.max(0, Math.round(t * n));
+    const periodicRate = annualRate / n;
+    const baseFuture = p * Math.pow(1 + periodicRate, periods);
+
+    const cf = Math.max(1, Math.round(contributionFrequency));
+    const contributionPeriods = Math.max(0, Math.round(t * cf));
+    const contributionRate = annualRate / cf;
+    const contributionFuture = contribution > 0
+      ? contributionRate === 0
+        ? contribution * contributionPeriods
+        : contribution * ((Math.pow(1 + contributionRate, contributionPeriods) - 1) / contributionRate)
+      : 0;
+
+    const totalContributions = contribution * contributionPeriods;
+    const totalInvested = p + totalContributions;
+    const total = baseFuture + contributionFuture;
+    const growth = Math.max(0, total - totalInvested);
+    const growthShare = total > 0 ? growth / total * 100 : 0;
+    const multiplier = p > 0 ? total / p : 0;
+    const simpleEquivalent = p * (1 + annualRate * t) + totalContributions;
+
+    const yearly = Array.from({ length: Math.min(40, Math.max(1, Math.ceil(t))) }, (_, index) => {
+      const year = index + 1;
+      const elapsed = Math.min(year, t);
+      const basePeriods = Math.round(elapsed * n);
+      const cPeriods = Math.round(elapsed * cf);
+      const baseAtYear = p * Math.pow(1 + periodicRate, basePeriods);
+      const cAtYear = contribution > 0
+        ? contributionRate === 0
+          ? contribution * cPeriods
+          : contribution * ((Math.pow(1 + contributionRate, cPeriods) - 1) / contributionRate)
+        : 0;
+      const invested = p + contribution * cPeriods;
+      const amount = baseAtYear + cAtYear;
+      return { year, invested, interest: Math.max(0, amount - invested), amount };
+    });
+
+    return { total, growth, totalInvested, growthShare, multiplier, simpleEquivalent, baseFuture, contributionFuture, totalContributions, yearly };
+  }, [principal, rate, years, frequency, contribution, contributionFrequency]);
+
+  const fmt = (n: number) => money(n, currency);
+  const growthArc = Math.min(100, Math.max(0, result.growthShare)).toFixed(2);
+  const frequencyLabel = frequency === 1 ? 'Annually' : frequency === 2 ? 'Semi-annually' : frequency === 4 ? 'Quarterly' : frequency === 12 ? 'Monthly' : frequency === 365 ? 'Daily' : `${frequency} times/year`;
+  const contributionLabel = contributionFrequency === 1 ? 'Annual' : contributionFrequency === 4 ? 'Quarterly' : contributionFrequency === 12 ? 'Monthly' : contributionFrequency === 26 ? 'Biweekly' : contributionFrequency === 52 ? 'Weekly' : `${contributionFrequency} times/year`;
+
+  return <Card className="w-full overflow-hidden border border-slate-200 bg-white shadow-sm">
+    <CardContent className="p-0">
+      <div className="border-b bg-gradient-to-r from-violet-50 via-white to-emerald-50 px-5 py-5 md:px-8">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-violet-600">Advanced Compound Interest Calculator</p>
+            <h2 className="mt-1 text-2xl font-black text-slate-800 md:text-3xl">See how your money can grow with compounding</h2>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">Model compound growth from an initial amount, recurring contributions, annual rate, time horizon and compounding frequency.</p>
+          </div>
+          <div className="rounded-2xl bg-violet-600 px-5 py-3 text-right text-white shadow-sm"><div className="text-xs opacity-80">Projected future value</div><div className="text-2xl font-black">{fmt(result.total)}</div></div>
+        </div>
+      </div>
+      <div className="grid lg:grid-cols-[1.08fr_.92fr]">
+        <div className="space-y-5 p-5 sm:p-7 md:p-8">
+          <div className="flex items-end gap-3 rounded-2xl border bg-slate-50/70 p-4"><div className="flex-1"><Label>Currency</Label><Select value={currency} onValueChange={setCurrency}><SelectTrigger className="mt-1 bg-white"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="USD">USD ($)</SelectItem><SelectItem value="INR">INR (₹)</SelectItem></SelectContent></Select></div><div className="hidden rounded-xl bg-white px-4 py-2 text-xs font-semibold text-slate-500 sm:block">Compound growth</div></div>
+          <LoanSlider label="Initial principal" value={principal} min={100} max={10000000} step={100} prefix={currency === 'INR' ? '₹' : '$'} onChange={setPrincipal} />
+          <LoanSlider label="Annual interest / return rate" value={rate} min={0} max={50} step={0.1} suffix="%" onChange={setRate} />
+          <LoanSlider label="Investment period" value={years} min={0.25} max={40} step={0.25} suffix="yr" onChange={setYears} />
+          <div className="grid gap-4 rounded-2xl border bg-slate-50/80 p-4 sm:grid-cols-2">
+            <div><Label>Compounding frequency</Label><Select value={String(frequency)} onValueChange={v=>setFrequency(Number(v))}><SelectTrigger className="mt-1 bg-white"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="1">Annually</SelectItem><SelectItem value="2">Semi-annually</SelectItem><SelectItem value="4">Quarterly</SelectItem><SelectItem value="12">Monthly</SelectItem><SelectItem value="365">Daily</SelectItem></SelectContent></Select></div>
+            <div><Label>Recurring contribution</Label><Input className="mt-1 bg-white" type="number" min="0" step="50" value={contribution} onChange={e=>setContribution(num(e.target.value))}/></div>
+            <div className="sm:col-span-2"><Label>Contribution frequency</Label><Select value={String(contributionFrequency)} onValueChange={v=>setContributionFrequency(Number(v))}><SelectTrigger className="mt-1 bg-white"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="1">Annually</SelectItem><SelectItem value="4">Quarterly</SelectItem><SelectItem value="12">Monthly</SelectItem><SelectItem value="26">Every 2 weeks</SelectItem><SelectItem value="52">Weekly</SelectItem></SelectContent></Select></div>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2"><div className="rounded-2xl border border-violet-100 bg-violet-50/70 p-4"><p className="text-sm text-slate-500">Compound growth</p><p className="mt-1 text-2xl font-black text-violet-600">{fmt(result.growth)}</p><p className="mt-1 text-xs text-slate-500">Projected value above your total contributions</p></div><div className="rounded-2xl border border-emerald-100 bg-emerald-50/70 p-4"><p className="text-sm text-slate-500">Total invested</p><p className="mt-1 text-2xl font-black text-emerald-600">{fmt(result.totalInvested)}</p><p className="mt-1 text-xs text-slate-500">Starting amount plus recurring contributions</p></div></div>
+        </div>
+        <div className="border-t bg-gradient-to-br from-slate-50 via-white to-violet-50/70 p-5 sm:p-7 lg:border-l lg:border-t-0 md:p-8">
+          <div className="rounded-3xl border bg-white p-5 shadow-sm"><div className="flex items-center justify-between"><div><p className="text-sm font-semibold text-slate-700">Growth contribution</p><p className="text-xs text-slate-500">Growth compared with invested money</p></div><span className="rounded-full bg-violet-50 px-3 py-1 text-xs font-bold text-violet-600">{result.growthShare.toFixed(1)}% growth</span></div>
+            <div className="mx-auto my-7 flex h-56 w-56 items-center justify-center rounded-full" style={{background:`conic-gradient(#7c3aed 0 ${growthArc}%, #ede9fe ${growthArc}% 100%)`}}><div className="flex h-36 w-36 flex-col items-center justify-center rounded-full bg-white text-center shadow-inner"><span className="text-xs text-slate-400">Future value</span><strong className="mt-1 text-2xl font-black text-slate-800">{fmt(result.total)}</strong><span className="mt-1 text-xs text-violet-600">{rate.toFixed(1)}% p.a.</span></div></div>
+            <div className="flex justify-center gap-5 text-xs text-slate-500"><span className="flex items-center gap-2"><i className="h-2.5 w-2.5 rounded-full bg-violet-600"/> Growth</span><span className="flex items-center gap-2"><i className="h-2.5 w-2.5 rounded-full bg-violet-100"/> Contributions</span></div>
+          </div>
+          <div className="mt-5 space-y-3"><LoanResult label="Starting principal" value={fmt(principal)} icon={<WalletCards className="h-4 w-4"/>}/><LoanResult label="Compounding" value={frequencyLabel} icon={<CircleDollarSign className="h-4 w-4"/>}/><LoanResult label="Return multiple" value={`${result.multiplier.toFixed(2)}×`} icon={<TrendingUp className="h-4 w-4"/>} strong/></div>
+        </div>
+      </div>
+      <div className="border-t bg-white p-5 sm:p-7 md:p-9">
+        <div className="flex flex-wrap items-end justify-between gap-3"><div><h3 className="text-xl font-black text-slate-800">Compound interest growth schedule</h3><p className="mt-1 text-sm text-slate-500">Track how the invested amount and estimated growth can build over time.</p></div><div className="rounded-xl bg-violet-50 px-4 py-2 text-xs text-violet-700">{frequencyLabel} · {contributionLabel} contributions</div></div>
+        <div className="mt-5 overflow-x-auto rounded-2xl border"><table className="w-full min-w-[650px] text-sm"><thead className="bg-slate-50 text-left text-slate-500"><tr><th className="px-4 py-3">Year</th><th className="px-4 py-3">Total invested</th><th className="px-4 py-3">Growth</th><th className="px-4 py-3">Projected value</th></tr></thead><tbody>{result.yearly.map(r=><tr key={r.year} className="border-t"><td className="px-4 py-3 font-semibold">{r.year}</td><td className="px-4 py-3">{fmt(r.invested)}</td><td className="px-4 py-3 text-violet-600">{fmt(r.interest)}</td><td className="px-4 py-3 font-semibold">{fmt(r.amount)}</td></tr>)}</tbody></table></div>
+        <div className="mt-6 grid gap-3 md:grid-cols-3"><div className="rounded-2xl border bg-violet-50/60 p-4"><p className="text-xs font-semibold uppercase tracking-wide text-violet-700">Core formula</p><p className="mt-2 text-sm font-semibold text-slate-700">A = P(1 + r/n)^(nt)</p><p className="mt-1 text-xs text-slate-500">P is principal, r is annual rate, n is compounding frequency and t is time in years.</p></div><div className="rounded-2xl border bg-emerald-50/60 p-4"><p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">Compounding effect</p><p className="mt-2 text-sm font-semibold text-slate-700">Returns can earn further returns</p><p className="mt-1 text-xs text-slate-500">As the balance grows, future interest is calculated on a larger base.</p></div><div className="rounded-2xl border bg-slate-50 p-4"><p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Scenario check</p><p className="mt-2 text-sm font-semibold text-slate-700">Time and rate drive the projection</p><p className="mt-1 text-xs text-slate-500">A higher assumed return or longer horizon can materially change the mathematical result.</p></div></div>
+        <p className="mt-5 flex gap-2 text-xs leading-5 text-slate-500"><Info className="mt-0.5 h-4 w-4 shrink-0"/>This is a mathematical projection, not a guaranteed investment return. Actual accounts may use different compounding rules, fees, taxes, contribution timing or variable rates.</p>
+      </div>
+    </CardContent>
+  </Card>;
+}
+
+function SimpleInterestCalculator() {
+  const [principal, setPrincipal] = useState(100000);
+  const [rate, setRate] = useState(6);
+  const [years, setYears] = useState(5);
+  const [currency, setCurrency] = useState('USD');
+
+  const result = useMemo(() => {
+    const p = Math.max(0, principal);
+    const r = Math.max(0, rate) / 100;
+    const t = Math.max(0, years);
+    const interest = p * r * t;
+    const total = p + interest;
+    const interestShare = total > 0 ? interest / total * 100 : 0;
+    const annualInterest = p * r;
+    const yearly = Array.from({ length: Math.min(20, Math.max(1, Math.ceil(t))) }, (_, index) => {
+      const year = index + 1;
+      return { year, interest: annualInterest * Math.min(year, t), amount: p + annualInterest * Math.min(year, t) };
+    });
+    return { interest, total, interestShare, annualInterest, yearly };
+  }, [principal, rate, years]);
+
+  const fmt = (n: number) => money(n, currency);
+  const interestArc = Math.min(100, Math.max(0, result.interestShare)).toFixed(2);
+  return (
+    <Card className="w-full overflow-hidden border border-slate-200 bg-white shadow-sm">
+      <CardContent className="p-0">
+        <div className="border-b bg-gradient-to-r from-amber-50 via-white to-emerald-50 px-5 py-5 md:px-8">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-amber-600">Advanced Simple Interest Calculator</p>
+              <h2 className="mt-1 text-2xl font-black text-slate-800 md:text-3xl">Calculate simple interest and final amount</h2>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">Enter a principal, annual interest rate and time period to see the interest earned and the total amount using simple-interest mathematics.</p>
+            </div>
+            <div className="rounded-2xl bg-amber-500 px-5 py-3 text-right text-white shadow-sm"><div className="text-xs opacity-85">Total amount</div><div className="text-2xl font-black">{fmt(result.total)}</div></div>
+          </div>
+        </div>
+        <div className="grid lg:grid-cols-[1.08fr_.92fr]">
+          <div className="space-y-5 p-5 sm:p-7 md:p-8">
+            <div className="flex items-end gap-3 rounded-2xl border bg-slate-50/70 p-4"><div className="flex-1"><Label>Currency</Label><Select value={currency} onValueChange={setCurrency}><SelectTrigger className="mt-1 bg-white"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="USD">USD ($)</SelectItem><SelectItem value="INR">INR (₹)</SelectItem></SelectContent></Select></div><div className="hidden rounded-xl bg-white px-4 py-2 text-xs font-semibold text-slate-500 sm:block">Linear growth</div></div>
+            <LoanSlider label="Principal amount" value={principal} min={100} max={10000000} step={100} prefix={currency === 'INR' ? '₹' : '$'} onChange={setPrincipal} />
+            <LoanSlider label="Annual interest rate" value={rate} min={0} max={50} step={0.1} suffix="%" onChange={setRate} />
+            <LoanSlider label="Time period" value={years} min={0.25} max={30} step={0.25} suffix="yr" onChange={setYears} />
+            <div className="grid gap-3 sm:grid-cols-2"><div className="rounded-2xl border border-amber-100 bg-amber-50/70 p-4"><p className="text-sm text-slate-500">Simple interest</p><p className="mt-1 text-2xl font-black text-amber-600">{fmt(result.interest)}</p><p className="mt-1 text-xs text-slate-500">Interest calculated only on the original principal</p></div><div className="rounded-2xl border border-emerald-100 bg-emerald-50/70 p-4"><p className="text-sm text-slate-500">Final amount</p><p className="mt-1 text-2xl font-black text-emerald-600">{fmt(result.total)}</p><p className="mt-1 text-xs text-slate-500">Principal plus simple interest</p></div></div>
+          </div>
+          <div className="border-t bg-gradient-to-br from-slate-50 via-white to-amber-50/60 p-5 sm:p-7 lg:border-l lg:border-t-0 md:p-8">
+            <div className="rounded-3xl border bg-white p-5 shadow-sm"><div className="flex items-center justify-between"><div><p className="text-sm font-semibold text-slate-700">Interest share</p><p className="text-xs text-slate-500">Interest compared with final amount</p></div><span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-bold text-amber-700">{result.interestShare.toFixed(1)}% interest</span></div>
+              <div className="mx-auto my-7 flex h-56 w-56 items-center justify-center rounded-full" style={{background:`conic-gradient(#f59e0b 0 ${interestArc}%, #fef3c7 ${interestArc}% 100%)`}}><div className="flex h-36 w-36 flex-col items-center justify-center rounded-full bg-white text-center shadow-inner"><span className="text-xs text-slate-400">Interest earned</span><strong className="mt-1 text-2xl font-black text-slate-800">{fmt(result.interest)}</strong><span className="mt-1 text-xs text-amber-600">{rate.toFixed(1)}% p.a.</span></div></div>
+              <div className="flex justify-center gap-5 text-xs text-slate-500"><span className="flex items-center gap-2"><i className="h-2.5 w-2.5 rounded-full bg-amber-500"/> Interest</span><span className="flex items-center gap-2"><i className="h-2.5 w-2.5 rounded-full bg-amber-100"/> Principal</span></div>
+            </div>
+            <div className="mt-5 space-y-3"><LoanResult label="Original principal" value={fmt(principal)} icon={<WalletCards className="h-4 w-4"/>}/><LoanResult label="Interest per year" value={fmt(result.annualInterest)} icon={<CircleDollarSign className="h-4 w-4"/>}/><LoanResult label="Final amount" value={fmt(result.total)} icon={<TrendingUp className="h-4 w-4"/>} strong/></div>
+          </div>
+        </div>
+        <div className="border-t bg-white p-5 sm:p-7 md:p-9"><div className="mb-5"><h3 className="text-xl font-bold text-slate-800">Simple interest growth schedule</h3><p className="mt-1 text-sm text-slate-500">Because simple interest does not compound, the interest added each full year stays constant when the rate and principal do not change.</p></div><div className="overflow-x-auto rounded-2xl border"><table className="w-full min-w-[560px] text-sm"><thead className="bg-slate-50 text-left text-slate-500"><tr><th className="px-4 py-3">Year</th><th className="px-4 py-3">Cumulative interest</th><th className="px-4 py-3">Amount</th></tr></thead><tbody>{result.yearly.map(r=><tr key={r.year} className="border-t"><td className="px-4 py-3 font-semibold">{r.year}</td><td className="px-4 py-3 text-amber-600">{fmt(r.interest)}</td><td className="px-4 py-3">{fmt(r.amount)}</td></tr>)}</tbody></table></div><div className="mt-6 grid gap-3 md:grid-cols-3"><div className="rounded-2xl border bg-amber-50/60 p-4"><p className="text-xs font-semibold uppercase tracking-wide text-amber-700">Formula</p><p className="mt-2 text-sm font-semibold text-slate-700">I = P × r × t</p><p className="mt-1 text-xs text-slate-500">Rate is expressed as a decimal and time is measured in years.</p></div><div className="rounded-2xl border bg-slate-50 p-4"><p className="text-xs font-semibold uppercase tracking-wide text-slate-400">No compounding</p><p className="mt-2 text-sm font-semibold text-slate-700">Interest is based on the original principal rather than prior interest.</p></div><div className="rounded-2xl border bg-slate-50 p-4"><p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Compare carefully</p><p className="mt-2 text-sm font-semibold text-slate-700">Real products may use different payment, day-count, fee or rate conventions.</p></div></div><p className="mt-5 flex gap-2 text-xs leading-5 text-slate-500"><Info className="mt-0.5 h-4 w-4 shrink-0"/>This calculator models pure simple interest. It is not a quote for a loan, deposit or investment product, and actual terms may differ.</p></div>
       </CardContent>
     </Card>
   );
@@ -533,6 +949,89 @@ function MortgageCalculator() {
       </div>
     </CardContent>
   </Card>;
+}
+
+
+function InflationCalculator() {
+  const [currentValue, setCurrentValue] = useState(100000);
+  const [inflationRate, setInflationRate] = useState(3);
+  const [years, setYears] = useState(10);
+  const [currency, setCurrency] = useState('USD');
+
+  const result = useMemo(() => {
+    const factor = Math.pow(1 + inflationRate / 100, years);
+    const futureCost = currentValue * factor;
+    const purchasingPower = factor > 0 ? currentValue / factor : currentValue;
+    const lossPercent = factor > 0 ? (1 - 1 / factor) * 100 : 0;
+    const extraCost = futureCost - currentValue;
+    const annualRows = Array.from({ length: Math.min(years, 50) }, (_, index) => {
+      const year = index + 1;
+      const value = currentValue * Math.pow(1 + inflationRate / 100, year);
+      return { year, value, purchasing: currentValue / Math.pow(1 + inflationRate / 100, year) };
+    });
+    return { factor, futureCost, purchasingPower, lossPercent, extraCost, annualRows };
+  }, [currentValue, inflationRate, years]);
+
+  const fmt = (n: number) => money(n, currency);
+  const futurePercent = result.futureCost > 0 ? Math.min(100, (currentValue / result.futureCost) * 100) : 100;
+  const currencySymbol = currency === 'INR' ? '₹' : '$';
+
+  return (
+    <Card className="w-full overflow-hidden border border-slate-200 bg-white shadow-sm">
+      <CardContent className="p-0">
+        <div className="grid lg:grid-cols-[1.15fr_.85fr]">
+          <div className="p-5 sm:p-7 md:p-9">
+            <div className="mb-7 flex items-center justify-between gap-3">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-amber-600">Purchasing Power Planner</p>
+                <h2 className="mt-1 text-2xl font-bold tracking-tight text-slate-800 md:text-3xl">Calculate the impact of inflation</h2>
+                <p className="mt-2 max-w-xl text-sm leading-6 text-slate-500">See how today’s money could change in value over time and estimate what a future purchase may cost under a constant inflation assumption.</p>
+              </div>
+              <div className="hidden h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-amber-50 text-amber-600 sm:flex"><TrendingUp className="h-5 w-5" /></div>
+            </div>
+
+            <div className="mb-6 flex items-center justify-between gap-3 rounded-2xl border border-slate-100 bg-slate-50 p-3">
+              <div><p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Display currency</p><p className="mt-1 text-sm text-slate-600">Use the currency that matches your planning scenario.</p></div>
+              <Select value={currency} onValueChange={setCurrency}><SelectTrigger className="w-28 bg-white"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="USD">USD ($)</SelectItem><SelectItem value="INR">INR (₹)</SelectItem></SelectContent></Select>
+            </div>
+
+            <div className="space-y-7">
+              <LoanSlider label="Current amount" value={currentValue} min={1000} max={5000000} step={1000} prefix={currencySymbol} onChange={setCurrentValue} />
+              <LoanSlider label="Annual inflation rate" value={inflationRate} min={0} max={20} step={0.1} suffix="%" onChange={setInflationRate} />
+              <LoanSlider label="Time horizon" value={years} min={1} max={50} step={1} suffix="yr" onChange={setYears} />
+            </div>
+
+            <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <div className="rounded-2xl border border-amber-100 bg-amber-50/70 p-4"><p className="text-sm text-slate-500">Future cost equivalent</p><p className="mt-1 text-2xl font-bold text-amber-600">{fmt(result.futureCost)}</p></div>
+              <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4"><p className="text-sm text-slate-500">Purchasing power later</p><p className="mt-1 text-2xl font-bold text-slate-800">{fmt(result.purchasingPower)}</p></div>
+            </div>
+          </div>
+
+          <div className="border-t bg-gradient-to-br from-slate-50 via-white to-amber-50/60 p-5 sm:p-7 lg:border-l lg:border-t-0 md:p-9">
+            <div className="mb-4 flex items-center justify-between"><div><p className="text-sm font-semibold text-slate-700">Inflation impact</p><p className="text-xs text-slate-500">Estimated change in the price level</p></div><CircleDollarSign className="h-5 w-5 text-amber-500" /></div>
+            <div className="mx-auto my-5 flex max-w-[300px] items-center justify-center">
+              <div className="relative h-56 w-56 rounded-full" style={{ background: `conic-gradient(#f59e0b 0 ${futurePercent}%, #fef3c7 ${futurePercent}% 100%)` }}>
+                <div className="absolute inset-[28px] flex flex-col items-center justify-center rounded-full bg-white shadow-inner"><span className="text-xs font-medium text-slate-500">Future equivalent</span><strong className="mt-1 text-2xl font-bold text-slate-800">{fmt(result.futureCost)}</strong><span className="mt-1 text-xs text-amber-600">{inflationRate.toFixed(1)}% annual inflation</span></div>
+              </div>
+            </div>
+            <div className="flex justify-center gap-5 text-xs text-slate-500"><span className="flex items-center gap-2"><i className="h-2.5 w-2.5 rounded-full bg-[#f59e0b]" /> Current value share</span><span className="flex items-center gap-2"><i className="h-2.5 w-2.5 rounded-full bg-[#fef3c7]" /> Inflation increase</span></div>
+            <div className="mt-8 space-y-4">
+              <LoanResult label="Current amount" value={fmt(currentValue)} icon={<WalletCards className="h-4 w-4" />} />
+              <LoanResult label="Additional future cost" value={fmt(result.extraCost)} icon={<TrendingUp className="h-4 w-4" />} />
+              <LoanResult label="Purchasing power reduction" value={pct(result.lossPercent)} icon={<CircleDollarSign className="h-4 w-4" />} strong />
+            </div>
+          </div>
+        </div>
+
+        <div className="border-t bg-white p-5 sm:p-7 md:p-9">
+          <div className="mb-5 flex flex-wrap items-end justify-between gap-3"><div><h3 className="text-xl font-bold text-slate-800">Year-by-year inflation projection</h3><p className="mt-1 text-sm text-slate-500">Track the estimated future cost of today’s amount under the selected constant rate.</p></div><div className="rounded-xl bg-amber-50 px-4 py-2 text-xs text-amber-800">{currency} · {inflationRate.toFixed(1)}% annual rate</div></div>
+          <div className="overflow-x-auto rounded-2xl border"><table className="w-full min-w-[650px] text-sm"><thead className="bg-slate-50 text-left text-slate-500"><tr><th className="px-4 py-3">Year</th><th className="px-4 py-3">Future cost equivalent</th><th className="px-4 py-3">Purchasing power of today’s amount</th><th className="px-4 py-3">Price increase</th></tr></thead><tbody>{result.annualRows.map(row => <tr key={row.year} className="border-t"><td className="px-4 py-3 font-semibold">{row.year}</td><td className="px-4 py-3 font-semibold">{fmt(row.value)}</td><td className="px-4 py-3">{fmt(row.purchasing)}</td><td className="px-4 py-3 text-amber-600">{pct((row.value / currentValue - 1) * 100)}</td></tr>)}</tbody></table></div>
+          <div className="mt-6 grid gap-3 md:grid-cols-3"><div className="rounded-2xl border border-slate-100 bg-slate-50 p-4"><p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Formula</p><p className="mt-2 text-sm font-semibold text-slate-700">Future cost = current amount × (1 + rate)<sup>years</sup></p></div><div className="rounded-2xl border border-slate-100 bg-slate-50 p-4"><p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Scenario</p><p className="mt-2 text-sm font-semibold text-slate-700">{years} years at {inflationRate.toFixed(1)}% inflation</p></div><div className="rounded-2xl border border-slate-100 bg-slate-50 p-4"><p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Change</p><p className="mt-2 text-sm font-semibold text-slate-700">{fmt(result.extraCost)} additional amount in the model</p></div></div>
+          <p className="mt-5 flex gap-2 text-xs leading-5 text-slate-500"><Info className="mt-0.5 h-4 w-4 shrink-0" />This calculator is a scenario model, not an inflation forecast. Actual inflation differs across years, countries, spending categories and households. Use official inflation data when you need a historical or current economic measure.</p>
+        </div>
+      </CardContent>
+    </Card>
+  );
 }
 
 function MortgageSlider({ label, value, min, max, step, prefix, suffix, onChange }: { label: string; value: number; min: number; max: number; step: number; prefix?: string; suffix?: string; onChange: (value: number) => void }) {
