@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
-  AlarmClock, ArrowDown, ArrowUp, CalendarDays, Check, Clock3, Dices, Flag,
+  AlarmClock, CalendarDays, Check, Clock3, Dices, Flag,
   Gauge, GraduationCap, Group, Maximize2, Pause, Play, RotateCcw,
   Shuffle, Sparkles, Trophy, Users, Volume2
 } from 'lucide-react';
@@ -90,18 +90,18 @@ function StopwatchCard({ compact = false }: { compact?: boolean }) {
   };
 
   return (
-    <section className={`relative overflow-hidden border border-slate-200 bg-white ${compact ? 'p-5' : 'p-5 sm:p-7'}`}>
-      <div className="absolute inset-x-0 top-0 h-1 bg-emerald-500" />
+    <section className={`relative overflow-hidden border-0 bg-white ${compact ? 'p-5 sm:p-7' : 'p-6 sm:p-8'}`}>
       <div className="relative">
         <div className="text-center">
-          <h2 className="text-4xl font-black text-slate-900 sm:text-5xl">Stopwatch</h2>
+          <h2 className="text-4xl font-normal tracking-tight text-black sm:text-5xl">Stopwatch</h2>
           {!compact && <p className="mt-1 text-sm text-slate-500">A precise browser stopwatch with lap and split timing.</p>}
         </div>
         <div className="mt-5 flex flex-col items-center">
-          <div className="flex h-36 w-36 items-center justify-center rounded-full border-[9px] border-emerald-300 bg-emerald-50 shadow-inner sm:h-44 sm:w-44">
-            <div className="text-center"><ArrowUp className="mx-auto mb-1 h-14 w-14 text-emerald-500" /><span className="text-xs font-bold uppercase tracking-widest text-emerald-700">{running ? 'Running' : 'Ready'}</span></div>
+          <div className="relative flex h-44 w-44 items-center justify-center sm:h-56 sm:w-56" aria-hidden="true">
+            <div className="absolute h-40 w-28 bg-gradient-to-r from-emerald-300 via-emerald-400 to-green-400 sm:h-52 sm:w-36" style={{ clipPath: 'polygon(50% 0, 100% 30%, 76% 30%, 76% 100%, 24% 100%, 24% 30%, 0 30%)' }} />
+            <div className="relative z-10 mt-1 text-xs font-black uppercase tracking-widest text-emerald-950">{running ? 'Running' : 'Ready'}</div>
           </div>
-          <div className="mt-5 w-full rounded-md bg-[#07389b] px-3 py-4 text-center font-mono text-3xl font-black tracking-wider text-white sm:text-5xl">{formatLong(elapsed)}</div>
+          <div className="mt-2 w-full rounded-none bg-[#07389b] px-3 py-4 text-center font-mono text-3xl font-black tracking-wider text-white sm:text-5xl">{formatLong(elapsed)}</div>
         </div>
         <div className="mt-5 flex flex-wrap justify-center gap-2">
           <button type="button" onClick={running ? pause : start} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 font-bold text-white hover:bg-emerald-700">{running ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}{running ? 'Pause' : 'Start'}</button>
@@ -110,7 +110,7 @@ function StopwatchCard({ compact = false }: { compact?: boolean }) {
         </div>
       </div>
       {laps.length > 0 && (
-        <div className="mt-5 overflow-hidden border border-slate-200 bg-white">
+        <div className="mt-4 overflow-hidden border border-slate-200 bg-white">
           <div className="grid grid-cols-3 bg-slate-800 px-4 py-2 text-xs font-bold uppercase tracking-wide text-white"><span>Lap</span><span>Split</span><span>Total</span></div>
           {laps.slice(0, 20).map((item) => <div key={item.id} className="grid grid-cols-3 border-t px-4 py-2.5 text-sm tabular-nums text-slate-700"><span className="font-semibold">#{item.lap}</span><span>{formatShort(item.split)}</span><span>{formatShort(item.total)}</span></div>)}
         </div>
@@ -147,9 +147,9 @@ function CountdownCard({ title = 'Countdown', defaultSeconds = 300, accent = 're
   };
   const reset = () => { setRunning(false); setRemaining(0); };
   return (
-    <section className={`relative overflow-hidden border ${palette.border} ${palette.bg} p-5 sm:p-7`}>
-      <div className="text-center"><h2 className={`text-4xl font-black ${palette.text} sm:text-5xl`}>{title}</h2><p className="mt-1 text-sm text-slate-500">Set a duration and count down accurately to zero.</p></div>
-      <div className="mt-5 flex flex-col items-center"><div className={`flex h-36 w-36 items-center justify-center rounded-full border-[9px] ${palette.border} bg-white shadow-inner sm:h-44 sm:w-44`}><ArrowDown className={`h-20 w-20 ${palette.text}`} /></div><div className="mt-5 w-full rounded-md bg-[#07389b] px-3 py-4 text-center font-mono text-4xl font-black tracking-wider text-white sm:text-5xl">{formatCountdown(remaining)}</div></div>
+    <section className={`relative overflow-hidden border-0 ${palette.bg} p-6 sm:p-8`}>
+      <div className="text-center"><h2 className="text-4xl font-normal tracking-tight text-black sm:text-5xl">{title}</h2><p className="mt-1 text-sm text-slate-500">Set a duration and count down accurately to zero.</p></div>
+      <div className="mt-5 flex flex-col items-center"><div className="relative flex h-44 w-44 items-center justify-center sm:h-56 sm:w-56" aria-hidden="true"><div className="absolute h-40 w-28 bg-gradient-to-r from-red-500 via-red-500 to-red-300 sm:h-52 sm:w-36" style={{ clipPath: 'polygon(24% 0, 76% 0, 76% 54%, 100% 54%, 50% 100%, 0 54%, 24% 54%)' }} /><div className="relative z-10 mt-1 text-xs font-black uppercase tracking-widest text-red-950">{running ? 'Running' : 'Ready'}</div></div><div className="mt-2 w-full rounded-none bg-[#07389b] px-3 py-4 text-center font-mono text-4xl font-black tracking-wider text-white sm:text-5xl">{formatCountdown(remaining)}</div></div>
       <div className="mt-5 grid grid-cols-3 gap-2">{[['Hours', hours, setHours, 99], ['Minutes', minutes, setMinutes, 59], ['Seconds', secs, setSecs, 59]].map(([label, value, setter, max]) => <label key={label as string} className="text-xs font-bold text-slate-600">{label as string}<input type="number" min={0} max={max as number} value={value as number} onChange={(e) => (setter as (n: number) => void)(Number(e.target.value))} className="mt-1 h-11 w-full rounded-xl border border-slate-300 bg-white px-2 text-center text-lg font-bold tabular-nums outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100" /></label>)}</div>
       <div className="mt-4 flex flex-wrap justify-center gap-2"><button type="button" onClick={() => { if (remaining > 0) setRunning((v) => !v); }} className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 font-bold text-white">{running ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}{running ? 'Pause' : 'Start'}</button><button type="button" onClick={apply} className="min-h-11 flex-1 rounded-xl bg-blue-600 px-4 font-bold text-white">Set Timer</button><button type="button" onClick={reset} className={`min-h-11 flex-1 rounded-xl ${palette.button} px-4 font-bold text-white`}>Reset</button></div>
       <div className="mt-4 flex items-center justify-center gap-3 text-sm text-slate-600"><button type="button" onClick={() => setSound((v) => !v)} className="inline-flex min-h-10 items-center gap-1 rounded-full border bg-white px-3 font-semibold"><Volume2 className="h-4 w-4" />Sound {sound ? 'On' : 'Off'}</button>{remaining === 0 && <span className="font-bold text-red-600">Time is up</span>}</div>
@@ -253,20 +253,18 @@ export default function Stopwatch() {
 
   return (
     <div className="space-y-6">
-      <header className="text-center">
+      <header className="mx-auto w-full max-w-[1120px] text-center">
         <div className="mb-2 text-sm text-slate-500">Home <span className="mx-1">›</span> Timers <span className="mx-1">›</span> Stopwatch</div>
-        <h1 className="text-4xl font-black tracking-tight text-slate-900 sm:text-5xl">Stopwatch &amp; Countdown Timer</h1>
-        <p className="mx-auto mt-3 max-w-4xl text-base text-slate-600">A free online stopwatch and countdown timer with race, classroom, exam, presentation, holiday, random picker, world clock and group tools.</p>
       </header>
 
-      <div className="grid overflow-hidden border border-slate-200 shadow-sm lg:grid-cols-2">
+      <div className="mx-auto grid w-full max-w-[1120px] overflow-hidden border border-slate-200 shadow-sm lg:grid-cols-2">
         <div className="bg-white"><StopwatchCard compact /></div>
         <div className="bg-emerald-50/70"><CountdownCard title="Countdown" defaultSeconds={300} accent="red" /></div>
       </div>
 
-      <div className="rounded-none bg-[#07389b] px-4 py-3 text-center text-white"><div className="font-mono text-4xl font-black tracking-wider sm:text-6xl">00:00:00.000</div></div>
+      <div className="mx-auto w-full max-w-[1120px] bg-[#07389b] px-4 py-3 text-center text-white"><div className="font-mono text-4xl font-black tracking-wider sm:text-6xl">00:00:00.000</div></div>
 
-      <div className="flex flex-wrap justify-center gap-2">
+      <div className="mx-auto flex w-full max-w-[1120px] flex-wrap justify-center gap-2">
         <button type="button" className="inline-flex min-h-11 items-center rounded-full border-2 border-slate-800 bg-lime-500 px-5 font-bold text-white shadow-sm">★ Add to My Page!</button>
         <button type="button" onClick={fullscreen} className="inline-flex min-h-11 items-center rounded-full border-2 border-slate-800 bg-blue-700 px-5 font-bold text-white shadow-sm"><Maximize2 className="mr-1 h-4 w-4" />Go Fullscreen!</button>
         <button type="button" className="inline-flex min-h-11 items-center rounded-full border-2 border-slate-800 bg-red-600 px-5 font-bold text-white shadow-sm">⊘ Go Ad Free!</button>
