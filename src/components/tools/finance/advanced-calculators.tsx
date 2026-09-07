@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { Calculator, Play, Pause, RotateCcw, Shuffle, Gauge, Info, Ruler, Scale, HeartPulse, TrendingUp, WalletCards, CircleDollarSign } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import StopwatchTool from '@/app/tools/stopwatch/stopwatch';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
@@ -45,7 +46,7 @@ const configs: Record<string, { title: string; description: string }> = {
 };
 
 export function AdvancedCalculator({ slug }: { slug: string }) {
-  if (slug === 'stopwatch') return <Stopwatch />;
+  if (slug === 'stopwatch') return <StopwatchTool />;
   if (slug === 'scientific-calculator') return <ScientificCalculator />;
   if (slug === 'random-number-generator') return <RandomNumberGenerator />;
   if (slug === 'bmi-calculator') return <BmiCalculator />;
@@ -286,7 +287,6 @@ function LoanLikeResult({ label, value, icon, strong }: { label: string; value: 
   return <div className="flex items-center justify-between gap-3 rounded-2xl border bg-white p-4 shadow-sm"><div className="flex items-center gap-3"><span className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-50 text-indigo-500">{icon}</span><span className="text-sm text-slate-500">{label}</span></div><span className={strong ? 'text-base font-black text-slate-800' : 'text-base font-bold text-slate-700'}>{value}</span></div>;
 }
 
-function Stopwatch(){const [running,setRunning]=useState(false),[elapsed,setElapsed]=useState(0);useEffect(()=>{if(!running)return;const id=window.setInterval(()=>setElapsed(e=>e+10),10);return()=>window.clearInterval(id)},[running]);const h=Math.floor(elapsed/3600000),m=Math.floor(elapsed/60000)%60,s=Math.floor(elapsed/1000)%60,ms=Math.floor(elapsed/10)%100;return <Shell title="Online Stopwatch" description="A precise browser stopwatch with start, pause, reset, and hundredth-second display. It runs locally in your browser and works on desktop and mobile."><div className="rounded-3xl border bg-muted/20 p-8 text-center"><div className="font-mono text-5xl md:text-7xl font-bold tracking-tight">{String(h).padStart(2,'0')}:{String(m).padStart(2,'0')}:{String(s).padStart(2,'0')}<span className="text-primary">.{String(ms).padStart(2,'0')}</span></div><div className="mt-8 flex flex-wrap justify-center gap-3"><Button size="lg" onClick={()=>setRunning(x=>!x)}>{running?<><Pause/>Pause</>:<><Play/>Start</>}</Button><Button size="lg" variant="outline" onClick={()=>{setRunning(false);setElapsed(0)}}><RotateCcw/>Reset</Button></div></div></Shell>}
 
 
 function SipCalculator(){
