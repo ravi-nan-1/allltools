@@ -325,7 +325,6 @@ function InvestmentReturnCalculator() {
   }, [initial, contribution, returnRate, years, frequency]);
 
   const fmt = (n: number) => money(n, currency);
-  const arc = `${result.growthShare.toFixed(2)}%`;
   const frequencyLabel = frequency === 1 ? 'year' : frequency === 4 ? 'quarter' : frequency === 12 ? 'month' : frequency === 26 ? '2 weeks' : frequency === 52 ? 'week' : `${frequency} times/year`;
 
   return <Card className="w-full overflow-hidden border border-slate-200 bg-white shadow-sm">
