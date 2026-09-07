@@ -544,8 +544,9 @@ function MortgageMetric({ label, value, highlight = false }: { label: string; va
   return <div className={`flex items-center justify-between rounded-xl border p-3 ${highlight ? 'border-emerald-100 bg-emerald-50/70' : 'border-slate-100 bg-white'}`}><span className="text-sm text-slate-500">{label}</span><strong className={highlight ? 'text-lg text-emerald-600' : 'text-base text-slate-700'}>{value}</strong></div>;
 }
 
-function LoanSlider({ label, value, min, max, step, onChange }: { label: string; value: number; min: number; max: number; step: number; onChange: (value: number) => void }) {
-  return <div className="mb-7"><div className="mb-3 flex items-center justify-between gap-4"><Label className="text-base font-medium text-slate-700">{label}</Label><Input type="number" min={min} max={max} step={step} value={value} onChange={e => onChange(Math.min(max, Math.max(min, Number(e.target.value) || 0)))} className="h-10 w-32 border-0 bg-emerald-50 text-right text-lg font-semibold text-emerald-600 shadow-none focus-visible:ring-1 focus-visible:ring-emerald-400" aria-label={label} /></div><Slider value={[value]} min={min} max={max} step={step} onValueChange={v => onChange(v[0] ?? value)} className="py-2" /></div>;
+function LoanSlider({ label, value, min, max, step, prefix, suffix, onChange }: { label: string; value: number; min: number; max: number; step: number; prefix?: string; suffix?: string; onChange: (value: number) => void }) {
+  const display = `${prefix ?? ''}${value.toLocaleString(undefined, { maximumFractionDigits: 2 })}${suffix ? ` ${suffix}` : ''}`;
+  return <div className="mb-7"><div className="mb-3 flex items-center justify-between gap-4"><Label className="text-base font-medium text-slate-700">{label}</Label><div className="h-10 w-32 rounded-md bg-emerald-50 px-3 py-2 text-right text-lg font-semibold text-emerald-600">{display}</div></div><Slider value={[value]} min={min} max={max} step={step} onValueChange={v => onChange(v[0] ?? value)} className="py-2" /></div>;
 }
 
 function LoanResult({ label, value, icon, strong = false }: { label: string; value: string; icon: ReactNode; strong?: boolean }) {
