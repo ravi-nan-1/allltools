@@ -1,10 +1,11 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { AdBanner } from '@/components/shared/ad-banner';
 import {
   AlarmClock, CalendarDays, Check, Clock3, Dices, Flag,
   Gauge, GraduationCap, Group, Maximize2, Pause, Play, RotateCcw,
-  Shuffle, Sparkles, Trophy, Users, Volume2
+  Shuffle, Sparkles, Trophy, Users, Volume2, Repeat2
 } from 'lucide-react';
 
 const MODES = [
@@ -65,7 +66,7 @@ function StopwatchCard({ compact = false }: { compact?: boolean }) {
   const startedAt = useRef(0);
   const base = useRef(0);
   const tick = () => { if (running) setElapsed(base.current + (performance.now() - startedAt.current)); };
-  useTicker(running, tick);
+  useTicker(running, tick, 25);
 
   const start = () => {
     if (running) return;
@@ -83,76 +84,89 @@ function StopwatchCard({ compact = false }: { compact?: boolean }) {
   const reset = () => { setRunning(false); setElapsed(0); base.current = 0; setLaps([]); };
   const lap = () => {
     const now = running ? base.current + (performance.now() - startedAt.current) : elapsed;
+    if (now <= 0) return;
     setLaps((current) => {
-      const lastTotal = current[0]?.total ?? 0;
-      return [{ id: Date.now(), lap: current.length + 1, split: now - lastTotal, total: now }, ...current];
+      const previousTotal = current[0]?.total ?? 0;
+      return [{ id: Date.now(), lap: current.length + 1, split: now - previousTotal, total: now }, ...current];
     });
   };
 
   return (
-    <section className={`relative overflow-hidden border-0 bg-white ${compact ? 'p-5 sm:p-7' : 'p-6 sm:p-8'}`}>
-      <div className="relative">
-        <div className="text-center">
-          <h2 className="text-4xl font-normal tracking-tight text-black sm:text-5xl">Stopwatch</h2>
-          {!compact && <p className="mt-1 text-sm text-slate-500">A precise browser stopwatch with lap and split timing.</p>}
-        </div>
-        <div className="mt-5 flex flex-col items-center">
-          <div className="relative flex h-44 w-44 items-center justify-center sm:h-56 sm:w-56" aria-hidden="true">
-            <div className="absolute h-40 w-28 bg-gradient-to-r from-emerald-300 via-emerald-400 to-green-400 sm:h-52 sm:w-36" style={{ clipPath: 'polygon(50% 0, 100% 30%, 76% 30%, 76% 100%, 24% 100%, 24% 30%, 0 30%)' }} />
-            <div className="relative z-10 mt-1 text-xs font-black uppercase tracking-widest text-emerald-950">{running ? 'Running' : 'Ready'}</div>
-          </div>
-          <div className="mt-2 w-full rounded-none bg-[#07389b] px-3 py-4 text-center font-mono text-3xl font-black tracking-wider text-white sm:text-5xl">{formatLong(elapsed)}</div>
-        </div>
-        <div className="mt-5 flex flex-wrap justify-center gap-2">
-          <button type="button" onClick={running ? pause : start} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 font-bold text-white hover:bg-emerald-700">{running ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}{running ? 'Pause' : 'Start'}</button>
-          <button type="button" onClick={lap} disabled={!elapsed} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 font-bold text-white disabled:cursor-not-allowed disabled:opacity-40"><Flag className="h-5 w-5" />Lap</button>
-          <button type="button" onClick={reset} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-red-600 px-5 font-bold text-white hover:bg-red-700"><RotateCcw className="h-5 w-5" />Reset</button>
+    <section className={`relative overflow-hidden border border-slate-200 bg-white ${compact ? 'p-5 sm:p-7' : 'rounded-3xl p-6 sm:p-8'}`}>
+      <div className="text-center">
+        <h2 className="text-4xl font-black tracking-tight text-black sm:text-5xl">Stopwatch</h2>
+        {!compact && <p className="mt-1 text-sm text-slate-500">Precision elapsed-time tracking with laps and split times.</p>}
+      </div>
+      <div className="mt-3 flex justify-center" aria-hidden="true">
+        <div className="relative h-36 w-32 sm:h-44 sm:w-40">
+          <div className="absolute inset-0 bg-gradient-to-r from-emerald-300 via-green-400 to-emerald-400" style={{ clipPath: 'polygon(50% 0, 100% 30%, 76% 30%, 76% 100%, 24% 100%, 24% 30%, 0 30%)', filter: 'drop-shadow(0 4px 0 #303030)' }} />
         </div>
       </div>
-      {laps.length > 0 && (
-        <div className="mt-4 overflow-hidden border border-slate-200 bg-white">
-          <div className="grid grid-cols-3 bg-slate-800 px-4 py-2 text-xs font-bold uppercase tracking-wide text-white"><span>Lap</span><span>Split</span><span>Total</span></div>
-          {laps.slice(0, 20).map((item) => <div key={item.id} className="grid grid-cols-3 border-t px-4 py-2.5 text-sm tabular-nums text-slate-700"><span className="font-semibold">#{item.lap}</span><span>{formatShort(item.split)}</span><span>{formatShort(item.total)}</span></div>)}
-        </div>
-      )}
+      <div className="mx-auto mt-1 w-full max-w-[520px] rounded-md border border-blue-300 bg-blue-50 px-3 py-3 text-center font-mono text-3xl font-black tracking-tight text-blue-800 sm:text-5xl">{formatLong(elapsed)}</div>
+      <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
+        <button type="button" onClick={running ? pause : start} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-emerald-500 px-4 font-black text-white shadow-sm hover:bg-emerald-600">{running ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}{running ? 'Pause' : 'Start'}</button>
+        <button type="button" onClick={lap} disabled={!elapsed} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 font-black text-white shadow-sm disabled:cursor-not-allowed disabled:opacity-40"><Flag className="h-5 w-5" />Lap</button>
+        <button type="button" onClick={reset} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-red-600 px-4 font-black text-white shadow-sm hover:bg-red-700"><RotateCcw className="h-5 w-5" />Reset</button>
+        <button type="button" onClick={fullscreen} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-slate-700 px-4 font-black text-white shadow-sm hover:bg-slate-800"><Maximize2 className="h-5 w-5" />Full</button>
+      </div>
+      <div className="mt-4 overflow-hidden rounded-md border border-slate-200">
+        <div className="grid grid-cols-3 bg-blue-700 px-4 py-2 text-xs font-black uppercase tracking-wide text-white"><span>#</span><span>Lap Time</span><span>Total Time</span></div>
+        {laps.length === 0 ? <div className="px-4 py-4 text-center text-sm text-slate-500">No laps yet. Click “Lap” to record your times.</div> : laps.slice(0, 20).map((item) => <div key={item.id} className="grid grid-cols-3 border-t px-4 py-2.5 text-sm tabular-nums text-slate-700"><span className="font-bold">{item.lap}</span><span>{formatShort(item.split)}</span><span>{formatLong(item.total)}</span></div>)}
+      </div>
     </section>
   );
 }
 
 function CountdownCard({ title = 'Countdown', defaultSeconds = 300, accent = 'red' }: { title?: string; defaultSeconds?: number; accent?: 'red' | 'green' | 'purple' }) {
-  const [hours, setHours] = useState(Math.floor(defaultSeconds / 3600));
-  const [minutes, setMinutes] = useState(Math.floor((defaultSeconds % 3600) / 60));
-  const [secs, setSecs] = useState(defaultSeconds % 60);
-  const [remaining, setRemaining] = useState(defaultSeconds);
+  const initial = Math.max(0, Math.floor(defaultSeconds));
+  const [hours, setHours] = useState(Math.floor(initial / 3600));
+  const [minutes, setMinutes] = useState(Math.floor((initial % 3600) / 60));
+  const [secs, setSecs] = useState(initial % 60);
+  const [remaining, setRemaining] = useState(initial);
   const [running, setRunning] = useState(false);
   const [sound, setSound] = useState(true);
-  const palette = accent === 'red' ? { border: 'border-red-200', bg: 'bg-red-50', text: 'text-red-600', button: 'bg-red-600' } : accent === 'green' ? { border: 'border-emerald-200', bg: 'bg-emerald-50', text: 'text-emerald-600', button: 'bg-emerald-600' } : { border: 'border-purple-200', bg: 'bg-purple-50', text: 'text-purple-600', button: 'bg-purple-600' };
+  const [repeat, setRepeat] = useState(false);
+  const palette = accent === 'red' ? { bg: 'bg-emerald-50/70', text: 'text-red-600', button: 'bg-red-600' } : accent === 'green' ? { bg: 'bg-emerald-50', text: 'text-emerald-600', button: 'bg-emerald-600' } : { bg: 'bg-purple-50', text: 'text-purple-600', button: 'bg-purple-600' };
   useEffect(() => {
     if (!running) return;
     const id = window.setInterval(() => {
       setRemaining((value) => {
         if (value <= 1) {
-          setRunning(false);
           if (sound) { try { void new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YQAAAAA=').play(); } catch {} }
+          if (repeat) return Math.max(1, hours * 3600 + minutes * 60 + secs);
+          setRunning(false);
           return 0;
         }
         return value - 1;
       });
     }, 1000);
     return () => window.clearInterval(id);
-  }, [running, sound]);
+  }, [running, sound, repeat, hours, minutes, secs]);
   const apply = () => {
-    const h = Math.min(99, Math.max(0, Number(hours) || 0)); const m = Math.min(59, Math.max(0, Number(minutes) || 0)); const s = Math.min(59, Math.max(0, Number(secs) || 0));
+    const h = Math.min(99, Math.max(0, Number(hours) || 0));
+    const m = Math.min(59, Math.max(0, Number(minutes) || 0));
+    const s = Math.min(59, Math.max(0, Number(secs) || 0));
     setHours(h); setMinutes(m); setSecs(s); setRemaining(h * 3600 + m * 60 + s); setRunning(false);
   };
-  const reset = () => { setRunning(false); setRemaining(0); };
+  const reset = () => { setRunning(false); setRemaining(hours * 3600 + minutes * 60 + secs); };
   return (
-    <section className={`relative overflow-hidden border-0 ${palette.bg} p-6 sm:p-8`}>
-      <div className="text-center"><h2 className="text-4xl font-normal tracking-tight text-black sm:text-5xl">{title}</h2><p className="mt-1 text-sm text-slate-500">Set a duration and count down accurately to zero.</p></div>
-      <div className="mt-5 flex flex-col items-center"><div className="relative flex h-44 w-44 items-center justify-center sm:h-56 sm:w-56" aria-hidden="true"><div className="absolute h-40 w-28 bg-gradient-to-r from-red-500 via-red-500 to-red-300 sm:h-52 sm:w-36" style={{ clipPath: 'polygon(24% 0, 76% 0, 76% 54%, 100% 54%, 50% 100%, 0 54%, 24% 54%)' }} /><div className="relative z-10 mt-1 text-xs font-black uppercase tracking-widest text-red-950">{running ? 'Running' : 'Ready'}</div></div><div className="mt-2 w-full rounded-none bg-[#07389b] px-3 py-4 text-center font-mono text-4xl font-black tracking-wider text-white sm:text-5xl">{formatCountdown(remaining)}</div></div>
-      <div className="mt-5 grid grid-cols-3 gap-2">{[['Hours', hours, setHours, 99], ['Minutes', minutes, setMinutes, 59], ['Seconds', secs, setSecs, 59]].map(([label, value, setter, max]) => <label key={label as string} className="text-xs font-bold text-slate-600">{label as string}<input type="number" min={0} max={max as number} value={value as number} onChange={(e) => (setter as (n: number) => void)(Number(e.target.value))} className="mt-1 h-11 w-full rounded-xl border border-slate-300 bg-white px-2 text-center text-lg font-bold tabular-nums outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100" /></label>)}</div>
-      <div className="mt-4 flex flex-wrap justify-center gap-2"><button type="button" onClick={() => { if (remaining > 0) setRunning((v) => !v); }} className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 font-bold text-white">{running ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}{running ? 'Pause' : 'Start'}</button><button type="button" onClick={apply} className="min-h-11 flex-1 rounded-xl bg-blue-600 px-4 font-bold text-white">Set Timer</button><button type="button" onClick={reset} className={`min-h-11 flex-1 rounded-xl ${palette.button} px-4 font-bold text-white`}>Reset</button></div>
-      <div className="mt-4 flex items-center justify-center gap-3 text-sm text-slate-600"><button type="button" onClick={() => setSound((v) => !v)} className="inline-flex min-h-10 items-center gap-1 rounded-full border bg-white px-3 font-semibold"><Volume2 className="h-4 w-4" />Sound {sound ? 'On' : 'Off'}</button>{remaining === 0 && <span className="font-bold text-red-600">Time is up</span>}</div>
+    <section className={`relative overflow-hidden border border-emerald-100 ${palette.bg} p-5 sm:p-7`}>
+      <div className="text-center"><h2 className="text-4xl font-black tracking-tight text-black sm:text-5xl">{title}</h2><p className="mt-1 text-sm text-slate-500">Set hours, minutes and seconds, then start the countdown.</p></div>
+      <div className="mt-3 flex justify-center" aria-hidden="true"><div className="relative h-36 w-32 sm:h-44 sm:w-40"><div className="absolute inset-0 bg-gradient-to-r from-red-500 via-red-500 to-red-300" style={{ clipPath: 'polygon(24% 0, 76% 0, 76% 54%, 100% 54%, 50% 100%, 0 54%, 24% 54%)', filter: 'drop-shadow(0 4px 0 #303030)' }} /></div></div>
+      <div className="mx-auto mt-1 w-full max-w-[520px] rounded-md border border-blue-300 bg-blue-50 px-3 py-3 text-center font-mono text-4xl font-black tracking-tight text-blue-800 sm:text-5xl">{formatCountdown(remaining)}</div>
+      <div className="mx-auto mt-4 grid max-w-[520px] grid-cols-3 gap-2">
+        {[['Hours', hours, setHours, 99], ['Minutes', minutes, setMinutes, 59], ['Seconds', secs, setSecs, 59]].map(([label, value, setter, max]) => <label key={label as string} className="text-center text-xs font-bold text-slate-600">{label as string}<input type="number" min={0} max={max as number} value={value as number} onChange={(e) => (setter as (n: number) => void)(Math.min(max as number, Math.max(0, Number(e.target.value) || 0)))} className="mt-1 h-11 w-full rounded-lg border border-slate-300 bg-white px-2 text-center text-lg font-bold tabular-nums outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100" /></label>)}
+      </div>
+      <div className="mx-auto mt-4 grid max-w-[520px] grid-cols-3 gap-2">
+        <button type="button" onClick={() => { if (remaining > 0) setRunning((v) => !v); }} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-emerald-500 px-4 font-black text-white shadow-sm">{running ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}{running ? 'Pause' : 'Start'}</button>
+        <button type="button" onClick={apply} className="min-h-12 rounded-xl bg-blue-600 px-4 font-black text-white shadow-sm">Set Timer</button>
+        <button type="button" onClick={reset} className={`inline-flex min-h-12 items-center justify-center gap-2 rounded-xl ${palette.button} px-4 font-black text-white shadow-sm`}><RotateCcw className="h-5 w-5" />Reset</button>
+      </div>
+      <div className="mt-4 flex flex-wrap justify-center gap-3 text-sm text-slate-700">
+        <label className="inline-flex min-h-10 cursor-pointer items-center gap-2 rounded-full border bg-white px-3 font-semibold"><input type="checkbox" checked={sound} onChange={(e) => setSound(e.target.checked)} /><Volume2 className="h-4 w-4" />Play sound when finished</label>
+        <label className="inline-flex min-h-10 cursor-pointer items-center gap-2 rounded-full border bg-white px-3 font-semibold"><input type="checkbox" checked={repeat} onChange={(e) => setRepeat(e.target.checked)} /><Repeat2 className="h-4 w-4" />Repeat countdown</label>
+      </div>
+      {remaining === 0 && <div className="mt-3 text-center font-black text-red-600" role="status">Time is up</div>}
     </section>
   );
 }
@@ -212,19 +226,19 @@ function GroupsMode() {
 function ClassroomMode() {
   const presets = [{ label: 'Focus', seconds: 25 * 60 }, { label: 'Break', seconds: 5 * 60 }, { label: 'Quick activity', seconds: 60 }];
   const [selected, setSelected] = useState(presets[0]);
-  return <div className="space-y-4"><div className="flex flex-wrap gap-2">{presets.map((p) => <button type="button" key={p.label} onClick={() => setSelected(p)} className={`rounded-full px-4 py-2 text-sm font-bold ${selected.label === p.label ? 'bg-emerald-600 text-white' : 'border bg-white'}`}>{p.label}</button>)}</div><CountdownCard title="Classroom Timer" defaultSeconds={selected.seconds} accent="green" /></div>;
+  return <div className="space-y-4"><div className="flex flex-wrap gap-2">{presets.map((p) => <button type="button" key={p.label} onClick={() => setSelected(p)} className={`rounded-full px-4 py-2 text-sm font-bold ${selected.label === p.label ? 'bg-emerald-600 text-white' : 'border bg-white'}`}>{p.label}</button>)}</div><CountdownCard key={`classroom-${selected.seconds}`} title="Classroom Timer" defaultSeconds={selected.seconds} accent="green" /></div>;
 }
 
 function SensoryMode() {
-  const [seconds, setSeconds] = useState(60); return <div className="space-y-4"><div className="rounded-2xl border border-pink-200 bg-pink-50 p-4 text-sm text-pink-900">Use a calm, predictable countdown for transitions, sensory breaks, routines and short activities.</div><div className="grid gap-2 sm:grid-cols-4">{[30, 60, 120, 300].map((n) => <button type="button" key={n} onClick={() => setSeconds(n)} className={`rounded-xl border px-4 py-3 font-bold ${seconds === n ? 'bg-pink-600 text-white' : 'bg-white'}`}>{n < 60 ? `${n}s` : `${n / 60} min`}</button>)}</div><CountdownCard title="Sensory Timer" defaultSeconds={seconds} accent="purple" /></div>;
+  const [seconds, setSeconds] = useState(60); return <div className="space-y-4"><div className="rounded-2xl border border-pink-200 bg-pink-50 p-4 text-sm text-pink-900">Use a calm, predictable countdown for transitions, sensory breaks, routines and short activities.</div><div className="grid gap-2 sm:grid-cols-4">{[30, 60, 120, 300].map((n) => <button type="button" key={n} onClick={() => setSeconds(n)} className={`rounded-xl border px-4 py-3 font-bold ${seconds === n ? 'bg-pink-600 text-white' : 'bg-white'}`}>{n < 60 ? `${n}s` : `${n / 60} min`}</button>)}</div><CountdownCard key={`sensory-${seconds}`} title="Sensory Timer" defaultSeconds={seconds} accent="purple" /></div>;
 }
 
 function ExamMode() {
-  const [minutes, setMinutes] = useState(60); return <div className="space-y-4"><div className="grid gap-2 sm:grid-cols-4">{[30, 60, 90, 120].map((n) => <button type="button" key={n} onClick={() => setMinutes(n)} className={`rounded-xl border px-4 py-3 font-bold ${minutes === n ? 'bg-indigo-600 text-white' : 'bg-white'}`}>{n} min</button>)}</div><CountdownCard title="Exam Timer" defaultSeconds={minutes * 60} accent="purple" /></div>;
+  const [minutes, setMinutes] = useState(60); return <div className="space-y-4"><div className="grid gap-2 sm:grid-cols-4">{[30, 60, 90, 120].map((n) => <button type="button" key={n} onClick={() => setMinutes(n)} className={`rounded-xl border px-4 py-3 font-bold ${minutes === n ? 'bg-indigo-600 text-white' : 'bg-white'}`}>{n} min</button>)}</div><CountdownCard key={`exam-${minutes}`} title="Exam Timer" defaultSeconds={minutes * 60} accent="purple" /></div>;
 }
 
 function PresentationMode() {
-  const [minutes, setMinutes] = useState(10); return <div className="space-y-4"><div className="flex flex-wrap gap-2">{[5, 10, 15, 20].map((n) => <button type="button" key={n} onClick={() => setMinutes(n)} className={`rounded-full px-4 py-2 font-bold ${minutes === n ? 'bg-orange-500 text-white' : 'border bg-white'}`}>{n} min</button>)}</div><CountdownCard title="Presentation Timer" defaultSeconds={minutes * 60} accent="red" /></div>;
+  const [minutes, setMinutes] = useState(10); return <div className="space-y-4"><div className="flex flex-wrap gap-2">{[5, 10, 15, 20].map((n) => <button type="button" key={n} onClick={() => setMinutes(n)} className={`rounded-full px-4 py-2 font-bold ${minutes === n ? 'bg-orange-500 text-white' : 'border bg-white'}`}>{n} min</button>)}</div><CountdownCard key={`presentation-${minutes}`} title="Presentation Timer" defaultSeconds={minutes * 60} accent="red" /></div>;
 }
 
 function ModeContent({ mode }: { mode: ModeId }) {
@@ -253,60 +267,68 @@ export default function Stopwatch() {
 
   return (
     <div className="space-y-6">
-      <header className="mx-auto w-full max-w-[1120px] text-center">
-        <div className="mb-2 text-sm text-slate-500">Home <span className="mx-1">›</span> Timers <span className="mx-1">›</span> Stopwatch</div>
+      <header className="mx-auto flex w-full max-w-[1120px] items-center justify-between px-1">
+        <div className="text-sm font-medium text-slate-500">Home <span className="mx-1">›</span> Tools <span className="mx-1">›</span> <span className="font-bold text-slate-800">Stopwatch</span></div>
+        <button type="button" className="hidden min-h-10 items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-700 shadow-sm sm:inline-flex">★ Add to My Page!</button>
       </header>
 
-      <div className="mx-auto grid w-full max-w-[1120px] overflow-hidden border border-slate-200 shadow-sm lg:grid-cols-2">
+      <div className="mx-auto grid w-full max-w-[1120px] overflow-hidden rounded-xl border border-slate-200 shadow-sm lg:grid-cols-2">
         <div className="bg-white"><StopwatchCard compact /></div>
         <div className="bg-emerald-50/70"><CountdownCard title="Countdown" defaultSeconds={300} accent="red" /></div>
       </div>
 
-      <div className="mx-auto w-full max-w-[1120px] bg-[#07389b] px-4 py-3 text-center text-white"><div className="font-mono text-4xl font-black tracking-wider sm:text-6xl">00:00:00.000</div></div>
+      <div className="mx-auto flex w-full max-w-[1120px] flex-wrap justify-center gap-2 rounded-md bg-[#07389b] px-4 py-3">
+        <button type="button" className="inline-flex min-h-10 items-center gap-2 rounded-full border-2 border-slate-800 bg-lime-500 px-5 font-bold text-white shadow-sm">★ Add to My Page!</button>
+        <button type="button" onClick={fullscreen} className="inline-flex min-h-10 items-center gap-2 rounded-full border-2 border-slate-800 bg-blue-700 px-5 font-bold text-white shadow-sm"><Maximize2 className="h-4 w-4" />Go Fullscreen!</button>
+        <button type="button" className="inline-flex min-h-10 items-center gap-2 rounded-full border-2 border-slate-800 bg-red-600 px-5 font-bold text-white shadow-sm">⊘ Go Ad Free!</button>
+      </div>
 
-      <div className="mx-auto flex w-full max-w-[1120px] flex-wrap justify-center gap-2">
-        <button type="button" className="inline-flex min-h-11 items-center rounded-full border-2 border-slate-800 bg-lime-500 px-5 font-bold text-white shadow-sm">★ Add to My Page!</button>
-        <button type="button" onClick={fullscreen} className="inline-flex min-h-11 items-center rounded-full border-2 border-slate-800 bg-blue-700 px-5 font-bold text-white shadow-sm"><Maximize2 className="mr-1 h-4 w-4" />Go Fullscreen!</button>
-        <button type="button" className="inline-flex min-h-11 items-center rounded-full border-2 border-slate-800 bg-red-600 px-5 font-bold text-white shadow-sm">⊘ Go Ad Free!</button>
+      <div className="mx-auto w-full max-w-[1120px] px-4">
+        <AdBanner adSlot="YOUR_TOP_BANNER_AD_SLOT_ID" adFormat="auto" dataFullWidthResponsive className="min-h-[90px]" />
       </div>
 
       <nav aria-label="Timer tools" className="overflow-x-auto border-y-8 border-sky-800 bg-sky-600 p-2">
-        <div className="flex min-w-max flex-wrap justify-center gap-1.5">
+        <div className="mx-auto flex min-w-[900px] flex-wrap justify-center gap-1.5">
           {MODES.map((item) => { const Icon = item.icon; const active = mode === item.id; return <button type="button" key={item.id} onClick={() => setMode(item.id)} aria-current={active ? 'page' : undefined} className={`inline-flex min-h-12 items-center gap-2 border-2 border-slate-800 px-3 py-2 text-sm font-bold text-white transition hover:brightness-110 ${active ? 'bg-slate-900' : item.tone === 'red' ? 'bg-red-600' : item.tone === 'green' ? 'bg-lime-600' : item.tone === 'purple' ? 'bg-purple-600' : item.tone === 'orange' ? 'bg-orange-500' : item.tone === 'gray' ? 'bg-slate-500' : item.tone === 'pink' ? 'bg-pink-700' : item.tone === 'gold' ? 'bg-yellow-700' : item.tone === 'teal' ? 'bg-teal-500' : item.tone === 'indigo' ? 'bg-indigo-700' : item.tone === 'lime' ? 'bg-lime-500' : item.tone === 'violet' ? 'bg-fuchsia-600' : 'bg-blue-700'}`}><Icon className="h-5 w-5" />{item.label}</button>; })}
         </div>
       </nav>
 
-      <section className="border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
+      <section className="mx-auto w-full max-w-[1120px] rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3"><div className="flex items-center gap-2"><AlarmClock className="h-6 w-6 text-blue-600" /><h2 className="text-2xl font-black text-slate-900 sm:text-3xl">{activeLabel}</h2></div><span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600">Free browser tool</span></div>
         <ModeContent mode={mode} />
       </section>
 
-      <section className="grid gap-4 sm:grid-cols-3">
+      <section className="mx-auto grid w-full max-w-[1120px] gap-4 sm:grid-cols-3">
         <article className="rounded-2xl border border-emerald-100 bg-emerald-50 p-5"><div className="text-lg font-black text-emerald-800">Accurate timing</div><p className="mt-1 text-sm text-slate-600">Use a high-resolution browser stopwatch for elapsed time, laps and practical timing tasks.</p></article>
-        <article className="rounded-2xl border border-blue-100 bg-blue-50 p-5"><div className="text-lg font-black text-blue-800">Many tools in one place</div><p className="mt-1 text-sm text-slate-600">Switch between race timers, countdowns, random pickers, clocks, dates, exam tools and group generators.</p></article>
+        <article className="rounded-2xl border border-blue-100 bg-blue-50 p-5"><div className="text-lg font-black text-blue-800">13 tools in one place</div><p className="mt-1 text-sm text-slate-600">Race, classroom, holiday, random selection, dates, clocks, exams, groups and presentation timers are available from the navigation above.</p></article>
         <article className="rounded-2xl border border-purple-100 bg-purple-50 p-5"><div className="text-lg font-black text-purple-800">Works on phones</div><p className="mt-1 text-sm text-slate-600">Responsive controls make the timer suite useful on desktop, tablet and mobile browsers.</p></article>
       </section>
 
-      <section className="prose prose-slate max-w-none">
+      <section className="mx-auto w-full max-w-[1120px] prose prose-slate">
         <h2>Free Online Stopwatch, Countdown &amp; Timer Tools</h2>
         <p>All2ools combines a precise online stopwatch with a practical collection of countdown, classroom, race, exam, presentation, holiday and random-selection utilities. The stopwatch measures upward from zero, while countdown tools work toward a chosen end time.</p>
         <h3>Stopwatch features</h3>
-        <p>Start, pause and reset the stopwatch whenever you need. Use Lap to record split and cumulative times. The display uses browser high-resolution timing rather than relying on visible screen refreshes alone, making it suitable for everyday workouts, study sessions, sports drills, cooking and task tracking.</p>
+        <p>Start, pause, lap and reset the stopwatch. Lap records save both split and cumulative elapsed times, and the high-resolution browser clock is used for responsive timing on ordinary devices.</p>
         <h3>Countdown timer features</h3>
-        <p>Set hours, minutes and seconds, then start, pause or reset the countdown. Optional sound can signal completion. Preset-based classroom, sensory, exam and presentation timers make common fixed-duration activities faster to set up.</p>
-        <h3>Extra timer-suite tools</h3>
-        <p>Race Timers provide separate lanes for multiple runners. Holiday Timers count down to an event date. Random Name Pickers select from a list without repeating a selected name until the pool is exhausted. Random Number Generators create one or more values inside a chosen range. Dates calculate the days between two calendar dates, while World Clocks show current times in several major cities.</p>
+        <p>Set hours, minutes and seconds, then start, pause, set or reset the countdown. Optional sound and repeat modes can signal or restart a completed countdown.</p>
+        <h3>Race, classroom and sensory timers</h3>
+        <p>Race Timers provide independent lanes for runners. Classroom Timers offer focus, break and activity presets. Sensory Timers provide predictable short durations for transitions and routines.</p>
+        <h3>Holiday, name and number tools</h3>
+        <p>Holiday Timers count toward a selected event. Random Name Pickers choose names without repeating a selected name until the current pool is exhausted. Random Number Generators create one or more values within a selected range.</p>
+        <h3>Dates, clocks and exams</h3>
+        <p>Dates calculates the days between two calendar dates. Clocks show current times across several world cities. Exam Timers provide common long-duration presets for timed sessions.</p>
         <h3>Chance, groups and presentations</h3>
-        <p>Chance Games include coin flips and configurable dice rolls. Group Generators shuffle a participant list into groups. Presentation Timers provide common duration presets, while Exam Timers make longer timed sessions easy to launch.</p>
+        <p>Chance Games include coin flips and dice rolls. Group Generators shuffle participants into groups. Presentation Timers provide common speaking-duration presets.</p>
         <h3>Important timing note</h3>
         <p>Browser timing is intended for ordinary activities and planning. Do not rely on an online timer for certified measurements, legal timing, medical dosing, industrial safety or other situations where a certified timing device is required.</p>
         <h3>Frequently asked questions</h3>
         <h4>Is the online stopwatch free?</h4><p>Yes. The stopwatch and timer-suite tools run in the browser without requiring an app installation.</p>
         <h4>Can I record lap times?</h4><p>Yes. Start the stopwatch and use Lap to save both split and cumulative elapsed times.</p>
-        <h4>Can the countdown play a sound?</h4><p>Yes. Sound can be switched on or off in the countdown control.</p>
-        <h4>Can I use it on a phone?</h4><p>Yes. The controls are responsive and designed for touch screens as well as desktop browsers.</p>
-        <h4>Does the stopwatch keep running if I change tabs?</h4><p>The stopwatch calculates elapsed time from a high-resolution start reference, but browser scheduling can vary when a page is backgrounded. For critical timing, use a dedicated timing device.</p>
+        <h4>Can the countdown play a sound?</h4><p>Yes. Sound can be switched on or off in the countdown controls.</p>
+        <h4>Can I repeat a countdown?</h4><p>Yes. Turn on Repeat countdown and the timer restarts from the configured duration when it reaches zero.</p>
+        <h4>Can I use the tools on a phone?</h4><p>Yes. The controls are responsive and designed for touch screens as well as desktop browsers.</p>
       </section>
     </div>
   );
 }
+
