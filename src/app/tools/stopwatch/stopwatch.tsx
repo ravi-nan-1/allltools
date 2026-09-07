@@ -82,6 +82,17 @@ function StopwatchCard({ compact = false }: { compact?: boolean }) {
     setRunning(false);
   };
   const reset = () => { setRunning(false); setElapsed(0); base.current = 0; setLaps([]); };
+  const fullscreen = async () => {
+    try {
+      if (document.fullscreenElement) {
+        await document.exitFullscreen();
+      } else {
+        await document.documentElement.requestFullscreen();
+      }
+    } catch {
+      // Fullscreen can be unavailable or blocked by the browser; keep the timer usable.
+    }
+  };
   const lap = () => {
     const now = running ? base.current + (performance.now() - startedAt.current) : elapsed;
     if (now <= 0) return;
