@@ -1,6 +1,7 @@
 import { tools } from '@/lib/tools';
 
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { LanguageProvider } from '@/context/language-context';
@@ -59,6 +60,12 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/logo.svg" sizes="any" type="image/svg+xml" />
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3080938150148610"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
       </head>
       <body className={cn("font-body antialiased", inter.variable, sourceCodePro.variable)}>
         <LanguageProvider>
