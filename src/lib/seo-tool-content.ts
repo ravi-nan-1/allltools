@@ -1306,60 +1306,6 @@ export const seoToolContent: Record<string, SeoToolContent> = {
   ],
   "conclusion": "Use the home-loan calculator before comparing lender offers so you can evaluate the complete repayment picture rather than only the advertised EMI. Compare down payment, rate and tenure together, test realistic prepayment scenarios, and verify the final numbers against the lender's sanction letter and repayment schedule."
 },
-  "how": "The home-loan calculator applies the standard fixed-payment amortization method to principal, annual interest rate, and tenure. It uses EMI terminology suited to common Indian home-loan planning, while actual banks may apply their own fees and rate rules.",
-  "features": [
-    "Home-loan principal and tenure inputs",
-    "EMI estimate",
-    "Total interest breakdown",
-    "Rate and tenure comparison",
-    "Indian EMI terminology"
-  ],
-  "use": "For Indian home buyers comparing loan tenures; families checking affordability; borrowers preparing questions for a lender.",
-  "steps": [
-    "Enter the home-loan principal.",
-    "Enter the annual interest rate.",
-    "Choose the tenure.",
-    "Compare EMI and total interest."
-  ],
-  "why": "The page is tailored to the home-loan question rather than generic interest math: how tenure and rate affect an EMI-based repayment plan.",
-  "compare": [
-    [
-      "Focus",
-      "Home-loan EMI planning",
-      "Generic interest result"
-    ],
-    [
-      "Inputs",
-      "Principal, rate, tenure",
-      "Unspecified loan inputs"
-    ],
-    [
-      "Cost view",
-      "EMI plus total interest",
-      "Single payment"
-    ],
-    [
-      "Local context",
-      "Indian EMI terminology",
-      "Universal assumptions"
-    ]
-  ],
-  "faqs": [
-    {
-      "question": "Is this intended for Indian home loans?",
-      "answer": "Yes. It uses EMI terminology and is suitable for Indian planning, but individual banks can have different rates, fees, reset rules, and rounding."
-    },
-    {
-      "question": "Does longer tenure always save money?",
-      "answer": "No. It can reduce the EMI while increasing total interest over the life of the loan."
-    },
-    {
-      "question": "Are processing fees included?",
-      "answer": "No. Add processing fees, insurance, and other property costs separately when comparing offers."
-    }
-  ],
-  "conclusion": "Use the home-loan estimate to compare tenure and rate choices, then verify the complete repayment schedule with the lender."
-},
   "car-loan-calculator": {
     "how": "A car loan calculator estimates how much of a vehicle purchase will be financed after your down payment and trade-in credit. It then applies the interest rate and repayment term to estimate the monthly payment, total interest, payoff time and overall financing cost. You can also test an extra monthly payment to see how faster principal reduction may change the result.",
     "features": [
