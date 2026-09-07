@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from 'react';
-import { ArrowDownUp, Calculator, CircleDollarSign, Info, Landmark, Percent, ShieldCheck, WalletCards } from 'lucide-react';
+import { ArrowDownUp, Calculator, CircleDollarSign, Info, Landmark, ShieldCheck, WalletCards } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
@@ -26,11 +26,10 @@ export function GlobalLoanOptimizer() {
   const [extra, setExtra] = useState(0);
 
   const currency = country === 'IN' ? 'INR' : 'USD';
-  const banks = country === 'IN'
-    ? [['HDFC Bank', 10.5], ['State Bank of India', 10.2], ['ICICI Bank', 10.8], ['Axis Bank', 11.0], ['Kotak Mahindra Bank', 10.7]]
-    : [['Chase Bank', 7.2], ['Bank of America', 7.0], ['Wells Fargo', 7.5], ['Citibank', 7.3], ['U.S. Bank', 7.8]];
-
   const result = useMemo(() => {
+    const banks = country === 'IN'
+      ? [['HDFC Bank', 10.5], ['State Bank of India', 10.2], ['ICICI Bank', 10.8], ['Axis Bank', 11.0], ['Kotak Mahindra Bank', 10.7]]
+      : [['Chase Bank', 7.2], ['Bank of America', 7.0], ['Wells Fargo', 7.5], ['Citibank', 7.3], ['U.S. Bank', 7.8]];
     const creditAdjustment = ((score - 700) / 150) * (country === 'IN' ? 2 : 1.5);
     const incomeRatio = income / Math.max(amount, 1);
     const incomeAdjustment = incomeRatio > (country === 'IN' ? 4 : 3) ? -0.6 : incomeRatio < 2 ? 0.6 : 0;
