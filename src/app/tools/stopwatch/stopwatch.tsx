@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   AlarmClock, ArrowDown, ArrowUp, CalendarDays, Check, Clock3, Dices, Flag,
-  Gauge, GraduationCap, Group, Hourglass, Maximize2, Pause, Play, RotateCcw,
+  Gauge, GraduationCap, Group, Maximize2, Pause, Play, RotateCcw,
   Shuffle, Sparkles, Trophy, Users, Volume2
 } from 'lucide-react';
 
