@@ -498,7 +498,6 @@ function CarLoanCalculator() {
 
   const fmt = (n: number) => money(n, currency);
   const principalPct = Math.max(0, Math.min(100, result.principalShare * 100));
-  const interestPct = Math.max(0, 100 - principalPct);
   const downPct = vehiclePrice > 0 ? Math.min(100, (downPayment + tradeIn) / vehiclePrice * 100) : 0;
 
   return <Card className="w-full overflow-hidden border border-slate-200 bg-white shadow-sm">
