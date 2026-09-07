@@ -1,6 +1,6 @@
-import { tools } from '@/lib/tools';
-
 'use client';
+
+import { tools } from '@/lib/tools';
 import {
   BrainCircuit,
   Building2,
