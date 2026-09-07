@@ -1,246 +1,87 @@
-
 "use client";
 
-import { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Button } from '@/components/ui/button';
+import { useMemo, useState } from 'react';
+import { ArrowDownUp, Calculator, CircleDollarSign, Info, Landmark, Percent, ShieldCheck, WalletCards } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Loader2, Landmark, Building, University } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-const formSchema = z.object({
-  loanAmount: z.number().min(1000, "Must be at least 1,000").max(10000000, "Must be at most 1,00,00,000 / 1,000,000"),
-  annualIncome: z.number().min(10000, "Must be at least 10,000").max(50000000, "Must be at most 5,00,00,000 / 5,000,000"),
-  creditScore: z.number().min(300, "Invalid score").max(850, "Invalid score"), // US max is 850
-  loanTenure: z.number().min(1, "Must be at least 1 year").max(30, "Must be at most 30 years"),
-});
+const money = (n: number, currency: string) => new Intl.NumberFormat(undefined, { style: 'currency', currency, maximumFractionDigits: 0 }).format(Number.isFinite(n) ? n : 0);
+const pct = (n: number) => `${Number.isFinite(n) ? n.toFixed(2) : '0.00'}%`;
 
-type LoanFormData = z.infer<typeof formSchema>;
-
-interface Bank {
-    name: string;
-    logo: React.ReactNode;
-    baseRate: number;
+function SliderField({ label, value, min, max, step, prefix = '', suffix = '', onChange }: { label: string; value: number; min: number; max: number; step: number; prefix?: string; suffix?: string; onChange: (v: number) => void }) {
+  return <div className="mb-7">
+    <div className="mb-3 flex items-center justify-between gap-4"><Label className="text-base font-medium text-slate-700">{label}</Label><div className="h-10 min-w-32 rounded-md bg-emerald-50 px-3 py-2 text-right text-lg font-semibold text-emerald-600">{prefix}{value.toLocaleString(undefined, { maximumFractionDigits: 2 })}{suffix}</div></div>
+    <Slider value={[value]} min={min} max={max} step={step} onValueChange={v => onChange(v[0] ?? value)} className="py-2" />
+  </div>;
 }
-
-interface LoanOffer {
-    bankName: string;
-    interestRate: number;
-    monthlyPayment: number;
-    totalPayment: number;
-    bankLogo: React.ReactNode;
-}
-
-const indianBanks: Bank[] = [
-    { name: 'HDFC Bank', logo: <Building className="text-blue-600" />, baseRate: 10.5 },
-    { name: 'State Bank of India', logo: <Landmark className="text-blue-800" />, baseRate: 10.2 },
-    { name: 'ICICI Bank', logo: <Building className="text-orange-500" />, baseRate: 10.8 },
-    { name: 'Axis Bank', logo: <Building className="text-purple-700" />, baseRate: 11.0 },
-    { name: 'Kotak Mahindra Bank', logo: <Building className="text-red-600" />, baseRate: 10.7 }
-];
-
-const usBanks: Bank[] = [
-    { name: 'Chase Bank', logo: <Landmark className="text-blue-700" />, baseRate: 7.2 },
-    { name: 'Bank of America', logo: <University className="text-red-700" />, baseRate: 7.0 },
-    { name: 'Wells Fargo', logo: <Landmark className="text-red-500" />, baseRate: 7.5 },
-    { name: 'Citibank', logo: <University className="text-blue-500" />, baseRate: 7.3 },
-    { name: 'U.S. Bank', logo: <Landmark className="text-indigo-600" />, baseRate: 7.8 }
-];
-
-type Country = 'IN' | 'US';
 
 export function GlobalLoanOptimizer() {
-    const [loanOffers, setLoanOffers] = useState<LoanOffer[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [country, setCountry] = useState<Country>('US');
+  const [country, setCountry] = useState('US');
+  const [amount, setAmount] = useState(50000);
+  const [income, setIncome] = useState(80000);
+  const [score, setScore] = useState(750);
+  const [years, setYears] = useState(5);
+  const [extra, setExtra] = useState(0);
 
-    useEffect(() => {
-        try {
-            const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-            if (timeZone.startsWith('Asia/')) {
-                setCountry('IN');
-            } else {
-                setCountry('US');
-            }
-        } catch {
-            console.error("Could not detect timezone, defaulting to US.");
-            setCountry('US');
-        }
-    }, []);
+  const currency = country === 'IN' ? 'INR' : 'USD';
+  const banks = country === 'IN'
+    ? [['HDFC Bank', 10.5], ['State Bank of India', 10.2], ['ICICI Bank', 10.8], ['Axis Bank', 11.0], ['Kotak Mahindra Bank', 10.7]]
+    : [['Chase Bank', 7.2], ['Bank of America', 7.0], ['Wells Fargo', 7.5], ['Citibank', 7.3], ['U.S. Bank', 7.8]];
 
-    const isIndia = country === 'IN';
-    const banks = isIndia ? indianBanks : usBanks;
+  const result = useMemo(() => {
+    const creditAdjustment = ((score - 700) / 150) * (country === 'IN' ? 2 : 1.5);
+    const incomeRatio = income / Math.max(amount, 1);
+    const incomeAdjustment = incomeRatio > (country === 'IN' ? 4 : 3) ? -0.6 : incomeRatio < 2 ? 0.6 : 0;
+    const offers = banks.map(([name, base]) => {
+      const rate = Math.max(country === 'IN' ? 8.5 : 5, Math.min(country === 'IN' ? 18 : 15, Number(base) - creditAdjustment + incomeAdjustment));
+      const r = rate / 100 / 12;
+      const months = years * 12;
+      const payment = r === 0 ? amount / months : amount * r * Math.pow(1 + r, months) / (Math.pow(1 + r, months) - 1);
+      const scheduled = payment * months;
+      const actualPayment = payment + extra;
+      let balance = amount, interest = 0, paid = 0, month = 0;
+      while (balance > 0.01 && month < 1200) {
+        month++;
+        const i = balance * r;
+        const p = Math.min(balance, Math.max(0, actualPayment - i));
+        if (p <= 0) break;
+        interest += i; paid += i + p; balance -= p;
+      }
+      return { name, rate, payment, scheduledInterest: Math.max(0, scheduled - amount), interest, paid, months: month };
+    }).sort((a, b) => a.rate - b.rate);
+    const best = offers[0];
+    const averageRate = offers.reduce((s, o) => s + o.rate, 0) / offers.length;
+    return { offers, best, averageRate };
+  }, [amount, income, score, years, extra, country]);
 
-    const form = useForm<LoanFormData>({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            loanAmount: isIndia ? 500000 : 50000,
-            annualIncome: isIndia ? 1000000 : 80000,
-            creditScore: 750,
-            loanTenure: 5
-        },
-        mode: 'onChange',
-    });
-    
-    const { reset } = form;
-    useEffect(() => {
-        reset({
-            loanAmount: isIndia ? 500000 : 50000,
-            annualIncome: isIndia ? 1000000 : 80000,
-            creditScore: 750,
-            loanTenure: 5
-        });
-    }, [country, reset, isIndia]);
+  const best = result.best;
+  const savingVsAverage = Math.max(0, amount * ((result.averageRate - best.rate) / 100) * years);
 
-
-    const onSubmit = (data: LoanFormData) => {
-        setIsLoading(true);
-        setLoanOffers([]);
-        
-        setTimeout(() => {
-            const offers: LoanOffer[] = banks.map(bank => {
-                let rate = bank.baseRate;
-
-                const creditScoreFactor = ((data.creditScore - 700) / 150) * (isIndia ? 2.0 : 1.5);
-                rate -= creditScoreFactor;
-
-                const incomeToLoanRatio = data.annualIncome / data.loanAmount;
-                if (incomeToLoanRatio > (isIndia ? 4 : 3)) {
-                    rate -= (isIndia ? 0.75 : 0.5);
-                } else if (incomeToLoanRatio < 2) {
-                    rate += (isIndia ? 0.75 : 0.5);
-                }
-
-                rate += (Math.random() - 0.5) * 0.4; 
-                
-                const finalRate = Math.max(isIndia ? 8.5 : 5.0, Math.min(isIndia ? 18.0 : 15.0, rate));
-                
-                const monthlyRate = finalRate / 100 / 12;
-                const numberOfPayments = data.loanTenure * 12;
-                const monthlyPayment = (data.loanAmount * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -numberOfPayments));
-                const totalPayment = monthlyPayment * numberOfPayments;
-
-                return {
-                    bankName: bank.name,
-                    interestRate: parseFloat(finalRate.toFixed(2)),
-                    monthlyPayment: parseFloat(monthlyPayment.toFixed(2)),
-                    totalPayment: parseFloat(totalPayment.toFixed(2)),
-                    bankLogo: bank.logo,
-                };
-            }).sort((a,b) => a.interestRate - b.interestRate);
-
-            setLoanOffers(offers);
-            setIsLoading(false);
-        }, 1500);
-    };
-
-    const formatCurrency = (amount: number) => {
-        return new Intl.NumberFormat(isIndia ? 'en-IN' : 'en-US', { 
-            style: 'currency', 
-            currency: isIndia ? 'INR' : 'USD', 
-            maximumFractionDigits: 0 
-        }).format(amount);
-    }
-    
-    return (
-        <div className="space-y-8">
-           <p className="text-muted-foreground">
-                Enter your financial details to see simulated loan offers from banks in your region. This tool helps you understand how factors like credit score and income can affect loan terms.
-           </p>
-            <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <FormField control={form.control} name="loanAmount" render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Loan Amount: {formatCurrency(field.value)}</FormLabel>
-                                <FormControl>
-                                    <Slider min={isIndia ? 50000 : 5000} max={isIndia ? 10000000 : 500000} step={isIndia ? 10000 : 1000} onValueChange={(vals) => field.onChange(vals[0])} defaultValue={[field.value]} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )} />
-                        <FormField control={form.control} name="annualIncome" render={({ field }) => (
-                             <FormItem>
-                                <FormLabel>Annual Income: {formatCurrency(field.value)}</FormLabel>
-                                <FormControl>
-                                    <Slider min={isIndia ? 100000 : 20000} max={isIndia ? 50000000 : 1000000} step={isIndia ? 25000 : 5000} onValueChange={(vals) => field.onChange(vals[0])} defaultValue={[field.value]} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )} />
-                        <FormField control={form.control} name="creditScore" render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Credit Score: {field.value}</FormLabel>
-                                <FormControl>
-                                    <Slider min={300} max={850} step={1} onValueChange={(vals) => field.onChange(vals[0])} defaultValue={[field.value]} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )} />
-                        <FormField control={form.control} name="loanTenure" render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Loan Tenure: {field.value} years</FormLabel>
-                                <FormControl>
-                                    <Slider min={1} max={30} step={1} onValueChange={(vals) => field.onChange(vals[0])} defaultValue={[field.value]} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )} />
-                    </div>
-                     <Button type="submit" className="w-full md:w-auto" disabled={isLoading}>
-                        {isLoading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin"/> Processing...</> : 'Find Best Loans'}
-                    </Button>
-                </form>
-            </Form>
-
-            {isLoading && (
-                <div className="flex items-center justify-center text-center p-8">
-                    <Loader2 className="mr-4 h-8 w-8 animate-spin text-primary" />
-                    <p className="text-muted-foreground">Analyzing offers from {isIndia ? 'Indian' : 'US'} lenders...</p>
-                </div>
-            )}
-
-            {loanOffers.length > 0 && !isLoading && (
-                 <Card>
-                    <CardHeader>
-                        <CardTitle>Simulated Loan Offers ({country})</CardTitle>
-                        <CardDescription>
-                            Based on your inputs, here are some estimated loan offers. These are for informational purposes only.
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <Table>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead>Bank</TableHead>
-                                    <TableHead className="text-right">Interest Rate</TableHead>
-                                    <TableHead className="text-right">Monthly Payment</TableHead>
-                                    <TableHead className="text-right">Total Payment</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {loanOffers.map((offer) => (
-                                    <TableRow key={offer.bankName}>
-                                        <TableCell className="font-medium flex items-center gap-2">
-                                            {offer.bankLogo}
-                                            {offer.bankName}
-                                        </TableCell>
-                                        <TableCell className="text-right">{offer.interestRate.toFixed(2)}%</TableCell>
-                                        <TableCell className="text-right">{formatCurrency(offer.monthlyPayment)}</TableCell>
-                                        <TableCell className="text-right">{formatCurrency(offer.totalPayment)}</TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </CardContent>
-                </Card>
-            )}
+  return <Card className="w-full overflow-hidden border-2 shadow-sm">
+    <CardContent className="p-0">
+      <div className="border-b bg-gradient-to-r from-slate-950 via-slate-900 to-slate-800 px-5 py-7 text-white sm:px-8">
+        <div className="flex flex-wrap items-center justify-between gap-4"><div><p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-emerald-300">Global financing comparison</p><h2 className="text-2xl font-bold sm:text-3xl">Global Loan Optimizer</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-slate-300">Compare simulated lender scenarios using your borrowing amount, income, credit profile and repayment term.</p></div><div className="rounded-2xl border border-white/10 bg-white/10 p-3"><ArrowDownUp className="h-7 w-7 text-emerald-300" /></div></div>
+      </div>
+      <div className="grid gap-0 lg:grid-cols-[1.05fr_.95fr]">
+        <div className="border-b p-5 sm:p-8 lg:border-b-0 lg:border-r">
+          <div className="mb-6 flex items-center justify-between"><div><h3 className="text-xl font-bold text-slate-800">Your borrowing profile</h3><p className="mt-1 text-sm text-slate-500">Adjust the scenario to see how affordability factors change estimated rates.</p></div><Select value={country} onValueChange={setCountry}><SelectTrigger className="w-32"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="US">US · USD</SelectItem><SelectItem value="IN">India · INR</SelectItem></SelectContent></Select></div>
+          <SliderField label="Loan amount" value={amount} min={country === 'IN' ? 50000 : 5000} max={country === 'IN' ? 10000000 : 500000} step={country === 'IN' ? 10000 : 1000} prefix={country === 'IN' ? '₹' : '$'} onChange={setAmount} />
+          <SliderField label="Annual income" value={income} min={country === 'IN' ? 100000 : 20000} max={country === 'IN' ? 50000000 : 1000000} step={country === 'IN' ? 25000 : 5000} prefix={country === 'IN' ? '₹' : '$'} onChange={setIncome} />
+          <SliderField label="Credit score" value={score} min={300} max={850} step={1} onChange={setScore} />
+          <SliderField label="Repayment term" value={years} min={1} max={30} step={1} suffix=" years" onChange={setYears} />
+          <SliderField label="Extra monthly payment" value={extra} min={0} max={5000} step={50} prefix={country === 'IN' ? '₹' : '$'} onChange={setExtra} />
+          <div className="rounded-2xl bg-slate-50 p-4 text-xs leading-5 text-slate-600"><ShieldCheck className="mr-2 inline h-4 w-4" />Calculations run in your browser. Lender rates below are simulated scenarios, not live loan offers.</div>
         </div>
-    );
-
+        <div className="bg-slate-50/70 p-5 sm:p-8">
+          <div className="rounded-3xl border bg-white p-6 shadow-sm"><div className="mb-5 flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Best simulated scenario</p><h3 className="mt-1 text-xl font-bold text-slate-800">{best.name}</h3></div><Landmark className="h-7 w-7 text-emerald-600" /></div><div className="grid gap-4 sm:grid-cols-2"><div className="rounded-2xl bg-emerald-50 p-4"><p className="text-xs text-emerald-700">Estimated rate</p><p className="mt-1 text-3xl font-bold text-emerald-700">{pct(best.rate)}</p></div><div className="rounded-2xl bg-slate-100 p-4"><p className="text-xs text-slate-500">Monthly payment</p><p className="mt-1 text-2xl font-bold text-slate-800">{money(best.payment + extra, currency)}</p></div></div><div className="my-6 h-4 overflow-hidden rounded-full bg-slate-100"><div className="h-full rounded-full bg-emerald-500" style={{ width: `${Math.max(12, Math.min(100, 100 - best.rate * 5))}%` }} /></div><div className="space-y-3"><Metric label="Total interest with extra payments" value={money(best.interest, currency)} /><Metric label="Estimated payoff" value={`${Math.ceil(best.months / 12 * 10) / 10} years`} /><Metric label="Potential rate advantage" value={money(savingVsAverage, currency)} /></div></div>
+        </div>
+      </div>
+      <div className="border-t bg-white p-5 sm:p-8"><div className="mb-5 flex flex-wrap items-end justify-between gap-3"><div><h3 className="text-xl font-bold text-slate-800">Lender scenario comparison</h3><p className="mt-1 text-sm text-slate-500">Sorted by estimated annual interest rate.</p></div><div className="rounded-xl bg-slate-50 px-4 py-2 text-xs text-slate-500">Average rate: <strong className="text-slate-800">{pct(result.averageRate)}</strong></div></div><div className="overflow-x-auto rounded-2xl border"><table className="w-full min-w-[680px] text-sm"><thead className="bg-slate-50 text-left text-slate-500"><tr><th className="px-4 py-3">Lender</th><th className="px-4 py-3">Rate</th><th className="px-4 py-3">Monthly payment</th><th className="px-4 py-3">Scheduled interest</th><th className="px-4 py-3">Payoff</th></tr></thead><tbody>{result.offers.map((o, i) => <tr key={o.name} className="border-t"><td className="px-4 py-4 font-semibold">{i === 0 ? '★ ' : ''}{o.name}</td><td className="px-4 py-4 font-semibold text-emerald-600">{pct(o.rate)}</td><td className="px-4 py-4">{money(o.payment + extra, currency)}</td><td className="px-4 py-4">{money(o.scheduledInterest, currency)}</td><td className="px-4 py-4">{Math.ceil(o.months / 12 * 10) / 10} yrs</td></tr>)}</tbody></table></div><div className="mt-5 grid gap-3 md:grid-cols-3"><InfoCard icon={<Calculator />} title="Rate impact" text="Credit profile and income-to-loan ratio are used to adjust simulated base rates." /><InfoCard icon={<WalletCards />} title="Total cost" text="Compare interest and payoff duration instead of judging an offer only by monthly payment." /><InfoCard icon={<CircleDollarSign />} title="Scenario planning" text="Use extra payments to explore how faster repayment could reduce borrowing time and interest." /></div><p className="mt-5 flex gap-2 text-xs leading-5 text-slate-500"><Info className="mt-0.5 h-4 w-4 shrink-0" />This tool does not connect to banks or guarantee approval. Actual APRs, fees, taxes, eligibility, exchange rates and loan terms vary by lender and country.</p></div>
+    </CardContent>
+  </Card>;
 }
-    
+
+function Metric({ label, value }: { label: string; value: string }) { return <div className="flex items-center justify-between gap-4 border-b pb-3 last:border-0 last:pb-0"><span className="text-sm text-slate-500">{label}</span><strong className="text-sm text-slate-800">{value}</strong></div>; }
+function InfoCard({ icon, title, text }: { icon: React.ReactNode; title: string; text: string }) { return <div className="rounded-2xl bg-slate-50 p-4"><div className="mb-2 flex items-center gap-2 text-emerald-600">{icon}<span className="text-xs font-bold uppercase tracking-wide text-slate-600">{title}</span></div><p className="text-sm leading-6 text-slate-600">{text}</p></div>; }

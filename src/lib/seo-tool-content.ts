@@ -441,47 +441,43 @@ export const seoToolContent: Record<string, SeoToolContent> = {
     "conclusion": "The PDF to Word Converter turns otherwise difficult-to-edit PDF documents into editable Word files. For the best result, review the generated DOCX before sending or publishing it, especially when the PDF contains complex layouts or scanned pages."
   },
   "global-loan-optimizer": {
-    "how": "Loan comparison starts by putting competing offers on a common basis. The optimizer can compare principal, interest rate, term, repayment frequency, and currency, then estimate periodic payments and total interest. An amortization schedule shows how each payment changes the outstanding balance over time, making it easier to understand the long-term cost of borrowing.",
+    "how": "The Global Loan Optimizer turns a borrowing scenario into a structured comparison. Enter the amount you want to borrow, annual income, credit score, repayment term, and optional extra payment. The calculator adjusts simulated lender rates, estimates monthly payments, compares total interest, and shows how faster repayment can change the payoff timeline. It is designed for scenario planning rather than live lender matching.",
     "features": [
-      "Loan offer comparison across common parameters",
-      "Estimated monthly or periodic payment calculations",
-      "Total interest and repayment-cost analysis",
-      "Amortization schedule views",
-      "Support for different loan categories",
-      "Currency-aware comparison inputs where supported"
+      "Country-aware USD and INR loan scenarios",
+      "Credit-score and income-to-loan sensitivity analysis",
+      "Side-by-side simulated lender comparison",
+      "Estimated monthly payment and total interest",
+      "Extra-payment payoff analysis",
+      "Estimated repayment timeline and rate comparison",
+      "Browser-based calculations without submitting financial details to lenders"
     ],
-    "use": "For Borrowers: Borrowers comparing mortgage, auto, personal, or business loan offers.\nFor Small Businesses: Small-business owners evaluating financing terms.\nFor Financial Planners: Anyone who wants to understand payment schedules before discussing an offer with a lender.",
+    "use": "For Borrowers: Compare financing scenarios before approaching a lender.\nFor International Borrowers: Explore how the same borrowing profile can look under different country assumptions.\nFor Home, Auto & Personal Loans: Compare payment size, rate, interest and repayment duration.\nFor Financial Planning: Test the effect of credit profile, income and extra monthly payments on borrowing cost.",
     "steps": [
-      "Enter the principal, interest rate, term, and repayment assumptions for each loan.",
-      "Compare periodic payments and total repayment cost.",
-      "Inspect the amortization schedule to see interest and principal over time.",
-      "Use the comparison as a planning aid and confirm final terms with the lender."
+      "Choose the country scenario and currency.",
+      "Set the desired loan amount, annual income, credit score and repayment term.",
+      "Optionally add an extra monthly payment to model faster repayment.",
+      "Review the best simulated scenario and compare every lender row.",
+      "Use the results as a planning estimate and verify actual APR, fees and eligibility directly with the lender."
     ],
-    "why": "A lower monthly payment does not automatically mean a cheaper loan. All2ools helps put payment size, term, and total interest next to each other so borrowers can evaluate the full cost rather than one headline number.",
+    "why": "Loan decisions are easier to evaluate when the headline rate is considered alongside payment size, total interest and repayment duration. All2ools provides a consistent scenario view so you can test several borrowing assumptions without rebuilding the calculations manually.",
     "compare": [
-      [
-        "Comparison",
-        "Side-by-side loan assumptions",
-        "Separate manual calculations"
-      ],
-      [
-        "Total cost",
-        "Estimated interest and repayment",
-        "Focus on monthly payment"
-      ],
-      [
-        "Amortization",
-        "Payment-by-payment schedule",
-        "Requires spreadsheet setup"
-      ],
-      [
-        "Planning",
-        "Scenario comparison",
-        "One offer at a time"
-      ]
+      ["Lender comparison", "Multiple simulated scenarios in one view", "Review offers one at a time"],
+      ["Credit sensitivity", "Models rate changes from credit score and income", "Requires manual what-if calculations"],
+      ["Repayment cost", "Monthly payment, interest and payoff timeline", "Often focused on headline payment"],
+      ["Extra payments", "Shows potential faster payoff scenarios", "Separate spreadsheet calculation"],
+      ["Planning", "Quick country-aware scenario analysis", "Manual comparison across currencies" ]
     ],
-    "faqs": [],
-    "conclusion": "The Global Loan Optimizer helps borrowers compare financing on more than the monthly payment. Use the scenarios to understand repayment cost and amortization, then confirm the final numbers and contractual terms with the lender."
+    "faqs": [
+      {"question": "Are the lender offers real?", "answer": "No. The lender rows are simulated scenarios based on illustrative rate assumptions. They are not applications, quotes, preapprovals or guaranteed offers."},
+      {"question": "Does the calculator check my credit report?", "answer": "No. You enter a credit-score assumption yourself. The tool does not perform a credit inquiry."},
+      {"question": "Why can a higher credit score change the estimated rate?", "answer": "In this model, a stronger credit profile is treated as lower lending risk and therefore produces a lower simulated rate. Actual lender pricing uses its own underwriting rules."},
+      {"question": "Does income affect the result?", "answer": "Yes. The calculator uses the relationship between annual income and requested loan amount as one scenario factor. Actual affordability rules differ by lender and country."},
+      {"question": "Can I compare loans from different countries?", "answer": "You can switch between the supported country scenarios and see currency-aware calculations, but the results should not be interpreted as a direct cross-country quote. APR definitions, taxes, fees, currencies and lending rules differ."},
+      {"question": "What does the extra payment option show?", "answer": "It adds an optional monthly amount to the scheduled payment and estimates how quickly the modeled balance could be repaid. Your actual contract may restrict or charge for prepayments."},
+      {"question": "Does the calculator include fees and taxes?", "answer": "The core comparison focuses on principal, rate and repayment. Real borrowing costs can also include origination fees, insurance, taxes, penalties, foreign-exchange costs and other charges."},
+      {"question": "Should I use this to choose a lender?", "answer": "Use it as an educational comparison tool. Before borrowing, compare the lender's official APR or equivalent rate, fees, total repayment, prepayment rules, eligibility requirements and contract terms."}
+    ],
+    "conclusion": "The Global Loan Optimizer gives you a practical way to compare simulated borrowing scenarios using rate, payment, total interest and payoff duration together. It is most useful for planning and what-if analysis; always confirm the official offer, APR, fees, currency costs and contractual terms with the lender before making a borrowing decision."
   },
   "crypto-tax-calculator": {
     "how": "Crypto tax calculations generally start with transaction history and cost basis. Each sale or taxable disposal is matched with acquisition information according to the selected accounting method, producing an estimated gain or loss. Transfers between your own wallets can require different treatment from sales, swaps, rewards, or other taxable events, so transaction classification matters.",
@@ -1271,6 +1267,45 @@ export const seoToolContent: Record<string, SeoToolContent> = {
   "conclusion": "Use the mortgage calculator to compare home-price, down-payment, rate, and term scenarios before discussing financing with a lender. Look beyond the headline monthly payment by reviewing total interest and recurring ownership costs, and confirm the final figures against the lender's disclosure and loan agreement."
 },
   "home-loan-calculator": {
+  "how": "The home-loan calculator estimates an EMI-style repayment plan from the property price, down payment, annual interest rate and loan tenure. It is designed around common Indian home-financing scenarios and also lets you test extra payments and estimated ownership costs so you can compare affordability with total borrowing cost.",
+  "features": [
+    "Property price and down-payment planning",
+    "Interactive home-loan interest-rate and tenure controls",
+    "Monthly EMI and principal-versus-interest breakdown",
+    "Total interest and total repayment estimates",
+    "Extra EMI scenario and estimated early payoff",
+    "Annual amortization schedule with remaining balance",
+    "Optional property tax, insurance and ownership-cost estimates"
+  ],
+  "use": "For Indian home buyers estimating an affordable loan amount, borrowers comparing 10-, 15-, 20- and 30-year tenure scenarios, homeowners testing prepayment strategies, and anyone preparing for a lender discussion.",
+  "steps": [
+    "Enter the property price you are considering.",
+    "Set the down-payment percentage to calculate the amount to finance.",
+    "Choose the annual home-loan interest rate and repayment tenure.",
+    "Optionally add estimated taxes, insurance and other annual ownership costs.",
+    "Review EMI, total interest, total repayment and the estimated payoff period.",
+    "Test an extra monthly EMI to see how faster principal reduction can change the result."
+  ],
+  "why": "Home financing decisions involve more than finding the lowest EMI. A longer tenure can reduce the monthly burden while increasing lifetime interest, while a larger down payment or regular prepayment can reduce the financed balance. This calculator brings those trade-offs together in one interactive view and provides an annual repayment schedule for easier planning.",
+  "compare": [
+    ["Property planning", "Property price, down payment and financed loan", "Loan amount only"],
+    ["Payment view", "EMI, total interest and total repayment", "Monthly payment only"],
+    ["Scenario testing", "Rate, tenure, down payment and extra EMI", "Manual recalculation"],
+    ["Repayment visibility", "Annual amortization and ending balance", "Single summary number"],
+    ["Ownership costs", "Optional tax, insurance and other estimates", "Usually excluded"]
+  ],
+  "faqs": [
+    {"question": "How is a home-loan EMI calculated?", "answer": "For a standard fixed-rate amortizing loan, the EMI is determined from the financed principal, periodic interest rate and number of monthly payments. Banks can apply their own rounding, fees and rate rules, so the calculator is an estimate rather than a lender quote."},
+    {"question": "Does a larger down payment reduce home-loan interest?", "answer": "Generally yes. A larger down payment reduces the amount borrowed, which lowers the interest charged on the outstanding balance and can reduce the total repayment cost."},
+    {"question": "Is a shorter home-loan tenure always better?", "answer": "Not necessarily. A shorter tenure usually increases the required EMI but can substantially reduce total interest. The right choice depends on affordability, cash flow, financial goals and the lender's terms."},
+    {"question": "Can I use this calculator for Indian home loans?", "answer": "Yes. The calculator uses Indian EMI terminology and INR-oriented home-financing scenarios. Confirm the final rate, processing fees, insurance requirements and repayment rules with the specific bank or lender."},
+    {"question": "What happens if I make an extra EMI payment?", "answer": "An extra amount directed toward principal can reduce the outstanding balance faster, potentially shortening the payoff period and lowering future interest. The exact benefit depends on how the lender applies prepayments."},
+    {"question": "Does the calculator include stamp duty and registration charges?", "answer": "The core home-loan calculation focuses on the financed amount and repayment. Government duties, registration, brokerage and other purchase costs should be considered separately because they vary by location and transaction."},
+    {"question": "Can I compare different home-loan rates?", "answer": "Yes. Change the interest-rate input and compare the resulting EMI, total interest and total repayment. Small rate differences can become significant over a long tenure."},
+    {"question": "Is this my exact bank EMI?", "answer": "No. It is a planning estimate. The actual lender calculation can differ because of the approved rate, processing charges, insurance, taxes, payment dates, rounding, prepayment treatment and other contractual terms."}
+  ],
+  "conclusion": "Use the home-loan calculator before comparing lender offers so you can evaluate the complete repayment picture rather than only the advertised EMI. Compare down payment, rate and tenure together, test realistic prepayment scenarios, and verify the final numbers against the lender's sanction letter and repayment schedule."
+},
   "how": "The home-loan calculator applies the standard fixed-payment amortization method to principal, annual interest rate, and tenure. It uses EMI terminology suited to common Indian home-loan planning, while actual banks may apply their own fees and rate rules.",
   "features": [
     "Home-loan principal and tenure inputs",
@@ -1427,115 +1462,85 @@ export const seoToolContent: Record<string, SeoToolContent> = {
     "conclusion": "Use the student loan estimate to understand the basic cost of repayment and compare scenarios. Before making a repayment decision, verify your current balance, interest rate, fees and program-specific options with your lender or loan servicer."
   },
   "credit-card-payoff-calculator": {
-  "how": "The payoff model starts with a revolving credit-card balance and APR, applies periodic interest, and subtracts a planned payment. Repeating that process estimates how long the balance could take to reach zero and how much interest may accrue.",
-  "features": [
-    "Current balance and APR inputs",
-    "Fixed-payment payoff scenario",
-    "Estimated payoff duration",
-    "Cumulative interest view",
-    "Higher-payment scenario comparison"
-  ],
-  "use": "For cardholders planning debt repayment; households comparing fixed payment amounts; people testing how extra payments can shorten payoff time.",
-  "steps": [
-    "Enter the current balance.",
-    "Enter the card APR.",
-    "Enter the planned recurring payment.",
-    "Review estimated payoff time and interest."
-  ],
-  "why": "Credit-card debt behaves differently from a standard installment loan because the balance revolves. Showing payment size alongside payoff time makes that trade-off easier to understand.",
-  "compare": [
-    [
-      "Debt model",
-      "Revolving-balance simulation",
-      "Fixed installment schedule"
+    "how": "The calculator models a revolving credit-card balance month by month. It applies the selected APR as a periodic interest rate, subtracts the planned payment, and repeats the process until the modeled balance reaches zero. You can add an extra monthly amount to compare a more aggressive payoff plan.",
+    "features": [
+      "Current balance and APR controls",
+      "Monthly payment and extra-payment scenarios",
+      "Estimated payoff date and total interest",
+      "Principal-versus-interest visual breakdown",
+      "First-year payment schedule",
+      "Annual balance and interest progress",
+      "Payment-too-low warning when interest is not covered",
+      "USD and INR display options"
     ],
-    [
-      "Decision variable",
-      "Payment amount",
-      "Loan term"
+    "use": "Useful for people planning credit-card debt repayment, comparing payment amounts, estimating the cost of carrying a balance, testing extra payments, and building a realistic payoff target without adding new purchases to the model.",
+    "steps": [
+      "Enter the current credit-card balance shown on your latest statement.",
+      "Enter the card's annual percentage rate (APR).",
+      "Set the monthly payment you can consistently afford.",
+      "Optionally add an extra monthly payment to test a faster strategy.",
+      "Review payoff time, interest, total paid, and the repayment schedule.",
+      "Compare scenarios before choosing a repayment amount."
     ],
-    [
-      "Cost result",
-      "Payoff time and interest",
-      "Payment only"
+    "why": "A credit card is revolving debt, so the payment amount can have a large effect on how long the balance remains outstanding. Showing the payoff path, cumulative interest, and effect of extra payments gives users more context than a single minimum-payment estimate.",
+    "compare": [
+      ["Debt type", "Revolving credit-card balance", "Fixed installment loan"],
+      ["Primary input", "Balance, APR and payment", "Principal, rate and term"],
+      ["Main result", "Payoff time and interest", "Scheduled payment and interest"],
+      ["Extra-payment analysis", "Directly tests faster payoff", "Can shorten an installment schedule"],
+      ["Real-world variability", "Purchases, fees, daily interest and APR changes", "Lender-specific fees and terms"]
     ],
-    [
-      "Scenario use",
-      "Test larger payments",
-      "One repayment case"
-    ]
-  ],
-  "faqs": [
-    {
-      "question": "Why can credit-card debt take so long to repay?",
-      "answer": "If the payment is only slightly above periodic interest, the principal falls slowly and the payoff period can become very long."
-    },
-    {
-      "question": "What if the payment does not cover interest?",
-      "answer": "The balance may not decrease. A safe implementation should flag that situation rather than promise a payoff date."
-    },
-    {
-      "question": "Does it include new purchases and fees?",
-      "answer": "No. It models the starting balance under the stated assumptions. New charges, fees, and rate changes can change the real payoff path."
-    }
-  ],
-  "conclusion": "Use the payoff estimate to compare repayment strategies, then account for actual card purchases, fees, APR changes, and issuer rules."
-},
+    "faqs": [
+      {"question":"How long will it take to pay off my credit card?","answer":"It depends mainly on the balance, APR and payment. A higher payment generally reduces the number of months and the interest accumulated, while a payment close to monthly interest can leave the balance outstanding for a very long time."},
+      {"question":"What happens if my payment does not cover the interest?","answer":"The modeled balance cannot be paid down under those assumptions. The calculator flags this situation instead of displaying a misleading payoff date. Increase the payment or verify the APR and balance with your issuer."},
+      {"question":"Does paying more than the minimum help?","answer":"Usually, yes. When additional money is applied toward the balance, less principal remains to generate future interest. The exact benefit depends on your card terms and whether new charges are added."},
+      {"question":"Does this calculator include new purchases?","answer":"No. The model assumes the starting balance is the only balance being repaid and that no new purchases or fees are added. Continued card spending can materially change the payoff result."},
+      {"question":"What APR should I enter?","answer":"Use the APR shown by your card issuer for the balance you are modeling. If different balances have different promotional or standard rates, one APR may not reproduce the issuer's exact statement calculation."},
+      {"question":"Is credit-card interest calculated daily or monthly?","answer":"Many cards calculate interest using a daily periodic rate and then apply it according to the issuer's agreement. This calculator uses a monthly approximation for planning, so the actual statement can differ."},
+      {"question":"Can I use this to compare debt-payoff strategies?","answer":"Yes. Test different monthly and extra-payment amounts and compare the modeled payoff time and interest. Treat the results as scenario estimates rather than a promise from your card issuer."},
+      {"question":"Should I pay off a credit card before investing?","answer":"That depends on your rate, liquidity needs, emergency savings and other financial priorities. High-interest revolving debt can be expensive, so compare the guaranteed cost of interest with the uncertain return of an investment and consider your overall situation."}
+    ],
+    "conclusion": "Use the payoff estimate to understand the relationship between balance, APR and payment size. For an actionable plan, confirm the current balance, APR, minimum payment, fees and issuer-specific rules on your statement, avoid adding new debt when possible, and test an extra payment that is sustainable for your budget."
+  },
   "interest-calculator": {
-  "how": "The interest calculator uses principal, rate, time, and compounding frequency. For compound growth it follows A = P(1 + r/n)^(nt), so changing the frequency changes the number of periods used in the calculation.",
-  "features": [
-    "Principal, rate, and duration inputs",
-    "Compounding-frequency control",
-    "Interest and final amount",
-    "Rate and frequency comparison",
-    "Transparent mathematical model"
-  ],
-  "use": "For savers comparing compounding schedules; borrowers checking interest assumptions; students learning how compounding frequency changes growth.",
-  "steps": [
-    "Enter principal, annual rate, and time.",
-    "Choose the compounding frequency.",
-    "Calculate the accumulated amount.",
-    "Compare different frequencies if needed."
-  ],
-  "why": "The frequency setting affects the mathematics rather than merely changing a label. That makes this page useful for learning and for checking product assumptions.",
-  "compare": [
-    [
-      "Method",
-      "Explicit compounding frequency",
-      "Hidden frequency"
+    "how": "This interest calculator estimates how a starting principal can grow when an annual rate is applied with a selected compounding frequency. You can also add recurring contributions to model a more realistic savings or investment scenario. The result separates money contributed from mathematical interest growth.",
+    "features": [
+      "Principal, annual rate and time controls",
+      "Annual, semi-annual, quarterly, monthly and daily compounding",
+      "Optional recurring contributions with multiple contribution schedules",
+      "Estimated interest earned and final value",
+      "Interest-share visual breakdown",
+      "Year-by-year growth schedule",
+      "Return-multiple and scenario analysis",
+      "USD and INR display options"
     ],
-    [
-      "Output",
-      "Interest and final amount",
-      "Interest only"
+    "use": "Useful for checking interest assumptions on savings, deposits, investments and educational examples; comparing compounding frequencies; estimating the effect of recurring contributions; and understanding how rate and time influence growth.",
+    "steps": [
+      "Enter the starting principal and annual interest rate.",
+      "Choose the time period and compounding frequency.",
+      "Optionally add a recurring contribution and contribution schedule.",
+      "Review estimated interest, invested money, final value and the yearly schedule.",
+      "Change one assumption at a time to compare scenarios."
     ],
-    [
-      "Learning",
-      "Shows frequency effect",
-      "Single result"
+    "why": "A single interest number can hide important assumptions. This calculator makes the rate, time, compounding frequency and recurring contributions visible so you can understand what is driving the result.",
+    "compare": [
+      ["Method", "Visible compounding and contribution assumptions", "Single fixed result"],
+      ["Outputs", "Interest, invested amount, final value and schedule", "Usually one total"],
+      ["Scenario testing", "Rate, time, frequency and contribution changes", "Manual recalculation"],
+      ["Transparency", "Shows the mathematical assumptions", "Assumptions may be hidden"]
     ],
-    [
-      "Scenario testing",
-      "Rate and frequency changes",
-      "Manual recalculation"
-    ]
-  ],
-  "faqs": [
-    {
-      "question": "Why does compounding frequency matter?",
-      "answer": "Interest can be added to the balance more often, producing a different final amount under the same nominal annual rate."
-    },
-    {
-      "question": "Can this be used for loans and savings?",
-      "answer": "It can illustrate the mathematics for both, but real products may use different day-count, payment, fee, and rate conventions."
-    },
-    {
-      "question": "What does n represent?",
-      "answer": "n is the number of compounding periods per year, such as 12 for monthly compounding."
-    }
-  ],
-  "conclusion": "Use the interest calculation to compare assumptions and understand the math, then check the actual financial product terms for a final figure."
-},
+    "faqs": [
+      {"question":"What is an interest calculator used for?","answer":"It estimates the interest and final value produced by a starting amount, rate and time period. It can also help compare compounding assumptions and recurring contributions."},
+      {"question":"Why does compounding frequency matter?","answer":"When interest is added more frequently, previously credited interest can participate in later calculations. Under the same nominal rate, that can produce a different mathematical result."},
+      {"question":"Can I add monthly contributions?","answer":"Yes. Enter a recurring contribution and select monthly, weekly, biweekly, quarterly or annual contributions to model additional money entering the calculation."},
+      {"question":"Is this calculator suitable for loans?","answer":"It can illustrate interest mathematics, but actual loan balances depend on payments, payment dates, fees, day-count rules, rate changes and lender-specific terms."},
+      {"question":"What is the difference between interest and final value?","answer":"Interest is the estimated growth above the money contributed. Final value combines the starting principal, recurring contributions and that estimated interest."},
+      {"question":"Does a higher interest rate always produce a higher result?","answer":"For the same principal, time, contribution pattern and positive compounding assumptions, a higher rate produces a higher mathematical result. Real financial products can have fees, taxes and changing rates that affect outcomes."},
+      {"question":"What does return multiple mean?","answer":"Return multiple compares the estimated final value with the total amount contributed. A value of 2.00× means the modeled final value is twice the money contributed."},
+      {"question":"Are the results guaranteed?","answer":"No. The calculator is a mathematical projection, not a quote or guarantee. Verify the actual rate, compounding method, fees, taxes and product terms before making a financial decision."}
+    ],
+    "conclusion": "Use the interest calculator to understand how rate, time, compounding and additional contributions interact. For real accounts or loans, compare the result with the institution's official terms and statement because product-specific rules can change the final amount."
+  },
   "simple-interest-calculator": {
   "how": "Simple interest grows in a straight line because each period uses the original principal as the interest base. The core formula is I = P × r × t, where P is principal, r is the annual rate as a decimal, and t is time in years. The final amount is P + I.",
   "features": [

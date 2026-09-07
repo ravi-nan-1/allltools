@@ -1,7 +1,7 @@
 'use client';
 
-import { AdvancedCalculator } from '@/components/tools/finance/advanced-calculators';
+import { FinanceCalculator } from '@/components/tools/finance/finance-calculator';
 
-export default function CreditCardPayoffCalculator( ) {
-  return <AdvancedCalculator slug="credit-card-payoff-calculator" />;
+export default function CreditCardPayoffCalculator() {
+  return <FinanceCalculator slug="credit-card-payoff-calculator" />;
 }
