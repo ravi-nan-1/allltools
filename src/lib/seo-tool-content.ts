@@ -1178,59 +1178,75 @@ export const seoToolContent: Record<string, SeoToolContent> = {
     "conclusion": "Use the loan calculator to understand the relationship between payment, interest, and tenure before comparing lenders. Treat the figures as planning estimates and confirm the final rate, fees, repayment schedule, and prepayment conditions with your lender."
   },
   "mortgage-calculator": {
-  "how": "Mortgage principal and interest are estimated with a standard amortization formula using the financed balance, annual rate, and loan term. Property taxes, insurance, PMI, and closing costs are separate housing expenses unless explicitly modeled.",
+  "how": "A mortgage calculator estimates the regular principal-and-interest payment from the amount financed, annual interest rate, and repayment term. It can also model common ownership costs such as property tax, home insurance, PMI, HOA charges, and other recurring expenses so buyers can see a broader picture of housing costs.",
   "features": [
-    "Mortgage principal and term scenarios",
-    "Interest-rate sensitivity",
-    "Monthly principal-and-interest estimate",
-    "Lifetime interest comparison",
-    "Separate view of financing versus ownership costs"
+    "Home price and down-payment planning",
+    "Interactive interest-rate and loan-term sliders",
+    "Principal-versus-interest payment meter",
+    "Monthly housing cost including optional taxes and insurance",
+    "PMI estimate for lower down payments",
+    "Extra-payment and early-payoff scenarios",
+    "Annual mortgage amortization schedule"
   ],
-  "use": "For home buyers comparing financing amounts; homeowners testing rate or term changes; planners building a housing budget.",
+  "use": "For prospective home buyers estimating affordability, homeowners comparing refinance scenarios, and borrowers who want to understand how the down payment, interest rate, term, and recurring ownership costs affect a mortgage.",
   "steps": [
-    "Enter the mortgage amount.",
-    "Enter the annual rate and term.",
-    "Review monthly principal and interest.",
-    "Compare total interest and add other housing costs separately."
+    "Enter the home's purchase price.",
+    "Choose the down-payment percentage.",
+    "Set the mortgage interest rate and repayment term.",
+    "Optionally include property tax, insurance, PMI, HOA, and other annual costs.",
+    "Review the monthly payment, total interest, payoff time, and amortization schedule.",
+    "Try an extra monthly payment to see how faster repayment can change the estimate."
   ],
-  "why": "Mortgage decisions involve more than one monthly number. This page keeps the loan-amortization calculation distinct from property taxes, insurance, and other ownership costs.",
+  "why": "The monthly mortgage payment is only one part of the cost of owning a home. A useful calculator should make the financing cost visible while also giving buyers a way to test taxes, insurance, PMI, recurring fees, and additional payments. The interactive meter makes the relationship between principal and interest easier to understand at a glance.",
   "compare": [
     [
-      "Core result",
-      "Principal and interest payment",
-      "Generic housing estimate"
+      "Home-price planning",
+      "Home price, down payment, and financed balance",
+      "Loan amount only"
     ],
     [
-      "Scenario control",
-      "Rate and term comparison",
-      "One fixed scenario"
+      "Payment breakdown",
+      "Principal, interest, and optional ownership costs",
+      "Single monthly figure"
     ],
     [
-      "Cost visibility",
-      "Lifetime interest shown",
-      "Payment only"
+      "Scenario testing",
+      "Rate, term, down payment, and extra-payment changes",
+      "Manual recalculation"
     ],
     [
-      "Scope",
-      "Financing-focused",
-      "May mix ownership costs"
+      "Repayment visibility",
+      "Annual amortization schedule",
+      "No repayment timeline"
     ]
   ],
   "faqs": [
     {
-      "question": "Does the mortgage calculator include property tax?",
-      "answer": "Not in the core principal-and-interest result. Taxes, insurance, PMI, and lender fees can materially change the actual monthly housing cost."
+      "question": "What does a mortgage calculator calculate?",
+      "answer": "It estimates the principal-and-interest payment for a mortgage and can help model additional housing costs such as property tax, insurance, PMI, HOA fees, and other recurring expenses."
     },
     {
-      "question": "Why does a longer mortgage cost more interest?",
-      "answer": "The balance remains outstanding for more periods, so interest accrues for longer even when the monthly payment is lower."
+      "question": "Does a larger down payment reduce the mortgage payment?",
+      "answer": "Usually, yes. A larger down payment means less money is financed, which generally lowers the principal-and-interest payment and can also reduce interest paid over the life of the mortgage."
     },
     {
-      "question": "Can I use it for refinancing?",
-      "answer": "Yes, for a comparison scenario. Enter the proposed balance, rate, and term and compare the estimate with the refinance offer and closing costs."
+      "question": "What happens if I choose a longer mortgage term?",
+      "answer": "A longer term generally lowers the required monthly principal-and-interest payment, but the balance remains outstanding for more months, so the total interest can be substantially higher."
+    },
+    {
+      "question": "Does the calculator include property taxes and insurance?",
+      "answer": "The calculator can include estimated recurring property tax, home insurance, PMI, HOA fees, and other annual costs when those options are enabled. These estimates vary by location and policy."
+    },
+    {
+      "question": "Can extra mortgage payments help me pay off the loan sooner?",
+      "answer": "An extra payment applied toward principal can reduce the balance faster and may shorten the payoff period and lower interest. Check your mortgage agreement for any prepayment restrictions or penalties."
+    },
+    {
+      "question": "Is the mortgage calculator result my exact lender payment?",
+      "answer": "No. It is a planning estimate. The final payment can differ because of lender pricing, taxes, insurance, PMI rules, fees, payment timing, local requirements, and the terms of the actual mortgage offer."
     }
   ],
-  "conclusion": "Use the mortgage calculation to compare financing structures, not as a binding mortgage offer."
+  "conclusion": "Use the mortgage calculator to compare home-price, down-payment, rate, and term scenarios before discussing financing with a lender. Look beyond the headline monthly payment by reviewing total interest and recurring ownership costs, and confirm the final figures against the lender's disclosure and loan agreement."
 },
   "home-loan-calculator": {
   "how": "The home-loan calculator applies the standard fixed-payment amortization method to principal, annual interest rate, and tenure. It uses EMI terminology suited to common Indian home-loan planning, while actual banks may apply their own fees and rate rules.",
