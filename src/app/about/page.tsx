@@ -1,3 +1,4 @@
+import { tools } from '@/lib/tools';
 
 import type { Metadata } from 'next';
 import {
@@ -106,7 +107,7 @@ export default function AboutPage() {
                 </p>
                 <div className="mt-8 space-y-4">
                     <BenefitItem icon={CheckCircle}>One Platform, One Interface</BenefitItem>
-                    <BenefitItem icon={CheckCircle}>25+ Essential Tools (and growing)</BenefitItem>
+                    <BenefitItem icon={CheckCircle}>{tools.length} Essential Tools (and growing)</BenefitItem>
                     <BenefitItem icon={CheckCircle}>Everything you need, in one place.</BenefitItem>
                 </div>
               </div>
@@ -123,7 +124,7 @@ export default function AboutPage() {
           <section className="text-center">
             <h2 className="text-3xl font-bold font-headline">What We Offer</h2>
             <p className="mx-auto mt-2 max-w-2xl text-muted-foreground">
-              All2ools includes 25+ free tools across critical categories to power your personal and professional projects.
+              All2ools includes {tools.length} free tools across critical categories to power your personal and professional projects.
             </p>
             <div className="mt-12 grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-6">
                 <FeatureCard icon={Briefcase} title="Business"></FeatureCard>
@@ -133,7 +134,7 @@ export default function AboutPage() {
                 <FeatureCard icon={Code} title="Developer"></FeatureCard>
                 <FeatureCard icon={FileText} title="SEO & Docs"></FeatureCard>
             </div>
-            <p className="mt-8 text-muted-foreground">Our goal is to expand All2ools into a complete ecosystem of 50+ tools.</p>
+            <p className="mt-8 text-muted-foreground">Our goal is to keep expanding All2ools with useful tools as new workflows are identified.</p>
           </section>
           
            {/* --- Who We Built It For --- */}

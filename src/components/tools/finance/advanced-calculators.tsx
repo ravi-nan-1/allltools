@@ -82,6 +82,11 @@ function GenericAdvancedCalculator({ slug, cfg }: { slug: string; cfg: { title: 
   
   const result = useMemo(() => calcAdvanced(slug, v, currency), [slug, v, currency]);
   const fields = fieldsFor(slug);
+  const disclaimer = slug === 'bmi-calculator'
+    ? 'BMI is a general screening estimate. It does not account for muscle mass, frame size, age, sex, or overall health and is not a diagnosis.'
+    : slug === 'calorie-calculator'
+      ? 'Calorie results are estimates based on the Mifflin–St Jeor equation and an activity multiplier. Individual metabolism and energy needs vary, so this is not a medical or dietary prescription.'
+      : 'Results are estimates for planning and education. Financial outcomes can depend on rates, fees, taxes, product terms, personal circumstances, and data sources.';
 
   return <Shell title={cfg.title} description={cfg.description}>
     <div className="rounded-2xl border bg-gradient-to-b from-muted/30 to-background p-4 md:p-5">
@@ -99,7 +104,7 @@ function GenericAdvancedCalculator({ slug, cfg }: { slug: string; cfg: { title: 
         {result.map((x,i) => <div key={x.label} className={`group rounded-2xl border p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md ${i===0?'bg-primary/[0.06] border-primary/30':''}`}><div className="text-sm text-muted-foreground">{x.label}</div><div className="mt-1 text-2xl font-bold tracking-tight break-words">{x.value}</div></div>)}
       </div>
     </div>
-    <p className="mt-5 text-xs text-muted-foreground">Results are estimates for planning and education. Financial, tax, health, and currency outcomes can depend on laws, rates, fees, personal circumstances, and data sources.</p>
+    <p className="mt-5 text-xs text-muted-foreground">{disclaimer}</p>
   </Shell>;
 }
 
@@ -153,8 +158,8 @@ function calcAdvanced(slug:string,v:Record<string,string>,currency:string):Resul
   if(slug==='percentage-calculator'){const a=n('amount'),p=n('percentage');return [{label:`${p}% of ${a}`,value:(a*p/100).toFixed(2)},{label:'Percentage as Decimal',value:(p/100).toFixed(4)},{label:'Base Number',value:a.toFixed(2)}]}
   if(slug==='age-calculator'){const b=new Date(v.birth+'T00:00:00'),t=new Date(v.target+'T00:00:00');let age=t.getFullYear()-b.getFullYear();const before=t.getMonth()<b.getMonth()||(t.getMonth()===b.getMonth()&&t.getDate()<b.getDate());if(before)age--;const days=Math.max(0,Math.floor((t.getTime()-b.getTime())/86400000));return [{label:'Age in Years',value:String(Math.max(0,age))},{label:'Age in Days',value:String(days)},{label:'Birth Date',value:v.birth}]}
   if(slug==='date-calculator'){const a=new Date(v.birth+'T00:00:00'),b=new Date(v.target+'T00:00:00'),diff=Math.round((b.getTime()-a.getTime())/86400000),add=Number.parseInt(v.days||'0',10)||0;const out=new Date(a);out.setDate(out.getDate()+add);return [{label:'Days Between Dates',value:String(Math.abs(diff))},{label:'Signed Difference',value:String(diff)},{label:'Date After Adding Days',value:out.toISOString().slice(0,10)}]}
-  if(slug==='bmi-calculator'){const bmi=n('weight')/Math.pow(n('height')/100,2);const cat=bmi<18.5?'Underweight':bmi<25?'Healthy range':bmi<30?'Overweight':'Obesity range';return [{label:'BMI',value:bmi.toFixed(1)},{label:'Category',value:cat},{label:'Height / Weight',value:`${n('height')} cm / ${n('weight')} kg`}]}
-  if(slug==='calorie-calculator'){const age=n('currentAge'),w=n('weight'),h=n('height'),sex=v.sex==='female'?-161:5,bmr=10*w+6.25*h-5*age+sex,tdee=bmr*n('activity');return [{label:'Estimated BMR',value:`${Math.round(bmr)} kcal/day`},{label:'Estimated Daily Calories',value:`${Math.round(tdee)} kcal/day`},{label:'Activity Multiplier',value:n('activity').toFixed(2)}]}
+  if(slug==='bmi-calculator'){const height=n('height'),weight=n('weight');if(height<=0||weight<=0)return [{label:'BMI',value:'Enter a positive height and weight'},{label:'Category',value:'Not calculated'},{label:'Input check',value:'Height and weight must be greater than zero'}];const bmi=weight/Math.pow(height/100,2);const cat=bmi<18.5?'Underweight':bmi<25?'Healthy range':bmi<30?'Overweight':'Obesity range';return [{label:'BMI',value:bmi.toFixed(1)},{label:'Category',value:cat},{label:'Height / Weight',value:`${height} cm / ${weight} kg`}]}
+  if(slug==='calorie-calculator'){const age=n('currentAge'),w=n('weight'),h=n('height'),activity=n('activity');if(age<=0||w<=0||h<=0||activity<=0)return [{label:'Result',value:'Enter positive age, height, weight, and activity values'},{label:'Status',value:'Not calculated'}];const sex=v.sex==='female'?-161:5,bmr=10*w+6.25*h-5*age+sex,tdee=bmr*activity;return [{label:'Estimated BMR',value:`${Math.round(bmr)} kcal/day`},{label:'Estimated Daily Calories',value:`${Math.round(tdee)} kcal/day`},{label:'Activity Multiplier',value:activity.toFixed(2)}]}
   if(slug==='mortgage-payment-calculator'){const m=loanPayment(n('loan'),n('rate'),n('term'));return [{label:'Monthly Principal & Interest',value:fmt(m)},{label:'Total Payments',value:fmt(m*n('term')*12)},{label:'Total Interest',value:fmt(m*n('term')*12-n('loan'))}]}
   if(slug==='auto-loan-calculator'){const loan=Math.max(0,n('purchase')-n('down')),m=loanPayment(loan,n('rate'),n('term'));return [{label:'Amount Financed',value:fmt(loan)},{label:'Monthly Payment',value:fmt(m)},{label:'Total Interest',value:fmt(m*n('term')*12-loan)}]}
   if(slug==='discount-calculator'){const p=n('price'),d=p*n('discount')/100;return [{label:'Discount Amount',value:fmt(d)},{label:'Sale Price',value:fmt(p-d)},{label:'You Save',value:fmt(d)}]}

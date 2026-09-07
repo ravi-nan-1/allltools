@@ -62,7 +62,7 @@ export function HomePageClient({ tools }: HomePageClientProps) {
           </h1>
           
           <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
-             All2ools offers 30+ free AI tools for PDFs, PDF to Word, SEO, images, and business tasks. Fast, easy, and no signup required.
+             All2ools brings together focused online utilities for documents, images, SEO, finance, developer tasks, and everyday work.
           </p>
           
           <div className="flex flex-wrap justify-center gap-6 mb-10 text-sm text-muted-foreground">
@@ -80,7 +80,7 @@ export function HomePageClient({ tools }: HomePageClientProps) {
             </div>
             <div className="flex items-center gap-2">
               <Check className="w-5 h-5 text-green-500" />
-              <span>30+ AI Tools</span>
+              <span>{tools.length} Online Tools</span>
             </div>
           </div>
           

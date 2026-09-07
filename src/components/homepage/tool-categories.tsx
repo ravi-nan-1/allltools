@@ -1,3 +1,4 @@
+import { tools } from '@/lib/tools';
 
 'use client';
 import {
@@ -81,7 +82,7 @@ export function ToolCategories() {
             <div className="text-center mb-12">
                 <h2 className="text-3xl font-extrabold tracking-tight md:text-5xl font-headline">A Complete Suite of Digital Tools</h2>
                 <p className="mx-auto mt-4 max-w-3xl text-lg text-muted-foreground">
-                    All2ools solves this by combining 25+ essential utilities into one clean, modern platform, covering everything from SEO and business automation to developer debugging and financial calculations.
+                    All2ools solves this by combining {tools.length} essential utilities into one clean, modern platform, covering everything from SEO and business automation to developer debugging and financial calculations.
                 </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

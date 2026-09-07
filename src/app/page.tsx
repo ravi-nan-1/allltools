@@ -1,5 +1,6 @@
 
 import { tools } from '@/lib/tools';
+import { homepageFaqItems } from '@/lib/homepage-faq';
 import { HomePageClient } from '@/components/homepage/home-page-client';
 import { placeholderImages } from '@/lib/placeholder-images';
 import type { Metadata } from 'next';
@@ -31,8 +32,7 @@ export default function Home() {
     '@type': 'WebSite',
     url: 'https://all2ools.com/',
     name: 'All2ools',
-    description:
-      'The ultimate suite of 30+ free online tools powered by AI. Explore tools for finance, SEO, image editing, business management, developers, and more.',
+    description: `All2ools offers ${tools.length} free online tools across finance, SEO, image, business, developer, and health categories.`,
     potentialAction: {
       '@type': 'SearchAction',
       target: {
@@ -55,40 +55,11 @@ export default function Home() {
   const faqSchema = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: [
-      {
-        '@type': 'Question',
-        name: 'Is All2ools free to use?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Yes, all tools available on All2ools are completely free to use. There are no hidden charges, subscription fees, or usage limits.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'Do I need to create an account?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'No, you do not need to create an account to use our tools. All utilities are accessible instantly without any signup required.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'Are my uploaded files and data secure?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Yes, your privacy and security are our top priorities. Most of our tools process data directly in your browser. For tools that require server-side processing, we do not store your files or data permanently. All uploads are deleted automatically after processing.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'How many tools does All2ools offer?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'All2ools offers a growing suite of over 25 essential tools across various categories, including SEO, Business, Finance, Image, PDF, and Developer utilities. We are constantly adding new tools every month.',
-        },
-      },
-    ],
+    mainEntity: homepageFaqItems.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+    })),
   };
   
   const featuredTools = [

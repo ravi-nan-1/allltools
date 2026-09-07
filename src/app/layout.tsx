@@ -1,3 +1,4 @@
+import { tools } from '@/lib/tools';
 
 import type { Metadata } from 'next';
 import './globals.css';
@@ -23,7 +24,7 @@ const sourceCodePro = Source_Code_Pro({
 export const metadata: Metadata = {
   metadataBase: new URL('https://all2ools.com'),
   title: 'Free Online AI Tools | PDF, SEO, Image & Business Tools',
-  description: 'All2ools offers 30+ free AI tools for PDFs, PDF to Word, SEO, images, and business tasks. Fast, easy, and no signup required.',
+  description: `All2ools offers ${tools.length} free online tools across documents, images, SEO, finance, business, developer, and health categories.`,
   keywords: 'pdf to word converter online, compress pdf online, image compressor online, text to speech online, paraphrasing tool online, ai image generator free, ai chatbot, plagiarism checker, website seo checker, backlink checker, tool ai, online for free, forex arbitrage, api latency, convert json, json to excel, no signup',
   icons: {
     icon: '/logo.svg',

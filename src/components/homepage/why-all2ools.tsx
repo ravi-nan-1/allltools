@@ -31,16 +31,16 @@ export function WhyAll2ools() {
     <section className="space-y-20 py-16 md:py-24">
       <header className="text-center max-w-4xl mx-auto">
         {/* Main H1 - Primary Keyword Focus */}
-        <h1 className="text-3xl font-extrabold tracking-tight text-primary md:text-5xl font-headline">
-          Free Online Tools - 27+ Tools for PDF Converter, Image Compression & SEO
-        </h1>
+        <h2 className="text-3xl font-extrabold tracking-tight text-primary md:text-5xl font-headline">
+          Free Online Tools for Everyday Digital Tasks
+        </h2>
         
         <p className="mx-auto mt-4 text-lg text-muted-foreground">
           In a world where digital work is becoming faster, smarter, and more demanding, having the right <strong>free online tools</strong> at the right time makes all the difference. All2ools is built to solve this exact problem. Instead of searching the internet for dozens of separate utilities, you get everything in one unified platform — simple, fast, and completely free.
         </p>
         
         <p className="mt-4 text-lg text-muted-foreground">
-          All2ools brings together <strong>AI-powered tools</strong>, <strong>PDF converter tools</strong> like <strong>PDF to Word</strong>, <strong>Word to PDF</strong>, <strong>PDF to JPG</strong>, image utilities like our <strong>image compressor online</strong>, <strong>plagiarism checker</strong>, <strong>QR code generator</strong>, <strong>URL shortener</strong>, SEO tools, finance calculators, and developer utilities like <strong>JSON formatter</strong> and <strong>JWT decoder</strong> — all designed to help you work smarter and finish tasks in seconds.
+          All2ools brings together document, image, SEO, finance, business, developer, and AI utilities in one searchable workspace. Each tool has its own focused workflow so you can move from a task to a result without switching between multiple websites.
         </p>
       </header>
 
@@ -53,7 +53,7 @@ export function WhyAll2ools() {
           </h2>
           
           <p className="text-muted-foreground mb-8">
-            Most online tools force you to watch ads, require sign-ups, slow down your device, and don&apos;t respect your privacy. All2ools does the opposite, offering powerful features like a <strong>free PDF to Word converter</strong>, <strong>PDF to Excel</strong>, <strong>merge PDF</strong>, <strong>split PDF</strong>, high-quality <strong>image compressor</strong>, <strong>background remover</strong>, <strong>plagiarism checker free</strong>, and a full suite of <strong>AI tools online for free</strong>.
+            The platform is organized around practical workflows: document conversion, image processing, content work, calculations, and developer tasks. Each tool page explains its purpose and workflow so visitors can choose the right utility instead of navigating a wall of unrelated links.
           </p>
           
           <ul className="space-y-4">
@@ -74,7 +74,7 @@ export function WhyAll2ools() {
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground">
-                All2ools replaces hundreds of separate websites by offering a single clean dashboard with <strong>PDF to Word converter free</strong>, <strong>JPG to PDF</strong>, <strong>compress image online</strong>, <strong>QR code generator free</strong>, <strong>invoice generator</strong>, <strong>webhook tester</strong>, and more. Instead of hopping across 10 websites, you stay in one smooth, productive environment, improving your efficiency, focus, and speed.
+                Instead of keeping a separate bookmark for every small task, visitors can search the All2ools catalog and open a dedicated tool page. Category navigation helps narrow the collection when a visitor knows the type of job they need to complete.
               </p>
             </CardContent>
           </Card>
@@ -88,7 +88,7 @@ export function WhyAll2ools() {
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground">
-                We are expanding rapidly, adding new <strong>AI tools</strong> like <strong>OCR PDF to Word</strong>, <strong>AI humanizer</strong>, <strong>AI headshot generator</strong>, <strong>product description generator</strong>, smart calculators including <strong>crypto tax calculator</strong> and <strong>business valuation calculator</strong>, and advanced utilities every month. Our vision is to make All2ools the #1 all-in-one digital utility hub.
+                The catalog continues to evolve as new workflows are added. The focus is on making each utility understandable and useful on its own while keeping navigation and interaction consistent across the site.
               </p>
             </CardContent>
           </Card>
@@ -264,10 +264,10 @@ export function WhyAll2ools() {
       <div className="space-y-8">
         <div className="text-center max-w-3xl mx-auto">
           <h2 className="text-2xl md:text-4xl font-bold font-headline mb-4">
-            Complete PDF Toolkit - 24 Free PDF Tools Online
+            Complete PDF Toolkit
           </h2>
           <p className="text-lg text-muted-foreground">
-            From <strong>PDF to Word converter free</strong> to advanced <strong>PDF editing tools</strong>, we offer the most comprehensive <strong>PDF tool suite</strong> available online. No installation, no signup, no limits.
+            The document section covers common conversion, editing, page-management, OCR, and compression tasks in one place. You can choose a dedicated <strong>PDF tool</strong> for the job instead of moving between several unrelated services.
           </p>
         </div>
 
@@ -322,7 +322,7 @@ export function WhyAll2ools() {
               No File Size Limits
             </h3>
             <p className="text-muted-foreground">
-              Unlike other <strong>PDF converter free</strong> tools, we don&apos;t restrict file sizes. Convert large <strong>PDF to Word</strong>, <strong>PDF to Excel</strong>, or <strong>merge PDF</strong> files without worrying about upload limits.
+              The document tools are designed around straightforward workflows: choose a file, select the operation, review the result, and continue with your work. Available limits and processing behavior depend on the individual tool rather than a blanket promise.
             </p>
           </div>
 
@@ -342,7 +342,7 @@ export function WhyAll2ools() {
               Lightning Fast Processing
             </h3>
             <p className="text-muted-foreground">
-              Our <strong>PDF to Word online</strong> converter processes files in seconds. <strong>Split PDF</strong>, <strong>compress PDF</strong>, or <strong>protect PDF</strong> operations complete almost instantly.
+              Browser-based interfaces keep common document operations easy to start and review. For example, <strong>PDF conversion</strong> and page-management tools expose the relevant inputs without requiring a desktop application.
             </p>
           </div>
 
@@ -352,7 +352,7 @@ export function WhyAll2ools() {
               AI-Powered OCR Technology
             </h3>
             <p className="text-muted-foreground">
-              Our <strong>OCR PDF to Word</strong> tool uses advanced AI to extract text from scanned PDFs with 99%+ accuracy. Convert scanned documents, receipts, and images to editable text.
+              OCR is useful when a PDF contains scanned pages rather than selectable text. The <strong>OCR workflow</strong> attempts to recognize characters and turn the result into editable content, but users should review extracted text for recognition errors.
             </p>
           </div>
         </div>
