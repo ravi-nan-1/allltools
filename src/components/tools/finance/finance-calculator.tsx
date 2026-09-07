@@ -720,6 +720,7 @@ function CreditCardPayoffCalculator() {
 
   const fmt=(n:number)=>money(n,currency);
   const arc=Math.min(100,Math.max(0,result.principalShare)).toFixed(2);
+  const actualPayment = payment + Math.max(0, extra);
   return <Card className="w-full overflow-hidden border border-slate-200 bg-white shadow-sm"><CardContent className="p-0">
     <div className="border-b bg-gradient-to-r from-rose-50 via-white to-indigo-50 px-5 py-5 md:px-8"><div className="flex flex-wrap items-center justify-between gap-4"><div><p className="text-xs font-bold uppercase tracking-[0.18em] text-rose-600">Advanced Credit Card Payoff Calculator</p><h2 className="mt-1 text-2xl font-black text-slate-800 md:text-3xl">Build a faster credit card payoff plan</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">See how your balance, APR and monthly payment interact, then test extra payments to estimate payoff time and interest.</p></div><div className="rounded-2xl bg-rose-600 px-5 py-3 text-right text-white shadow-sm"><div className="text-xs opacity-80">Estimated payoff</div><div className="text-2xl font-black">{result.impossible?'No payoff':result.payoff}</div></div></div></div>
     <div className="grid lg:grid-cols-[1.08fr_.92fr]"><div className="space-y-5 p-5 sm:p-7 md:p-8">
