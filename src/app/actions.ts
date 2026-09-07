@@ -16,6 +16,8 @@ import {
 } from '@/ai/flows/summarize-content-generate-cheatsheet';
 import type { GenerateRegexInput, DescribeRegexInput } from '@/ai/flows/generate-regex-from-text';
 
+const MAX_CHEAT_SHEET_CHARS = 50000;
+
 const GenerateProductDescriptionInputSchema = z.object({
   productName: z.string().min(3, 'Product name must be at least 3 characters.'),
   features: z.string().min(10, 'Please list at least one key feature.'),
