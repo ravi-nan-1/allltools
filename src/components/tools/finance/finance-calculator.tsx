@@ -1,11 +1,12 @@
 "use client";
 
-import { useMemo, useState } from 'react';
-import { Calculator, Info } from 'lucide-react';
+import { useMemo, useState, type ReactNode } from 'react';
+import { Calculator, Info, WalletCards, TrendingUp, CircleDollarSign } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
+import Slider from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const money = (n: number, currency = 'USD') => new Intl.NumberFormat(undefined, { style: 'currency', currency, maximumFractionDigits: 2 }).format(Number.isFinite(n) ? n : 0);
@@ -26,6 +27,7 @@ export function FinanceCalculator({ slug }: Props) {
   const result = useMemo(() => calculate(slug, values, currency), [slug, values, currency]);
 
   const config = getConfig(slug);
+  if (slug === 'loan-calculator') return <LoanCalculator />;
   return (
     <Card className="w-full overflow-hidden border-2 shadow-sm">
       <CardHeader className="bg-muted/30">
@@ -44,6 +46,105 @@ export function FinanceCalculator({ slug }: Props) {
       </CardContent>
     </Card>
   );
+}
+
+
+function LoanCalculator() {
+  const [loanAmount, setLoanAmount] = useState(1000000);
+  const [rate, setRate] = useState(6.5);
+  const [years, setYears] = useState(5);
+  const [extra, setExtra] = useState(0);
+  const currency = 'INR';
+
+  const result = useMemo(() => {
+    const months = Math.max(1, Math.round(years * 12));
+    const monthlyRate = rate / 100 / 12;
+    const basePayment = monthlyRate === 0
+      ? loanAmount / months
+      : loanAmount * monthlyRate * Math.pow(1 + monthlyRate, months) / (Math.pow(1 + monthlyRate, months) - 1);
+    const payment = basePayment + extra;
+    let balance = loanAmount;
+    let totalInterest = 0;
+    let totalPaid = 0;
+    let actualMonths = 0;
+    const rows: { month: number; payment: number; principal: number; interest: number; balance: number }[] = [];
+    while (balance > 0.01 && actualMonths < 1200) {
+      actualMonths += 1;
+      const interest = monthlyRate === 0 ? 0 : balance * monthlyRate;
+      const principal = Math.min(balance, Math.max(0, payment - interest));
+      const actualPayment = principal + interest;
+      balance = Math.max(0, balance - principal);
+      totalInterest += interest;
+      totalPaid += actualPayment;
+      if (rows.length < 12 || balance === 0) rows.push({ month: actualMonths, payment: actualPayment, principal, interest, balance });
+      if (principal <= 0 && interest > 0) break;
+    }
+    const principalShare = totalPaid > 0 ? loanAmount / totalPaid : 1;
+    const interestShare = Math.max(0, Math.min(1, totalInterest / Math.max(totalPaid, 1)));
+    return { months, basePayment, payment, totalInterest, totalPaid, actualMonths, principalShare, interestShare, rows };
+  }, [loanAmount, rate, years, extra]);
+
+  const fmt = (n: number) => money(n, currency);
+  const yearsLabel = result.actualMonths >= 12 ? `${Math.floor(result.actualMonths / 12)}y ${result.actualMonths % 12}m` : `${result.actualMonths}m`;
+  const donut = `${Math.max(0, Math.min(100, result.principalShare * 100))}%`;
+
+  return (
+    <Card className="w-full overflow-hidden border border-slate-200 bg-white shadow-sm">
+      <CardContent className="p-0">
+        <div className="grid lg:grid-cols-[1.15fr_.85fr]">
+          <div className="p-5 sm:p-7 md:p-9">
+            <div className="mb-7 flex items-center justify-between gap-3">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-600">Online Loan Calculator</p>
+                <h2 className="mt-1 text-2xl font-bold tracking-tight text-slate-800 md:text-3xl">Calculate your loan payment</h2>
+                <p className="mt-2 max-w-xl text-sm leading-6 text-slate-500">Adjust the amount, interest rate and tenure to instantly see your monthly payment, total interest and repayment cost.</p>
+              </div>
+              <div className="hidden h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600 sm:flex"><Calculator className="h-5 w-5" /></div>
+            </div>
+
+            <LoanSlider label="Loan amount" value={loanAmount} min={10000} max={10000000} step={10000} display={fmt(loanAmount)} onChange={setLoanAmount} />
+            <LoanSlider label="Rate of interest (p.a.)" value={rate} min={0} max={25} step={0.1} display={`${rate.toFixed(1)} %`} onChange={setRate} />
+            <LoanSlider label="Loan tenure" value={years} min={1} max={30} step={1} display={`${years} Yr`} onChange={setYears} />
+            <LoanSlider label="Extra monthly payment" value={extra} min={0} max={100000} step={1000} display={fmt(extra)} onChange={setExtra} />
+
+            <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <div className="rounded-2xl border border-emerald-100 bg-emerald-50/70 p-4"><p className="text-sm text-slate-500">Monthly EMI</p><p className="mt-1 text-2xl font-bold text-emerald-600">{fmt(result.payment)}</p></div>
+              <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4"><p className="text-sm text-slate-500">Payoff time</p><p className="mt-1 text-2xl font-bold text-slate-800">{yearsLabel}</p></div>
+            </div>
+          </div>
+
+          <div className="border-t bg-gradient-to-br from-slate-50 via-white to-emerald-50/60 p-5 sm:p-7 lg:border-l lg:border-t-0 md:p-9">
+            <div className="mb-4 flex items-center justify-between"><div><p className="text-sm font-semibold text-slate-700">Repayment breakdown</p><p className="text-xs text-slate-500">Principal vs total interest</p></div><TrendingUp className="h-5 w-5 text-emerald-500" /></div>
+            <div className="mx-auto my-5 flex max-w-[300px] items-center justify-center">
+              <div className="relative h-56 w-56 rounded-full" style={{ background: `conic-gradient(#5065f6 0 ${donut}, #e9edff ${donut} 100%)` }}>
+                <div className="absolute inset-[28px] flex flex-col items-center justify-center rounded-full bg-white shadow-inner"><span className="text-xs font-medium text-slate-500">Monthly EMI</span><strong className="mt-1 text-2xl font-bold text-slate-800">{fmt(result.payment)}</strong><span className="mt-1 text-xs text-emerald-600">{rate.toFixed(1)}% p.a.</span></div>
+              </div>
+            </div>
+            <div className="flex justify-center gap-5 text-xs text-slate-500"><span className="flex items-center gap-2"><i className="h-2.5 w-2.5 rounded-full bg-[#5065f6]" /> Principal amount</span><span className="flex items-center gap-2"><i className="h-2.5 w-2.5 rounded-full bg-[#e9edff]" /> Interest amount</span></div>
+            <div className="mt-8 space-y-4">
+              <LoanResult label="Principal amount" value={fmt(loanAmount)} icon={<WalletCards className="h-4 w-4" />} />
+              <LoanResult label="Total interest" value={fmt(result.totalInterest)} icon={<CircleDollarSign className="h-4 w-4" />} />
+              <LoanResult label="Total amount payable" value={fmt(result.totalPaid)} icon={<TrendingUp className="h-4 w-4" />} strong />
+            </div>
+          </div>
+        </div>
+
+        <div className="border-t bg-white p-5 sm:p-7 md:p-9">
+          <div className="mb-5"><h3 className="text-xl font-bold text-slate-800">First-year repayment schedule</h3><p className="mt-1 text-sm text-slate-500">See how each payment is divided between interest and principal.</p></div>
+          <div className="overflow-x-auto rounded-2xl border"><table className="w-full min-w-[650px] text-sm"><thead className="bg-slate-50 text-left text-slate-500"><tr><th className="px-4 py-3">Month</th><th className="px-4 py-3">Payment</th><th className="px-4 py-3">Principal</th><th className="px-4 py-3">Interest</th><th className="px-4 py-3">Balance</th></tr></thead><tbody>{result.rows.map(r => <tr key={r.month} className="border-t"><td className="px-4 py-3 font-medium">{r.month}</td><td className="px-4 py-3">{fmt(r.payment)}</td><td className="px-4 py-3 text-emerald-600">{fmt(r.principal)}</td><td className="px-4 py-3">{fmt(r.interest)}</td><td className="px-4 py-3">{fmt(r.balance)}</td></tr>)}</tbody></table></div>
+          <p className="mt-5 flex gap-2 text-xs leading-5 text-slate-500"><Info className="mt-0.5 h-4 w-4 shrink-0" />This online loan calculator is an estimate. Actual EMI can differ because lenders may apply different rates, fees, insurance, taxes, rounding rules, payment dates or other loan conditions.</p>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function LoanSlider({ label, value, min, max, step, display, onChange }: { label: string; value: number; min: number; max: number; step: number; display: string; onChange: (value: number) => void }) {
+  return <div className="mb-7"><div className="mb-3 flex items-center justify-between gap-4"><Label className="text-base font-medium text-slate-700">{label}</Label><Input type="number" min={min} max={max} step={step} value={value} onChange={e => onChange(Math.min(max, Math.max(min, Number(e.target.value) || 0)))} className="h-10 w-32 border-0 bg-emerald-50 text-right text-lg font-semibold text-emerald-600 shadow-none focus-visible:ring-1 focus-visible:ring-emerald-400" aria-label={label} /></div><Slider value={[value]} min={min} max={max} step={step} onValueChange={v => onChange(v[0] ?? value)} className="py-2" /></div>;
+}
+
+function LoanResult({ label, value, icon, strong = false }: { label: string; value: string; icon: ReactNode; strong?: boolean }) {
+  return <div className="flex items-center justify-between gap-4 rounded-xl border border-slate-100 p-3"><span className="flex items-center gap-2 text-sm text-slate-500">{icon}{label}</span><strong className={strong ? 'text-lg text-emerald-600' : 'text-base text-slate-700'}>{value}</strong></div>;
 }
 
 function Field({ label, value, onChange, suffix }: { label: string; value: string; onChange: (v: string) => void; suffix?: string }) {

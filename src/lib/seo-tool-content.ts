@@ -1141,60 +1141,42 @@ export const seoToolContent: Record<string, SeoToolContent> = {
   "conclusion": "Use the EMI result to compare loan scenarios, then confirm the lender’s actual rate, fees, repayment schedule, and local conventions."
 },
   "loan-calculator": {
-  "how": "This calculator models a standard amortizing installment loan. It uses the principal, annual interest rate, and term to estimate a regular payment and the total interest accumulated over the schedule.",
-  "features": [
-    "Fixed-payment installment model",
-    "Principal, rate, and term controls",
-    "Monthly payment estimate",
-    "Total interest visibility",
-    "Term comparison"
-  ],
-  "use": "For borrowers comparing ordinary installment loans; households checking monthly affordability; learners understanding principal and interest repayment.",
-  "steps": [
-    "Enter the amount borrowed.",
-    "Enter the annual interest rate.",
-    "Set the repayment term.",
-    "Review payment and total interest."
-  ],
-  "why": "A general loan calculator should make the repayment assumptions clear. This one centers the relationship between amount borrowed, rate, and term instead of presenting an unexplained payment number.",
-  "compare": [
-    [
-      "Loan model",
-      "Amortizing installment loan",
-      "Interest-only calculation"
+    "how": "A loan calculator estimates the regular payment for an amortizing loan and shows how the borrowed principal and interest contribute to the overall repayment. Change the amount, annual rate, or tenure to compare scenarios before speaking with a bank or lender.",
+    "features": [
+      "Interactive loan amount, rate, and tenure controls",
+      "Visual principal-versus-interest repayment meter",
+      "Monthly EMI, total interest, and total repayment",
+      "Optional extra-payment scenario",
+      "Estimated payoff time",
+      "First-year amortization schedule"
     ],
-    [
-      "Decision support",
-      "Payment and total interest",
-      "Single total"
+    "use": "Home Buyers: Estimate a housing-loan payment and test different tenures before planning a property budget.\nPersonal Borrowers: Compare monthly payments and total interest for different loan offers.\nVehicle Buyers: Check whether a vehicle loan fits a monthly budget and see how changing the term affects total cost.",
+    "steps": [
+      "Enter the amount you plan to borrow.",
+      "Set the annual interest rate offered or the rate you want to test.",
+      "Choose the loan tenure in years.",
+      "If you plan to pay extra each month, enter an additional payment amount.",
+      "Review the EMI, total interest, total repayment, visual meter, and repayment schedule."
     ],
-    [
-      "Term sensitivity",
-      "Shows effect of term changes",
-      "Manual recalculation"
+    "why": "The calculator is designed to make the cost of borrowing understandable at a glance. Instead of showing only one monthly number, it separates principal and interest, makes term changes easy to test, and provides a schedule that helps users understand how the balance changes over time.",
+    "compare": [
+      ["Payment view", "Monthly payment plus total repayment", "Monthly payment only"],
+      ["Cost breakdown", "Principal and interest meter", "Often requires manual calculation"],
+      ["Scenario testing", "Change amount, rate, term, and extra payment", "Recalculate each scenario manually"],
+      ["Repayment detail", "First-year amortization schedule", "Single summary figure"],
+      ["Accessibility", "Works online on desktop and mobile", "Spreadsheet or manual formulas may be required"]
     ],
-    [
-      "Transparency",
-      "Inputs and assumptions visible",
-      "Method often hidden"
-    ]
-  ],
-  "faqs": [
-    {
-      "question": "What kind of loan does it model?",
-      "answer": "A regular amortizing installment loan with recurring payments under a fixed-rate assumption."
-    },
-    {
-      "question": "Why can two lenders show different payments?",
-      "answer": "Rates, fees, payment frequency, rounding, insurance, and other lender-specific terms can change the real payment."
-    },
-    {
-      "question": "Can I compare different terms?",
-      "answer": "Yes. Test different terms to compare the lower periodic payment of longer repayment with the higher total interest it can create."
-    }
-  ],
-  "conclusion": "Use this calculator for budgeting and comparison, then rely on the lender’s disclosed schedule and fees for a final borrowing decision."
-},
+    "faqs": [
+      {"question": "What is a loan calculator?", "answer": "It is an online planning tool that estimates a loan payment and repayment cost from inputs such as principal, interest rate, and tenure."},
+      {"question": "How is a monthly loan payment calculated?", "answer": "For a standard fixed-rate amortizing loan, the payment is calculated from the principal, periodic interest rate, and number of payments. The calculator converts the annual rate to a monthly rate and applies the standard amortization formula."},
+      {"question": "Does a longer loan tenure reduce the EMI?", "answer": "Usually, spreading the same balance over more months lowers the regular payment, but it generally increases the total interest paid."},
+      {"question": "Can I use this for a home loan or personal loan?", "answer": "Yes. The standard amortization model can be used for many installment-loan scenarios, including home, personal, education, and vehicle financing. Actual lender terms may differ."},
+      {"question": "Does an extra monthly payment reduce interest?", "answer": "An additional payment can reduce the outstanding principal faster, which may shorten the payoff period and reduce interest under many loan structures. Check the lender's prepayment rules before relying on this estimate."},
+      {"question": "Is the result the exact amount my bank will charge?", "answer": "No. It is an estimate. The final payment can be affected by lender rates, fees, taxes, insurance, payment dates, rounding, and other contract terms."},
+      {"question": "How often can I use the online loan calculator?", "answer": "As often as you need. Try several loan amounts, rates, and tenures to compare affordability and total borrowing cost."}
+    ],
+    "conclusion": "Use the loan calculator to understand the relationship between payment, interest, and tenure before comparing lenders. Treat the figures as planning estimates and confirm the final rate, fees, repayment schedule, and prepayment conditions with your lender."
+  },
   "mortgage-calculator": {
   "how": "Mortgage principal and interest are estimated with a standard amortization formula using the financed balance, annual rate, and loan term. Property taxes, insurance, PMI, and closing costs are separate housing expenses unless explicitly modeled.",
   "features": [
