@@ -1,5 +1,7 @@
 
 'use client';
+
+import { homepageFaqItems } from '@/lib/homepage-faq';
 import {
   Accordion,
   AccordionContent,
