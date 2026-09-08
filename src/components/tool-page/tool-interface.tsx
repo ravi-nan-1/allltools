@@ -27,6 +27,7 @@ import { AiTutor } from '@/app/tools/ai-tutor/ai-tutor';
 import { ExcelPowerTools } from '@/app/tools/excel-power-tools/excel-power-tools';
 import { FinanceCalculator } from '@/components/tools/finance/finance-calculator';
 import { AdvancedCalculator } from '@/components/tools/finance/advanced-calculators';
+import Stopwatch from '@/app/tools/stopwatch/stopwatch';
 
 interface ToolInterfaceProps {
   slug: string;
@@ -38,6 +39,7 @@ export function ToolInterface({ slug }: ToolInterfaceProps) {
   const advancedSlugs = new Set(['stopwatch','retirement-calculator','pension-calculator','sip-calculator','fd-calculator','ppf-calculator','nps-calculator','401k-calculator','social-security-calculator','income-tax-calculator','take-home-pay-calculator','salary-calculator','gst-calculator','sales-tax-calculator','percentage-calculator','age-calculator','date-calculator','bmi-calculator','calorie-calculator','mortgage-payment-calculator','auto-loan-calculator','discount-calculator','tip-calculator','profit-margin-calculator','break-even-calculator','currency-converter','time-zone-converter','scientific-calculator','random-number-generator']);
 
   const renderTool = () => {
+    if (slug === 'stopwatch') return <Stopwatch />;
     if (financeSlugs.has(slug)) return <FinanceCalculator slug={slug} />;
     if (advancedSlugs.has(slug)) return <AdvancedCalculator slug={slug} />;
     switch (slug) {
