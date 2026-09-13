@@ -70,7 +70,7 @@ export const seoToolContent: Record<string, SeoToolContent> = {
       "Adjust the content or organization when a subject needs more emphasis.",
       "Export or save the finished cheat sheet for study, printing, or quick reference."
     ],
-    "why": "A useful cheat sheet should prioritize signal over volume. All2ools focuses the output on scannable sections and high-value information so users can find a definition, formula, command, or concept quickly instead of rereading a long document.",
+    "why": "A useful cheat sheet should prioritize important information over volume. All2ools focuses the output on scannable sections and high-value information so users can find a definition, formula, command, or concept quickly instead of rereading a long document.",
     "compare": [
       [
         "Information structure",
@@ -97,7 +97,7 @@ export const seoToolContent: Record<string, SeoToolContent> = {
     "conclusion": "The Free Cheat Sheet Generator helps turn large amounts of information into a focused reference you can scan quickly. It is useful for study sessions, technical work, training, and any situation where the right information needs to be easy to find."
   },
   "ai-humanizer": {
-    "how": "An AI humanizer rewrites text by changing sentence rhythm, transitions, wording, and paragraph flow while preserving the intended message. Instead of blindly replacing words with synonyms, the workflow should consider context, readability, tone, and repetition. The result is best treated as an editable draft that a person can review and personalize.",
+    "how": "An AI humanizer is a rewriting assistant that can change sentence rhythm, transitions, wording, and paragraph flow while aiming to preserve the intended message. Instead of blindly replacing words with synonyms, the workflow should consider context, readability, tone, and repetition. The result is best treated as an editable draft that a person can review and personalize.",
     "features": [
       "Natural sentence and paragraph restructuring",
       "Tone and readability improvements",

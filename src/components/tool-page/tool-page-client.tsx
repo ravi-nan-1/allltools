@@ -45,17 +45,11 @@ export function ToolPageClient({ tool, aiContent }: ToolPageClientProps) {
         <ToolBreadcrumb tool={tool} />
         <ToolHeader tool={tool} />
 
-        <ToolWorkspace className="mb-10">
+        <div id="tool-workspace"><ToolWorkspace className="mb-10">
           <ToolInterface slug={tool.slug} />
-        </ToolWorkspace>
+        </ToolWorkspace></div>
 
         <div className="space-y-12">
-          <section className="max-w-4xl mx-auto px-4">
-            <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-              {tool.longDescription}
-            </p>
-          </section>
-
           {relatedTools.length > 0 && relatedCluster && (
             <section className="max-w-5xl mx-auto px-4">
               <h2 className="text-2xl md:text-3xl font-bold mb-6">{relatedCluster.title}</h2>
