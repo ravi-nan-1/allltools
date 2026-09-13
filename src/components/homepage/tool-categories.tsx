@@ -16,7 +16,7 @@ const toolCategories = [
   {
     icon: AreaChart,
     title: 'SEO Tools',
-    description: 'Improve search rankings with our free plagiarism checker, keyword cluster generator, backlink checker, and content gap analyzer. Dominate search results with the best SEO audit tools.',
+    description: 'Research, organize, and improve search-focused workflows with utilities for keyword discovery, content analysis, site checks, and optimization.',
     links: [
         {name: 'Keyword Cluster Generator', href: '/tools/keyword-cluster-generator'},
         {name: 'Content Gap Analyzer', href: '/tools/content-gap-analyzer'},
@@ -26,7 +26,7 @@ const toolCategories = [
   {
     icon: Building2,
     title: 'Business Tools',
-    description: 'Generate invoices, extract data from documents with our PDF to Excel tool, calculate business valuations, and manage your financial workflows with our suite of free business automation tools online.',
+    description: 'Handle practical business workflows such as document data extraction, invoicing, valuation, spreadsheets, and everyday financial tasks from one place.',
      links: [
         {name: 'AI Invoice Generator', href: '/tools/ai-invoice-generator'},
         {name: 'Business Valuation Calculator', href: '/tools/business-valuation-calculator'},
@@ -36,7 +36,7 @@ const toolCategories = [
    {
     icon: Image,
     title: 'Image Tools',
-    description: 'Compress images for faster websites with our image compressor online, remove backgrounds from product photos, cartoonize photos with AI, and generate professional AI headshots without a photoshoot.',
+    description: 'Prepare visual assets for websites, stores, social posts, and projects with tools for image optimization, background editing, and creative transformations.',
      links: [
         {name: 'Image Compressor', href: '/tools/image-compressor'},
     ]
@@ -44,7 +44,7 @@ const toolCategories = [
   {
     icon: FileText,
     title: 'PDF & Document Tools',
-    description: 'Use our PDF to Word converter online, merge PDFs, or extract tables from invoices to Excel. Automate your most repetitive office tasks with our free PDF tools online.',
+    description: 'Convert, organize, extract, and prepare documents for editing or sharing with a collection of focused PDF and office-file utilities.',
      links: [
         {name: 'PDF to Word Converter', href: '/tools/pdf-to-word-converter'},
         {name: 'Invoice -> Excel Extractor', href: '/tools/invoice-excel-extractor'},
@@ -54,7 +54,7 @@ const toolCategories = [
   {
     icon: Code,
     title: 'Developer Tools',
-    description: 'Test API latency from global locations, decode JWT tokens, generate complex Regex from plain text, and convert JSON to Excel for easy debugging with our free developer tools.',
+    description: 'Inspect data, test integrations, transform structured files, and troubleshoot common development tasks with practical browser-based utilities.',
      links: [
         {name: 'API Latency Checker', href: '/tools/api-latency-checker'},
         {name: 'Webhook Tester', href: '/tools/webhook-tester'},
@@ -64,7 +64,7 @@ const toolCategories = [
    {
     icon: BrainCircuit,
     title: 'AI Tools',
-    description: 'Leverage our free AI tools including an AI image generator, text summarizer, text-to-speech online, and AI chatbot to enhance your projects and automate creative tasks.',
+    description: 'Use AI-assisted utilities for writing, summarization, creative work, document tasks, and other workflows where automation can save time.',
      links: [
         {name: 'Crypto Tax Calculator', href: '/tools/crypto-tax-calculator'},
         {name: 'Global Loan Optimizer', href: '/tools/global-loan-optimizer'},

@@ -37,6 +37,7 @@ export function SeoContent({ tool }: { tool: Tool }) {
   const workTitle = `How ${tool.name} Works`;
   const hasComparison = content.compare.length > 0;
   const featureCount = content.features.length;
+  const isPdfToWord = tool.slug === 'pdf-to-word-converter';
 
   const faqSchema = faqs.length ? {
     '@context': 'https://schema.org',
@@ -61,7 +62,7 @@ export function SeoContent({ tool }: { tool: Tool }) {
       {faqSchema && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />}
       {howToSchema && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }} />}
 
-      <article className="mx-auto w-full max-w-6xl px-4 pb-14 md:pb-20">
+      <article className={`mx-auto w-full max-w-6xl px-4 pb-14 md:pb-20 ${isPdfToWord ? 'seo-pdf-word' : ''}`}>
         <header className="relative overflow-hidden rounded-[2rem] border bg-gradient-to-br from-background via-muted/30 to-primary/[0.06] p-6 shadow-sm md:p-10">
           <div className="absolute right-0 top-0 h-40 w-40 rounded-full bg-primary/10 blur-3xl" aria-hidden="true" />
           <div className="relative max-w-4xl">
@@ -78,6 +79,17 @@ export function SeoContent({ tool }: { tool: Tool }) {
             </div>
           </div>
         </header>
+
+        {isPdfToWord && (
+          <div className="seo-keyword-strip mt-5 rounded-2xl border p-4 shadow-sm">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Search intents</span>
+              {['PDF to Word converter', 'convert PDF to Word', 'PDF to DOCX converter', 'PDF converter online'].map((keyword) => (
+                <span key={keyword} className="rounded-full border bg-background px-3 py-1.5 text-sm font-semibold text-foreground">{keyword}</span>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className="mt-5 grid gap-4 md:grid-cols-3">
           <div className="rounded-2xl border bg-background p-5 shadow-sm">
@@ -98,18 +110,19 @@ export function SeoContent({ tool }: { tool: Tool }) {
         </div>
 
         <div className="mt-8 overflow-hidden rounded-[2rem] border bg-background shadow-sm">
-          <section className="p-6 md:p-10">
+          <section className={`p-6 md:p-10 ${isPdfToWord ? 'seo-section-warm' : ''}`}>
             <div className="mb-6 flex items-start gap-4">
               <div className="rounded-2xl bg-primary/10 p-3 text-primary"><Info className="h-6 w-6" /></div>
               <div>
-                <h2 className="text-2xl font-bold md:text-3xl">What is a {keywords.primary}?</h2>
-                <p className="mt-1 text-muted-foreground">A quick explanation before you use the tool.</p>
+                <h2 className="text-2xl font-bold md:text-3xl">What Is a {keywords.primary}?</h2>
+                {isPdfToWord && <h3 className="mt-2 text-sm font-semibold text-primary">Convert PDF to Word Online · PDF to DOCX Converter</h3>}
+                <p className="mt-1 text-muted-foreground">Convert PDF to Word and create editable DOCX files without rebuilding the document from scratch.</p>
               </div>
             </div>
             <p className="max-w-4xl text-base leading-8 text-muted-foreground md:text-lg">{tool.longDescription || tool.description}</p>
           </section>
 
-          <section className="border-t bg-muted/20 p-6 md:p-10">
+          <section className={`border-t bg-muted/20 p-6 md:p-10 ${isPdfToWord ? 'seo-section-blue' : ''}`}>
             <div className="mb-6 flex items-start gap-4">
               <div className="rounded-2xl bg-blue-500/10 p-3 text-blue-600"><Sparkles className="h-6 w-6" /></div>
               <div><h2 className="text-2xl font-bold md:text-3xl">{keywords.headings.method}</h2><p className="mt-1 text-muted-foreground">Understand the method and assumptions behind the result.</p></div>
@@ -117,14 +130,24 @@ export function SeoContent({ tool }: { tool: Tool }) {
             <p className="max-w-4xl text-base leading-8 text-muted-foreground md:text-lg">{content.how}</p>
           </section>
 
+          {content.limitations && (
+            <section className="border-t bg-amber-50/40 p-6 md:p-10">
+              <div className="mb-5 flex items-start gap-4">
+                <div className="rounded-2xl bg-amber-500/10 p-3 text-amber-700"><ShieldCheck className="h-6 w-6" /></div>
+                <div><h2 className="text-2xl font-bold md:text-3xl">Limitations to Keep in Mind</h2><p className="mt-1 text-muted-foreground">A quick check before you rely on the output.</p></div>
+              </div>
+              <p className="max-w-4xl text-base leading-8 text-muted-foreground md:text-lg">{content.limitations}</p>
+            </section>
+          )}
+
           <section className="border-t p-6 md:p-10">
             <div className="flex items-end justify-between gap-4">
-              <div><h2 className="text-2xl font-bold md:text-3xl">Key features and benefits</h2><p className="mt-1 text-muted-foreground">What the workflow is designed to help you accomplish.</p></div>
+              <div><h2 className="text-2xl font-bold md:text-3xl">Key features and benefits</h2><p className="mt-1 text-muted-foreground">What the workflow is designed to help you accomplish.</p>{isPdfToWord && <h3 className="mt-2 text-sm font-semibold text-primary">PDF to Word conversion features for editable documents</h3>}</div>
               <span className="hidden rounded-full bg-muted px-3 py-1 text-sm font-medium sm:inline-flex">{featureCount} highlights</span>
             </div>
             <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {content.features.map((feature, index) => (
-                <div key={feature} className="group rounded-2xl border bg-background p-5 transition-all hover:-translate-y-0.5 hover:shadow-md">
+                <div key={feature} className={`group rounded-2xl border bg-background p-5 transition-all hover:-translate-y-1 hover:shadow-lg ${isPdfToWord ? 'seo-card-float' : ''}`} style={isPdfToWord ? { animationDelay: `${index * 70}ms` } : undefined}>
                   <div className="mb-4 flex items-center justify-between"><span className="text-xs font-bold text-muted-foreground">{String(index + 1).padStart(2, '0')}</span><Check className="h-5 w-5 text-emerald-600" /></div>
                   <p className="font-semibold leading-7">{feature}</p>
                 </div>
@@ -134,10 +157,11 @@ export function SeoContent({ tool }: { tool: Tool }) {
 
           <section className="border-t p-6 md:p-10">
             <h2 className="text-2xl font-bold md:text-3xl">{keywords.headings.useCases}</h2>
+            {isPdfToWord && <h3 className="mt-2 text-sm font-semibold text-primary">Common PDF to Word conversion use cases</h3>}
             <p className="mt-1 text-muted-foreground">Examples of practical situations where this type of tool can save time or reduce manual work.</p>
             <div className="mt-7 grid gap-4 md:grid-cols-3">
               {useCases.map(({ audience, description }) => (
-                <div key={audience + description} className="rounded-2xl border bg-muted/20 p-5">
+                <div key={audience + description} className={`rounded-2xl border bg-muted/20 p-5 transition-all hover:-translate-y-1 hover:shadow-md ${isPdfToWord ? 'seo-card-float' : ''}`} style={isPdfToWord ? { animationDelay: `${index * 70}ms` } : undefined}>
                   <h3 className="font-semibold">{audience}</h3>
                   <p className="mt-2 text-sm leading-7 text-muted-foreground">{description}</p>
                 </div>
@@ -152,7 +176,7 @@ export function SeoContent({ tool }: { tool: Tool }) {
             </div>
             <ol className="grid gap-4 md:grid-cols-2">
               {content.steps.map((step, index) => (
-                <li key={step} className="flex gap-4 rounded-2xl border p-5">
+                <li key={step} className={`flex gap-4 rounded-2xl border p-5 transition-all hover:-translate-y-1 hover:shadow-md ${isPdfToWord ? 'seo-card-float' : ''}`} style={isPdfToWord ? { animationDelay: `${index * 70}ms` } : undefined}>
                   <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">{index + 1}</span>
                   <span className="leading-7 text-muted-foreground">{step}</span>
                 </li>

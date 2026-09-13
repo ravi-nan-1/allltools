@@ -7,6 +7,7 @@ export interface SeoToolContent {
   compare: string[][];
   faqs: Array<{ question: string; answer: string }>;
   conclusion: string;
+  limitations?: string;
 }
 
 export const seoToolContent: Record<string, SeoToolContent> = {
@@ -398,48 +399,62 @@ export const seoToolContent: Record<string, SeoToolContent> = {
     "conclusion": "TinyURL Maker is useful when a long web address needs to become compact, readable, and easy to share. Create the link, verify the redirect, and use it where space and convenience matter."
   },
   "pdf-to-word-converter": {
-    "how": "PDF to Word conversion involves reading the document structure, extracting text and visual elements, and reconstructing that information in an editable DOCX document. Text-based PDFs are generally easier to convert accurately, while scanned pages require OCR to recognize text from images. Complex layouts, unusual fonts, and forms may still require manual cleanup after conversion.",
-    "features": [
-      "Editable DOCX output from PDF files",
-      "Layout-aware extraction for text, images, and tables",
-      "OCR workflow for scanned PDF pages where supported",
-      "Useful for reports, forms, contracts, and notes",
-      "Browser-based conversion workflow",
-      "Designed to preserve structure as closely as practical"
+  "how": "The converter reads the PDF's internal layout — text blocks, fonts, tables,\nand image positions — and rebuilds them as an editable .docx file rather than\njust dumping raw text. Text-based PDFs convert directly; scanned PDFs route\nthrough OCR first so the words become selectable and editable instead of\nstaying locked inside an image.",
+  "features": [
+    "Editable DOCX output from PDF files",
+    "Layout-aware extraction for text, images, and tables",
+    "OCR workflow for scanned PDF pages where supported",
+    "Useful for reports, forms, contracts, and notes",
+    "Browser-based conversion workflow",
+    "Designed to preserve structure as closely as practical"
+  ],
+  "use": "A student needs to edit a professor's PDF handout to add their own notes and resubmit it as a Word file.\\nAn HR manager receives a PDF resume and needs to lift the contact details and work history into a Word template.\\nA freelancer gets a scanned PDF contract and needs it in Word to redline changes with a client.",
+  "steps": [
+    "Open the tool and add the source document or files required for this PDF task.",
+    "Choose the available options for the pages, output, or document settings you need.",
+    "Run the PDF operation and wait for processing to finish.",
+    "Download the result and review the document before sharing or using it officially."
+  ],
+  "why": "A converter is valuable when a PDF needs to become editable without rebuilding the document from scratch. All2ools combines a straightforward upload workflow with structure-aware conversion and OCR support where available.",
+  "compare": [
+    [
+      "Output",
+      "Editable DOCX",
+      "Static PDF"
     ],
-    "use": "For Students: Students editing lecture notes, research papers, and study PDFs.\nFor Office Teams: Office teams updating reports, forms, manuals, and contracts.\nFor Freelancers: Freelancers extracting and reformatting client documents.",
-    "steps": [
-      "Upload a PDF or drag it into the converter.",
-      "Wait while the document is analyzed and converted.",
-      "Download the generated Word document.",
-      "Open the DOCX and check tables, page breaks, fonts, and scanned text before final editing."
+    [
+      "Scanned pages",
+      "OCR where supported",
+      "Requires manual retyping"
     ],
-    "why": "A converter is valuable when a PDF needs to become editable without rebuilding the document from scratch. All2ools combines a straightforward upload workflow with structure-aware conversion and OCR support where available.",
-    "compare": [
-      [
-        "Output",
-        "Editable DOCX",
-        "Static PDF"
-      ],
-      [
-        "Scanned pages",
-        "OCR where supported",
-        "Requires manual retyping"
-      ],
-      [
-        "Tables and images",
-        "Attempts structural preservation",
-        "Not directly editable"
-      ],
-      [
-        "Workflow",
-        "Upload and convert online",
-        "Recreate document manually"
-      ]
+    [
+      "Tables and images",
+      "Attempts structural preservation",
+      "Not directly editable"
     ],
-    "faqs": [],
-    "conclusion": "The PDF to Word Converter turns otherwise difficult-to-edit PDF documents into editable Word files. For the best result, review the generated DOCX before sending or publishing it, especially when the PDF contains complex layouts or scanned pages."
-  },
+    [
+      "Workflow",
+      "Upload and convert online",
+      "Recreate document manually"
+    ]
+  ],
+  "faqs": [
+    {
+      "question": "Will my formatting stay intact?",
+      "answer": "Simple layouts (single column, standard fonts) convert cleanly. Complex layouts with nested tables or multiple columns may need minor manual fixes after conversion."
+    },
+    {
+      "question": "Does it work on scanned PDFs?",
+      "answer": "Yes, via OCR — accuracy depends on scan quality and how clean the original text is."
+    },
+    {
+      "question": "Is there a page limit?",
+      "answer": "No hard limit, but very large files take longer to process and are more likely to need formatting cleanup afterward."
+    }
+  ],
+  "conclusion": "The PDF to Word Converter turns otherwise difficult-to-edit PDF documents into editable Word files. For the best result, review the generated DOCX before sending or publishing it, especially when the PDF contains complex layouts or scanned pages.",
+  "limitations": "Handwritten text, heavily stylized fonts, and low-resolution scans reduce OCR accuracy. Always review the output before sending it anywhere official."
+},
   "global-loan-optimizer": {
     "how": "The Global Loan Optimizer turns a borrowing scenario into a structured comparison. Enter the amount you want to borrow, annual income, credit score, repayment term, and optional extra payment. The calculator adjusts simulated lender rates, estimates monthly payments, compares total interest, and shows how faster repayment can change the payoff timeline. It is designed for scenario planning rather than live lender matching.",
     "features": [

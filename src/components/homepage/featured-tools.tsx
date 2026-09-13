@@ -25,6 +25,17 @@ const featuredSlugs = [
 export function FeaturedTools() {
     const { translate } = useLanguage();
     const featuredTools = tools.filter(tool => featuredSlugs.includes(tool.slug));
+
+    // Featured cards use their own editorial blurbs so the homepage does not
+    // repeat the same tool description shown in the main tool directory.
+    const featuredDescriptions: Record<string, string> = {
+        'pdf-to-word-converter': 'Turn a PDF into an editable Word document when you need to revise, reuse, or repurpose its content.',
+        'image-compressor': 'Shrink image files for quicker uploads, lighter pages, and easier sharing while keeping practical visual quality.',
+        'regex-generator-from-text': 'Describe the text pattern you need and build a regular expression that is easier to test and refine.',
+        '1-click-article-outline-generator': 'Create a structured article outline from a topic so you can move from an idea to a clear writing plan faster.',
+        'json-excel-converter': 'Move structured JSON data into a spreadsheet-friendly format for inspection, reporting, and everyday analysis.',
+        'api-latency-checker': 'Measure API response times and use the results to spot slow endpoints and compare network performance.'
+    };
     
     return (
         <section className="py-16 md:py-24">
@@ -45,7 +56,7 @@ export function FeaturedTools() {
                                     <CardTitle className="text-xl">{translate(tool.slug)}</CardTitle>
                                 </CardHeader>
                                 <CardContent className="flex-grow">
-                                    <CardDescription>{translate(tool.description)}</CardDescription>
+                                    <CardDescription>{featuredDescriptions[tool.slug] ?? translate(tool.description)}</CardDescription>
                                 </CardContent>
                                  <div className="p-6 pt-0">
                                     <div className="text-primary font-semibold flex items-center group-hover:underline">
