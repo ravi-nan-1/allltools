@@ -339,18 +339,6 @@ export function FileConverter({ conversionType, setConversionType }: FileConvert
     setConversionType(value as ConversionType);
   };
   
-  useEffect(() => {
-    resetState();
-  }, [resetState]);
-  
-  useEffect(() => {
-    if (files.length > 0 || htmlContent) {
-        setStatus('file-selected');
-    } else {
-        setStatus('idle');
-    }
-  }, [files, htmlContent]);
-
   const resetState = useCallback(() => {
     setFiles([]);
     setHtmlContent("");
@@ -370,10 +358,21 @@ export function FileConverter({ conversionType, setConversionType }: FileConvert
     });
     setAdditionalParams(newParams);
     const fileInput = document.getElementById('file-upload') as HTMLInputElement;
-    if (fileInput) {
-      fileInput.value = '';
-    }
+    if (fileInput) fileInput.value = '';
   }, [conversionType]);
+
+  useEffect(() => {
+    resetState();
+  }, [conversionType, resetState]);
+  
+  useEffect(() => {
+    if (files.length > 0 || htmlContent) {
+        setStatus('file-selected');
+    } else {
+        setStatus('idle');
+    }
+  }, [files, htmlContent]);
+
 
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
