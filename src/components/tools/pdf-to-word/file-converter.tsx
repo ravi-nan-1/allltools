@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useMemo, type ChangeEvent, useEffect } from "react";
+import { useState, useMemo, type ChangeEvent, useEffect, useCallback } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -341,7 +341,7 @@ export function FileConverter({ conversionType, setConversionType }: FileConvert
   
   useEffect(() => {
     resetState();
-  }, [conversionType]);
+  }, [resetState]);
   
   useEffect(() => {
     if (files.length > 0 || htmlContent) {
@@ -351,7 +351,7 @@ export function FileConverter({ conversionType, setConversionType }: FileConvert
     }
   }, [files, htmlContent]);
 
-  const resetState = () => {
+  const resetState = useCallback(() => {
     setFiles([]);
     setHtmlContent("");
     setStatus("idle");
@@ -373,7 +373,7 @@ export function FileConverter({ conversionType, setConversionType }: FileConvert
     if (fileInput) {
       fileInput.value = '';
     }
-  };
+  }, [conversionType]);
 
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {

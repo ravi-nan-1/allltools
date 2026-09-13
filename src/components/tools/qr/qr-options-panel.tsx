@@ -7,7 +7,7 @@ import { ContentTab } from "./content-tab";
 import { DesignTab } from "./design-tab";
 import { LogoTab } from "./logo-tab";
 import { SettingsTab } from "./settings-tab";
-import { Palette, Image, Settings, FileText } from "lucide-react";
+import { Palette, Image as ImageIcon, Settings, FileText } from "lucide-react";
 
 interface QROptionsPanelProps {
   config: QRConfig;
@@ -28,7 +28,7 @@ export const QROptionsPanel = ({ config, setConfig }: QROptionsPanelProps) => {
             Design
           </TabsTrigger>
           <TabsTrigger value="logo" className="text-xs">
-            <Image className="w-4 h-4 mr-1" />
+            <ImageIcon className="w-4 h-4 mr-1" />
             Logo
           </TabsTrigger>
           <TabsTrigger value="settings" className="text-xs">

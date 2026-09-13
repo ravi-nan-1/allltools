@@ -34,7 +34,6 @@ export function SeoContent({ tool }: { tool: Tool }) {
   const faqs = content.faqs.length ? content.faqs : (tool.faq?.length ? tool.faq : makeSpecificFaqs(tool));
   const useCases = content.use.split('\n').filter(Boolean).map(splitUseCase);
   const stepsTitle = `How to Use ${tool.name}`;
-  const workTitle = `How ${tool.name} Works`;
   const hasComparison = content.compare.length > 0;
   const featureCount = content.features.length;
   const isPdfToWord = tool.slug === 'pdf-to-word-converter';
