@@ -159,7 +159,7 @@ export function SeoContent({ tool }: { tool: Tool }) {
             {isPdfToWord && <h3 className="mt-2 text-sm font-semibold text-primary">Common PDF to Word conversion use cases</h3>}
             <p className="mt-1 text-muted-foreground">Examples of practical situations where this type of tool can save time or reduce manual work.</p>
             <div className="mt-7 grid gap-4 md:grid-cols-3">
-              {useCases.map(({ audience, description }) => (
+              {useCases.map(({ audience, description }, index) => (
                 <div key={audience + description} className={`rounded-2xl border bg-muted/20 p-5 transition-all hover:-translate-y-1 hover:shadow-md ${isPdfToWord ? 'seo-card-float' : ''}`} style={isPdfToWord ? { animationDelay: `${index * 70}ms` } : undefined}>
                   <h3 className="font-semibold">{audience}</h3>
                   <p className="mt-2 text-sm leading-7 text-muted-foreground">{description}</p>

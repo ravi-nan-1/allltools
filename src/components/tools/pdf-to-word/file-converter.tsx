@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useMemo, useCallback, type ChangeEvent, useEffect } from "react";
+import { useState, useMemo, type ChangeEvent, useEffect, useCallback } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -338,8 +338,8 @@ export function FileConverter({ conversionType, setConversionType }: FileConvert
   const onTabChange = (value: string) => {
     setConversionType(value as ConversionType);
   };
-
-  const resetState = useCallback(() => {
+  
+    const resetState = useCallback(() => {
     setFiles([]);
     setHtmlContent("");
     setStatus("idle");
@@ -358,13 +358,16 @@ export function FileConverter({ conversionType, setConversionType }: FileConvert
     });
     setAdditionalParams(newParams);
     const fileInput = document.getElementById('file-upload') as HTMLInputElement;
-    if (fileInput) fileInput.value = '';
+    if (fileInput) {
+      fileInput.value = '';
+    }
   }, [conversionType]);
+
 
   useEffect(() => {
     resetState();
-  }, [resetState]);
-  
+  }, [conversionType, resetState]);
+
   useEffect(() => {
     if (files.length > 0 || htmlContent) {
         setStatus('file-selected');

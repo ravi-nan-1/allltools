@@ -2,6 +2,7 @@
 import { tools } from '@/lib/tools';
 import { homepageFaqItems } from '@/lib/homepage-faq';
 import { HomePageClient } from '@/components/homepage/home-page-client';
+import { placeholderImages } from '@/lib/placeholder-images';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -12,6 +13,19 @@ export const metadata: Metadata = {
 
 
 export default function Home() {
+  const toolsWithImages = tools.map((tool) => {
+    const image = placeholderImages.find((img) => img.id === tool.slug);
+    // Don't pass the icon component to the client
+    const { ...toolWithoutIcon } = tool;
+    return {
+      ...toolWithoutIcon,
+      icon: tool.icon,
+      image: image?.imageUrl || `https://picsum.photos/seed/${tool.slug}/300/300`,
+      width: 300,
+      height: 300,
+      imageHint: image?.imageHint || 'tool illustration',
+    };
+  });
 
   const websiteSchema = {
     '@context': 'https://schema.org',
@@ -91,7 +105,7 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
       />
-      <HomePageClient tools={tools} />
+      <HomePageClient tools={toolsWithImages} />
     </>
   );
 }

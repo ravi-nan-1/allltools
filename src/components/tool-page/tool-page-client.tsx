@@ -6,6 +6,7 @@ import { ToolInterface } from './tool-interface';
 import { toolClusters } from '@/lib/tool-clusters';
 import { tools } from '@/lib/tools';
 import { ToolCard } from '@/components/homepage/tool-card';
+import { placeholderImages } from '@/lib/placeholder-images';
 import { ToolBreadcrumb, ToolHeader, ToolWorkspace, ToolMaxWidth } from './shell/tool-shell';
 import { SeoContent } from './seo-content';
 import { BmiGuide } from './bmi-guide';
@@ -22,7 +23,16 @@ export function ToolPageClient({ tool, aiContent }: ToolPageClientProps) {
   const relatedTools = relatedCluster
     ? tools
         .filter(t => relatedCluster.slugs.includes(t.slug) && t.slug !== tool.slug)
-        .map(t => t)
+        .map(t => {
+          const image = placeholderImages.find(img => img.id === t.slug);
+          return {
+            ...t,
+            image: image?.imageUrl || `https://picsum.photos/seed/${t.slug}/300/300`,
+            width: 300,
+            height: 300,
+            imageHint: image?.imageHint || 'tool illustration',
+          };
+        })
     : [];
 
   return (
