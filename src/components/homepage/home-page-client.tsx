@@ -2,10 +2,10 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import type { ToolCategory } from '@/lib/tools';
+import type { Tool, ToolCategory } from '@/lib/tools';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { ToolCard, type ToolWithImage } from './tool-card';
+import { ToolCard } from './tool-card';
 import { useLanguage } from '@/hooks/use-language';
 import { Search, ArrowRight, Check } from 'lucide-react';
 import { WhyAll2ools } from './why-all2ools';
@@ -26,7 +26,7 @@ const categories: ToolCategory[] = [
 ];
 
 interface HomePageClientProps {
-  tools: ToolWithImage[];
+  tools: Tool[];
 }
 
 export function HomePageClient({ tools }: HomePageClientProps) {
