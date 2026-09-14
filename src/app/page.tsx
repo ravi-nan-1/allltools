@@ -1,44 +1,40 @@
-
 import { tools } from '@/lib/tools';
 import { homepageFaqItems } from '@/lib/homepage-faq';
 import { HomePageClient } from '@/components/homepage/home-page-client';
-import { placeholderImages } from '@/lib/placeholder-images';
 import type { Metadata } from 'next';
 
+const SITE_URL = 'https://all2ools.com';
+const OG_IMAGE = `${SITE_URL}/og-image.png`;
+
 export const metadata: Metadata = {
-  alternates: {
-    canonical: 'https://all2ools.com/',
+  alternates: { canonical: `${SITE_URL}/` },
+  openGraph: {
+    title: 'Free Online AI Tools | PDF, SEO, Image & Business Tools',
+    description: `All2ools offers ${tools.length} free online tools across documents, images, SEO, finance, business, developer, and health categories.`,
+    url: SITE_URL,
+    siteName: 'All2ools',
+    type: 'website',
+    locale: 'en_US',
+    images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: 'All2ools free online tools' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'All2ools — Free Online Tools',
+    description: `Explore ${tools.length} free online tools for work, study, documents, images, SEO, finance, and development.`,
+    images: [OG_IMAGE],
   },
 };
 
-
 export default function Home() {
-  const toolsWithImages = tools.map((tool) => {
-    const image = placeholderImages.find((img) => img.id === tool.slug);
-    // Don't pass the icon component to the client
-    const { ...toolWithoutIcon } = tool;
-    return {
-      ...toolWithoutIcon,
-      icon: tool.icon,
-      image: image?.imageUrl || `https://picsum.photos/seed/${tool.slug}/300/300`,
-      width: 300,
-      height: 300,
-      imageHint: image?.imageHint || 'tool illustration',
-    };
-  });
-
   const websiteSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    url: 'https://all2ools.com/',
+    url: SITE_URL,
     name: 'All2ools',
     description: `All2ools offers ${tools.length} free online tools across finance, SEO, image, business, developer, and health categories.`,
     potentialAction: {
       '@type': 'SearchAction',
-      target: {
-        '@type': 'EntryPoint',
-        urlTemplate: 'https://all2ools.com/?search={search_term_string}',
-      },
+      target: { '@type': 'EntryPoint', urlTemplate: `${SITE_URL}/?search={search_term_string}` },
       'query-input': 'required name=search_term_string',
     },
   };
@@ -47,8 +43,8 @@ export default function Home() {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: 'All2ools',
-    url: 'https://all2ools.com/',
-    logo: 'https://all2ools.com/logo.svg',
+    url: SITE_URL,
+    logo: `${SITE_URL}/logo.svg`,
     sameAs: [],
   };
 
@@ -61,10 +57,14 @@ export default function Home() {
       acceptedAnswer: { '@type': 'Answer', text: faq.answer },
     })),
   };
-  
-  const featuredTools = [
-    'pdf-to-word-converter', 'image-compressor', 'regex-generator-from-text', 
-    '1-click-article-outline-generator', 'json-excel-converter', 'api-latency-checker'
+
+  const featuredSlugs = [
+    'pdf-to-word-converter',
+    'image-compressor',
+    'regex-generator-from-text',
+    '1-click-article-outline-generator',
+    'json-excel-converter',
+    'api-latency-checker',
   ];
 
   const itemListSchema = {
@@ -72,40 +72,31 @@ export default function Home() {
     '@type': 'ItemList',
     name: 'Featured Tools on All2ools',
     itemListElement: tools
-      .filter(t => featuredTools.includes(t.slug))
+      .filter((tool) => featuredSlugs.includes(tool.slug))
       .map((tool, index) => ({
-      '@type': 'ListItem',
-      position: index + 1,
-      item: {
-        '@type': 'SoftwareApplication',
-        name: tool.name,
-        url: `https://all2ools.com/tools/${tool.slug}`,
-        applicationCategory: 'Utility',
-        operatingSystem: 'Any',
-        description: tool.description,
-      },
-    })),
+        '@type': 'ListItem',
+        position: index + 1,
+        item: {
+          '@type': 'SoftwareApplication',
+          name: tool.name,
+          url: `${SITE_URL}/tools/${tool.slug}`,
+          applicationCategory: 'Utility',
+          operatingSystem: 'Any',
+          description: tool.description,
+        },
+      })),
   };
+
+  // Tool cards intentionally use functional SVG icons instead of stock photography.
+  const toolsForHome = tools;
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
-       <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
-      />
-      <HomePageClient tools={toolsWithImages} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }} />
+      <HomePageClient tools={toolsForHome} />
     </>
   );
 }

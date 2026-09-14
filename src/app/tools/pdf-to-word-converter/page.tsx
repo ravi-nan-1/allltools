@@ -28,6 +28,15 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     title: seoTitle,
     description: seoDescription,
+    openGraph: {
+      title: seoTitle,
+      description: seoDescription,
+      url: `https://all2ools.com/tools/${SLUG}`,
+      siteName: 'All2ools',
+      type: 'website',
+      locale: 'en_US',
+      images: [{ url: '/og-image.png', width: 1200, height: 630, alt: `${tool.name} — All2ools` }],
+    },
   };
 }
 

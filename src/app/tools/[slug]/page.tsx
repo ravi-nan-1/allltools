@@ -32,6 +32,15 @@ export async function generateMetadata({
     },
     title: seoTitle,
     description: seoDescription,
+    openGraph: {
+      title: seoTitle,
+      description: seoDescription,
+      url: `https://all2ools.com/tools/${slug}`,
+      siteName: 'All2ools',
+      type: 'website',
+      locale: 'en_US',
+      images: [{ url: '/og-image.png', width: 1200, height: 630, alt: `${tool.name} — All2ools` }],
+    },
   };
 }
 

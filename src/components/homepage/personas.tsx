@@ -33,7 +33,7 @@ const personas = [
   {
     icon: PenTool,
     name: 'Creators & Designers',
-    description: 'Compress high-res images, remove backgrounds, generate AI headshots, and prepare photos for e-commerce.',
+    description: 'Compress images and prepare visual assets for websites, stores, and social posts.',
   },
   {
     icon: Store,

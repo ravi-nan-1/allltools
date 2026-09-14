@@ -26,17 +26,21 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://all2ools.com'),
   title: 'Free Online AI Tools | PDF, SEO, Image & Business Tools',
   description: `All2ools offers ${tools.length} free online tools across documents, images, SEO, finance, business, developer, and health categories.`,
-  keywords: 'pdf to word converter online, compress pdf online, image compressor online, text to speech online, paraphrasing tool online, ai image generator free, ai chatbot, plagiarism checker, website seo checker, backlink checker, tool ai, online for free, forex arbitrage, api latency, convert json, json to excel, no signup',
+  keywords: 'pdf to word converter online, compress pdf online, image compressor online, text to speech online, ai image generator free, ai chatbot, plagiarism checker, website seo checker, backlink checker, tool ai, online for free, forex arbitrage, api latency, convert json, json to excel, no signup',
   icons: {
     icon: '/logo.svg',
   },
   openGraph: {
+    title: 'Free Online AI Tools | PDF, SEO, Image & Business Tools',
+    description: `All2ools offers ${tools.length} free online tools across documents, images, SEO, finance, business, developer, and health categories.`,
     siteName: 'All2ools',
     type: 'website',
     locale: 'en_US',
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'All2ools free online tools' }],
   },
   twitter: {
     card: 'summary_large_image',
+    images: ['/og-image.png'],
   },
   robots: {
     index: true,

@@ -30,6 +30,15 @@ export async function generateMetadata({
     },
     title: `${pageTitle} | ${tool.name}`,
     description: `Learn more about the ${page} for the ${tool.name} tool on All2ools.`,
+    openGraph: {
+      title: tool.metaTitle || tool.name,
+      description: tool.metaDescription || tool.description,
+      url: `https://all2ools.com/tools/${slug}`,
+      siteName: 'All2ools',
+      type: 'website',
+      locale: 'en_US',
+      images: [{ url: '/og-image.png', width: 1200, height: 630, alt: `${tool.name} — All2ools` }],
+    },
   };
 }
 

@@ -11,7 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
   
-  const staticPages = ['/about', '/contact', '/privacy', '/terms'].map((route) => ({
+  const staticPages = ['/pdf-tools', '/about', '/contact', '/privacy', '/terms'].map((route) => ({
       url: `${baseUrl}${route}`,
       lastModified: new Date(),
       changeFrequency: 'monthly' as const,

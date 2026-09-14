@@ -15,6 +15,15 @@ export async function generateMetadata(): Promise<Metadata> {
     title: tool.metaTitle || tool.name,
     description: tool.metaDescription || tool.description,
     keywords: tool.keywords,
+    openGraph: {
+      title: tool.metaTitle || tool.name,
+      description: tool.metaDescription || tool.description,
+      url: `https://all2ools.com/tools/${SLUG}`,
+      siteName: 'All2ools',
+      type: 'website',
+      locale: 'en_US',
+      images: [{ url: '/og-image.png', width: 1200, height: 630, alt: `${tool.name} — All2ools` }],
+    },
   };
 }
 
