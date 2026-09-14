@@ -7,7 +7,7 @@ import type { Tool } from '@/lib/tools';
 import { useLanguage } from '@/hooks/use-language';
 import { ArrowRight, Wrench } from 'lucide-react';
 
-export type ToolWithImage = Tool & {
+export type ToolWithImage = Pick<Tool, 'name' | 'slug' | 'category' | 'description' | 'icon'> & {
   image?: string;
   imageHint?: string;
   width?: number;
